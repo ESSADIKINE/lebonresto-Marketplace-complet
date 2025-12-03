@@ -1,0 +1,56 @@
+// scss-docs-start theme-color-variables Customize your color option here
+:root,
+[data-bs-theme=light] {
+  /* User Palette - TheFork Inspired */
+  --lb-primary: #016B61;
+  --lb-primary-hover: #015349;
+  --lb-primary-soft: #E0F3F1;
+  --lb-black: #000000;
+  --lb-gray-900: #333333;
+  --lb-gray-600: #6C757D;
+  --lb-gray-200: #E3E3E3;
+  --lb-gray-50: #F5F5F5;
+
+  /* Bootstrap Variable Overrides */
+  --bs-body-bg: var(--lb-gray-50);
+  --bs-body-bg-rgb: 245, 245, 245;
+  --bs-body-color: var(--lb-black);
+  --bs-body-color-rgb: 0, 0, 0;
+
+  --bs-primary: var(--lb-primary);
+  --bs-primary-rgb: 1, 107, 97;
+  --bs-primary-bg-subtle: var(--lb-primary-soft);
+  --bs-primary-border-subtle: #b2dfdb;
+  /* Light green border */
+  --bs-primary-text-emphasis: var(--lb-primary-hover);
+  --bs-primary-bg-dark: var(--lb-primary-hover);
+
+  --bs-secondary: var(--lb-gray-600);
+  --bs-secondary-rgb: 108, 117, 125;
+
+  --bs-success: #10b981;
+  --bs-info: #3b82f6;
+  --bs-warning: #f59e0b;
+  --bs-danger: #ef4444;
+  --bs-light: #ffffff;
+  --bs-dark: var(--lb-black);
+
+  --bs-link-color: var(--lb-primary);
+  --bs-link-hover-color: var(--lb-primary-hover);
+  --bs-link-decoration: none;
+
+  --bs-border-color: var(--lb-gray-200);
+  --bs-border-color-translucent: rgba(0, 0, 0, 0.1);
+
+  --headingColor: var(--lb-black);
+  --paragraphColor: var(--lb-gray-900);
+
+  --bs-card-bg: #ffffff;
+  --bs-card-border-radius: 0.75rem;
+
+  --body-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --heading-font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+// Import Font Family
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');

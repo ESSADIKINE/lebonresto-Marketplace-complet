@@ -1,0 +1,16 @@
+/* Global styles */
+:root {
+    --lb-primary: #016B61;
+    --lb-primary-hover: #015349;
+    --lb-primary-soft: #E0F3F1;
+    --lb-black: #000000;
+    --lb-gray-900: #333333;
+    --lb-gray-600: #6C757D;
+    --lb-gray-200: #E3E3E3;
+    --lb-gray-50: #F5F5F5;
+}
+
+body {
+    background-color: var(--lb-gray-50);
+    color: var(--lb-black);
+}
