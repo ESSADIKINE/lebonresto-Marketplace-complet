@@ -21,7 +21,7 @@ export default function RestaurantCard({ restaurant, layout = 'grid' }) {
                         </button>
                     </div>
                     <div className="listing-thumb">
-                        <Link href={`/single-listing?id=${id}`} className="d-block position-relative">
+                        <Link href={`/restaurants/${id}`} className="d-block position-relative">
                             <img src={image} className="img-fluid rounded-top" alt={name} style={{ height: '220px', width: '100%', objectFit: 'cover' }} />
                         </Link>
                     </div>
@@ -36,7 +36,7 @@ export default function RestaurantCard({ restaurant, layout = 'grid' }) {
                         <span className="text-muted small">{priceRange}</span>
                     </div>
                     <h5 className="mb-1 fw-bold">
-                        <Link href={`/single-listing?id=${id}`} className="text-dark">{name}</Link>
+                        <Link href={`/restaurants/${id}`} className="text-dark">{name}</Link>
                     </h5>
                     <div className="d-flex align-items-center text-muted mb-3">
                         <BsGeoAlt size={14} className="me-1" />
@@ -50,7 +50,7 @@ export default function RestaurantCard({ restaurant, layout = 'grid' }) {
                     </div>
 
                     <div className="d-grid">
-                        <Link href={`/single-listing?id=${id}`} className="btn btn-outline-primary btn-sm rounded-pill fw-medium">
+                        <Link href={`/restaurants/${id}`} className="btn btn-outline-primary btn-sm rounded-pill fw-medium">
                             Voir le restaurant
                         </Link>
                     </div>
@@ -68,7 +68,7 @@ export default function RestaurantCard({ restaurant, layout = 'grid' }) {
                         <div className="position-absolute top-0 start-0 m-3 z-1">
                             <span className="badge bg-primary bg-opacity-75 text-white">{category}</span>
                         </div>
-                        <Link href={`/single-listing?id=${id}`} className="h-100 d-block">
+                        <Link href={`/restaurants/${id}`} className="h-100 d-block">
                             <img src={image} className="img-fluid rounded-start h-100 object-fit-cover" alt={name} style={{ minHeight: '200px' }} />
                         </Link>
                     </div>
@@ -90,7 +90,7 @@ export default function RestaurantCard({ restaurant, layout = 'grid' }) {
                         </div>
 
                         <h4 className="mb-1 fw-bold">
-                            <Link href={`/single-listing?id=${id}`} className="text-dark">{name}</Link>
+                            <Link href={`/restaurants/${id}`} className="text-dark">{name}</Link>
                         </h4>
 
                         <div className="d-flex align-items-center text-muted mb-3">
@@ -109,7 +109,7 @@ export default function RestaurantCard({ restaurant, layout = 'grid' }) {
                         </div>
 
                         <div className="d-flex align-items-center justify-content-between mt-auto">
-                            <Link href={`/single-listing?id=${id}`} className="btn btn-primary btn-sm rounded-pill px-4 fw-medium">
+                            <Link href={`/restaurants/${id}`} className="btn btn-primary btn-sm rounded-pill px-4 fw-medium">
                                 Voir le restaurant <BsArrowRight className="ms-1" />
                             </Link>
                         </div>

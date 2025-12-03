@@ -1,23 +1,24 @@
+'use client';
+
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { BsPersonCircle, BsBasket2, BsSearch, BsGeoAlt, BsSpeedometer, BsPersonLinesFill, BsJournalCheck, BsUiRadiosGrid, BsBookmarkStar, BsChatDots, BsYelp, BsWallet, BsPatchPlus, BsBoxArrowInRight, BsPersonPlus, BsQuestionCircle, BsShieldCheck, BsPersonVcard, BsCalendar2Check, BsPersonCheck, BsBlockquoteLeft, BsEnvelopeCheck, BsCoin, BsPatchQuestion, BsHourglassTop, BsInfoCircle, BsXOctagon, BsGear, BsGeoAltFill, BsX, BsShop } from "react-icons/bs";
 import { FiX } from 'react-icons/fi';
 import { BiSolidShoppingBagAlt } from 'react-icons/bi'
 
 export default function NavbarLight() {
     const [scroll, setScroll] = useState(false);
-    const [current, setCurrent] = useState('');
     const [windowWidth, setWindowWidth] = useState(0);
     const [toggle, setIsToggle] = useState(false);
 
-    const router = useRouter();
+    const pathname = usePathname();
+    const current = pathname;
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
         window.scrollTo(0, 0)
-        setCurrent(router.asPath)
         setWindowWidth(window.innerWidth)
 
         const handlerScroll = () => {
@@ -37,7 +38,7 @@ export default function NavbarLight() {
             window.removeEventListener('scroll', handlerScroll)
             window.removeEventListener('resize', handleResize);
         };
-    }, [router.asPath])
+    }, [pathname])
 
     return (
         <>
@@ -48,25 +49,29 @@ export default function NavbarLight() {
                             <Link className="nav-brand" href="/">
                                 <span className="fw-bold fs-3 text-primary">LeBonResto</span>
                             </Link>
-                            <div className="nav-toggle" onClick={() => setIsToggle(!toggle)}></div>
+                            <button className="nav-toggle bg-transparent border-0" onClick={() => setIsToggle(!toggle)} aria-label="Toggle navigation">
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                                <span className="icon-bar"></span>
+                            </button>
                             <div className="mobile_nav">
                                 <ul>
                                     <li>
-                                        <Link href="/login" className="d-flex align-items-center"><BsPersonCircle className="me-1" /></Link>
+                                        <Link href="/login" className="d-flex align-items-center" aria-label="Login"><BsPersonCircle className="me-1" /></Link>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                         <div className={`nav-menus-wrapper ${toggle ? 'nav-menus-wrapper-open' : ''}`} style={{ transitionProperty: toggle ? 'none' : 'left' }}>
-                            <span className='nav-menus-wrapper-close-button' onClick={() => setIsToggle(!toggle)}>✕</span>
+                            <button className='nav-menus-wrapper-close-button bg-transparent border-0' onClick={() => setIsToggle(!toggle)} aria-label="Close navigation">✕</button>
                             <ul className="nav-menu">
                                 <li className={`${current === '/' ? 'active' : ''}`}><Link href="/">Accueil</Link></li>
 
-                                <li className={`${['/grid-layout', '/list-layout', '/half-map', '/single-listing'].includes(current) ? 'active' : ''}`}>
-                                    <Link href="/grid-layout">Restaurants</Link>
+                                <li className={`${['/restaurants_grid', '/restaurants_list', '/half-map', '/restaurants'].includes(current) ? 'active' : ''}`}>
+                                    <Link href="/restaurants_grid">Restaurants</Link>
                                     <ul className="nav-dropdown nav-submenu">
-                                        <li><Link href="/grid-layout">Vue Grille</Link></li>
-                                        <li><Link href="/list-layout">Vue Liste</Link></li>
+                                        <li><Link href="/restaurants_grid">Vue Grille</Link></li>
+                                        <li><Link href="/restaurants_list">Vue Liste</Link></li>
                                         <li><Link href="/half-map">Carte</Link></li>
                                     </ul>
                                 </li>
@@ -84,7 +89,7 @@ export default function NavbarLight() {
                                     </Link>
                                 </li>
                                 <li className="list-buttons light">
-                                    <Link href="http://localhost:3000" target="_blank" className="bg-primary">
+                                    <Link href="http://localhost:3000" target="_blank" rel="noopener noreferrer" className="bg-primary">
                                         <BsShop className="fs-6 me-2" />
                                         Espace Restaurateur
                                     </Link>

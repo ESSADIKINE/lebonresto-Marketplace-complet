@@ -16,7 +16,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { UserType } from '../auth/dto/login.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../images/cloudinary.service';
-import { ApiTags, ApiBearerAuth, ApiConsumes, ApiBody } from '@nestjs/swagger';
+import { ApiTags, ApiBearerAuth, ApiConsumes, ApiBody, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('Events')
 @Controller('events')
@@ -24,7 +24,7 @@ export class EventsController {
   constructor(
     private readonly eventsService: EventsService,
     private readonly cloudinaryService: CloudinaryService,
-  ) {}
+  ) { }
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -60,6 +60,12 @@ export class EventsController {
       imageUrl = result.secure_url;
     }
     return this.eventsService.create(createEventDto, imageUrl);
+  }
+
+  @Get('upcoming')
+  @ApiOperation({ summary: 'Get all upcoming events' })
+  async getUpcoming() {
+    return this.eventsService.findAll();
   }
 
   @Get('restaurant/:restaurantId')

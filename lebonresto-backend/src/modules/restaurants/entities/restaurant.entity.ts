@@ -21,9 +21,10 @@ export class Restaurant {
   visit360_url?: string;
   video_url?: string;
   is_active: boolean;
-  view_count: number;
+  rating_count: number;
   rating_avg: number;
-  drive_folder_id?: string;
+  resturant_status: string; // 'Ouvert' by default in DB
+  restaurant_image: string; // Required
   created_at: Date;
   updated_at: Date;
 }

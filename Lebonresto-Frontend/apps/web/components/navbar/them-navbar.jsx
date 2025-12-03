@@ -95,11 +95,11 @@ export default function ThemNavbar() {
                                     </ul>
                                 </li>
 
-                                <li className={`${['/grid-layout', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06', '/list-layout', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05', '/half-map', '/half-map-02', '/half-map-03', '/half-map-04', '/half-map-05', '/single-listing', '/single-listing-02', '/single-listing-03', '/single-listing-04', '/single-listing-05'].includes(current) ? 'active' : ''}`}><Link href="#">Listings<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
+                                <li className={`${['/restaurants_grid', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06', '/restaurants_list', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05', '/half-map', '/half-map-02', '/half-map-03', '/half-map-04', '/half-map-05', '/single-listing', '/single-listing-02', '/single-listing-03', '/single-listing-04', '/single-listing-05'].includes(current) ? 'active' : ''}`}><Link href="#">Listings<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
                                     <ul className="nav-dropdown nav-submenu">
-                                        <li className={`${['/grid-layout', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06'].includes(current) ? 'active' : ''}`}><Link href="#">Grid Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
+                                        <li className={`${['/restaurants_grid', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06'].includes(current) ? 'active' : ''}`}><Link href="#">Grid Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
                                             <ul className="nav-dropdown nav-submenu">
-                                                <li className={`${current === '/grid-layout' ? 'active' : ''}`}><Link href="/grid-layout">Grid Layout 01</Link></li>
+                                                <li className={`${current === '/restaurants_grid' ? 'active' : ''}`}><Link href="/restaurants_grid">Grid Layout 01</Link></li>
                                                 <li className={`${current === '/grid-layout-02' ? 'active' : ''}`}><Link href="/grid-layout-02">Grid Layout 02</Link></li>
                                                 <li className={`${current === '/grid-layout-03' ? 'active' : ''}`}><Link href="/grid-layout-03">Grid Layout 03</Link></li>
                                                 <li className={`${current === '/grid-layout-04' ? 'active' : ''}`}><Link href="/grid-layout-04">Grid Layout 04</Link></li>
@@ -107,9 +107,9 @@ export default function ThemNavbar() {
                                                 <li className={`${current === '/grid-layout-06' ? 'active' : ''}`}><Link href="/grid-layout-06">Grid Layout 06</Link></li>
                                             </ul>
                                         </li>
-                                        <li className={`${['/list-layout', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05'].includes(current) ? 'active' : ''}`}><Link href="#">List Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
+                                        <li className={`${['/restaurants_list', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05'].includes(current) ? 'active' : ''}`}><Link href="#">List Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
                                             <ul className="nav-dropdown nav-submenu">
-                                                <li className={`${current === '/list-layout' ? 'active' : ''}`}><Link href="/list-layout">List Layout 01</Link></li>
+                                                <li className={`${current === '/restaurants_list' ? 'active' : ''}`}><Link href="/restaurants_list">List Layout 01</Link></li>
                                                 <li className={`${current === '/list-layout-02' ? 'active' : ''}`}><Link href="/list-layout-02">List Layout 02</Link></li>
                                                 <li className={`${current === '/list-layout-03' ? 'active' : ''}`}><Link href="/list-layout-03">List Layout 03</Link></li>
                                                 <li className={`${current === '/list-layout-04' ? 'active' : ''}`}><Link href="/list-layout-04">List Layout 04</Link></li>

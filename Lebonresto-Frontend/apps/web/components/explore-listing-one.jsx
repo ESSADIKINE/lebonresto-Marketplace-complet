@@ -10,77 +10,77 @@ export default function ExploreListingOne() {
         tooltipTriggerList.forEach((tooltipTriggerEl) => {
             new window.bootstrap.Tooltip(tooltipTriggerEl);
         });
-        }, []);
+    }, []);
 
-  return (
+    return (
         <div className="row align-items-center justify-content-center g-4">
-            {listData.slice(0,6).map((item,index)=>{
+            {listData.slice(0, 6).map((item, index) => {
                 let Icon = item.tagIcon
-                return(
+                return (
                     <div className="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12" key={index}>
                         <div className="listingitem-container">
-                        <div className="singlelisting-item">
-                            <div className="listing-top-item">
-                                <Link href="#" className="topLink">
-                                    <div className="position-absolute start-0 top-0 ms-3 mt-3 z-2">
-                                        <div className="d-flex align-items-center justify-content-start gap-2">
-                                            {item.status === 'open' ? (<span className="badge badge-xs text-uppercase listOpen">Open</span>) :(<span className="badge badge-xs text-uppercase listClose">Closed</span>)}
+                            <div className="singlelisting-item">
+                                <div className="listing-top-item">
+                                    <Link href="#" className="topLink">
+                                        <div className="position-absolute start-0 top-0 ms-3 mt-3 z-2">
+                                            <div className="d-flex align-items-center justify-content-start gap-2">
+                                                {item.status === 'open' ? (<span className="badge badge-xs text-uppercase listOpen">Open</span>) : (<span className="badge badge-xs text-uppercase listClose">Closed</span>)}
 
-                                            <span className="badge badge-xs badge-transparent">$$$</span>
+                                                <span className="badge badge-xs badge-transparent">$$$</span>
 
-                                            {item.featured === true && 
-                                                <span className="badge badge-xs badge-transparent"><BsStar className="mb-0 me-1"/>Featured</span>
-                                            }
+                                                {item.featured === true &&
+                                                    <span className="badge badge-xs badge-transparent"><BsStar className="mb-0 me-1" />Featured</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <img src={item.image} className="img-fluid" alt="Listing Image" />
+                                    </Link>
+                                    <div className="position-absolute end-0 bottom-0 me-3 mb-3 z-2">
+                                        <Link href="#" className="bookmarkList" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0" /></Link>
+                                    </div>
+                                </div>
+                                <div className="listing-middle-item">
+                                    <div className="listing-avatar">
+                                        <Link href="#" className="avatarImg"><img src={item.user} className="img-fluid circle" alt="Avatar" /></Link>
+                                    </div>
+                                    <div className="listing-details">
+                                        <h4 className="listingTitle"><Link href="/restaurants/${item.id}" className="titleLink">{item.title}<span className="verified"><BsPatchCheckFill className="bi bi-patch-check-fill m-0" /></span></Link></h4>
+                                        <p>{item.desc}</p>
+                                    </div>
+                                    <div className="listing-info-details">
+                                        <div className="d-flex align-items-center justify-content-start gap-4">
+                                            <div className="list-calls"><BsTelephone className="mb-0 me-2" />{item.call}</div>
+                                            <div className="list-distance"><BsGeoAlt className="mb-0 me-2" />{item.loction}</div>
                                         </div>
                                     </div>
-                                    <img src={item.image} className="img-fluid" alt="Listing Image"/>
-                                </Link>
-                                <div className="position-absolute end-0 bottom-0 me-3 mb-3 z-2">
-                                    <Link href="#" className="bookmarkList" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0"/></Link>
                                 </div>
-                            </div>
-                            <div className="listing-middle-item">
-                                <div className="listing-avatar">
-                                    <Link href="#" className="avatarImg"><img src={item.user} className="img-fluid circle" alt="Avatar"/></Link>
-                                </div>
-                                <div className="listing-details">
-                                    <h4 className="listingTitle"><Link href="/single-listing-02" className="titleLink">{item.title}<span className="verified"><BsPatchCheckFill className="bi bi-patch-check-fill m-0"/></span></Link></h4>
-                                    <p>{item.desc}</p>
-                                </div>
-                                <div className="listing-info-details">
-                                    <div className="d-flex align-items-center justify-content-start gap-4">
-                                        <div className="list-calls"><BsTelephone className="mb-0 me-2"/>{item.call}</div>
-                                        <div className="list-distance"><BsGeoAlt className="mb-0 me-2"/>{item.loction}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="listing-footer-item">
-                                <div className="d-flex align-items-center justify-content-between gap-2">
-                                    <div className="catdWraps">
-                                        <div className="flex-start">
-                                            <Link href="#" className="d-flex align-items-center justify-content-start gap-2">
-                                                <span className={`catIcon ${item.tagIconStyle}`}><Icon className=""/></span>
-                                                <span className="catTitle">{item.tag}</span>
-                                            </Link>
+                                <div className="listing-footer-item">
+                                    <div className="d-flex align-items-center justify-content-between gap-2">
+                                        <div className="catdWraps">
+                                            <div className="flex-start">
+                                                <Link href="#" className="d-flex align-items-center justify-content-start gap-2">
+                                                    <span className={`catIcon ${item.tagIconStyle}`}><Icon className="" /></span>
+                                                    <span className="catTitle">{item.tag}</span>
+                                                </Link>
+                                            </div>
+                                            <div className="flex-end"><span className="moreCatcounter">+2</span></div>
                                         </div>
-                                        <div className="flex-end"><span className="moreCatcounter">+2</span></div>
-                                    </div>
-                                    <div className="listing-shares">
-                                        <div className="d-flex align-items-center justify-content-start gap-2">
-                                            <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="View Listing"><BsEyeFill className="m-0"/></Link>
-                                            <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0"></BsSuitHeart></Link>
-                                            <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Share Listing"><BsShareFill className="m-0"/></Link>
+                                        <div className="listing-shares">
+                                            <div className="d-flex align-items-center justify-content-start gap-2">
+                                                <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="View Listing"><BsEyeFill className="m-0" /></Link>
+                                                <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0"></BsSuitHeart></Link>
+                                                <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Share Listing"><BsShareFill className="m-0" /></Link>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
                 )
             })}
-                
+
         </div>
-  )
+    )
 }

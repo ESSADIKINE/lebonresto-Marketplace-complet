@@ -9,7 +9,7 @@ import { SupabaseService } from '../../database/supabase.service';
 export class FeedbackRepository {
   private readonly table = 'feedback';
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(private readonly supabase: SupabaseService) { }
 
   async create(data: any) {
     const { data: created, error } = await this.supabase
@@ -30,7 +30,7 @@ export class FeedbackRepository {
     const { data, error } = await this.supabase
       .getClient()
       .from(this.table)
-      .select('*')
+      .select('*, customer:customers(*), restaurant:restaurants(*)')
       .order('created_at', { ascending: false });
 
     if (error) {

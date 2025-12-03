@@ -11,7 +11,7 @@ import { UpdateCityDto } from './dto/update-city.dto';
 export class CitiesRepository {
   private readonly table = 'cities';
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(private readonly supabase: SupabaseService) { }
 
   async create(data: CreateCityDto) {
     const { data: created, error } = await this.supabase
@@ -85,5 +85,52 @@ export class CitiesRepository {
     }
 
     return { message: 'City deleted successfully' };
+  }
+
+  async incrementRestaurantCount(id: string) {
+    // Supabase doesn't have a direct atomic increment via simple client easily without RPC,
+    // but we can do a read-update or use rpc if defined.
+    // For simplicity/compatibility with current setup, we'll fetch then update.
+    // Ideally, use an RPC function: increment_city_count(city_id)
+
+    // Attempt RPC first if you have it, otherwise fallback to fetch-update
+    // const { error } = await this.supabase.getClient().rpc('increment_city_count', { city_id: id });
+
+    // Fallback: Fetch current count
+    const { data: city, error: fetchError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('count_restaurants')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !city) return; // Ignore if city not found or error
+
+    const newCount = (city.count_restaurants || 0) + 1;
+
+    await this.supabase
+      .getClient()
+      .from(this.table)
+      .update({ count_restaurants: newCount })
+      .eq('id', id);
+  }
+
+  async decrementRestaurantCount(id: string) {
+    const { data: city, error: fetchError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('count_restaurants')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !city) return;
+
+    const newCount = Math.max(0, (city.count_restaurants || 0) - 1);
+
+    await this.supabase
+      .getClient()
+      .from(this.table)
+      .update({ count_restaurants: newCount })
+      .eq('id', id);
   }
 }

@@ -11,7 +11,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoriesRepository {
   private readonly table = 'categories';
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(private readonly supabase: SupabaseService) { }
 
   async create(data: CreateCategoryDto) {
     const { data: created, error } = await this.supabase
@@ -85,5 +85,43 @@ export class CategoriesRepository {
     }
 
     return { message: 'Category deleted successfully' };
+  }
+
+  async incrementRestaurantCount(id: string) {
+    const { data: category, error: fetchError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('count_restaurants')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !category) return;
+
+    const newCount = (category.count_restaurants || 0) + 1;
+
+    await this.supabase
+      .getClient()
+      .from(this.table)
+      .update({ count_restaurants: newCount })
+      .eq('id', id);
+  }
+
+  async decrementRestaurantCount(id: string) {
+    const { data: category, error: fetchError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('count_restaurants')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !category) return;
+
+    const newCount = Math.max(0, (category.count_restaurants || 0) - 1);
+
+    await this.supabase
+      .getClient()
+      .from(this.table)
+      .update({ count_restaurants: newCount })
+      .eq('id', id);
   }
 }

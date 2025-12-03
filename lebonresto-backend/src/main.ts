@@ -15,7 +15,19 @@ async function bootstrap() {
 
   // Security
   app.use(helmet());
-  app.enableCors();
+
+  // CORS Configuration - Allow multiple frontend origins
+  app.enableCors({
+    origin: [
+      'http://localhost:3000', // Customer web app
+      'http://localhost:3001', // Owner dashboard
+      'http://localhost:3002', // Admin panel
+      'http://localhost:3003', // Alternative port
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  });
 
   // Logging
 

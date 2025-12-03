@@ -12,7 +12,7 @@ import { Restaurant } from './entities/restaurant.entity';
 export class RestaurantsRepository {
   private readonly table = 'restaurants';
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(private readonly supabase: SupabaseService) { }
 
   async create(data: Partial<Restaurant>): Promise<Restaurant> {
     const { data: created, error } = await this.supabase
@@ -33,7 +33,7 @@ export class RestaurantsRepository {
     const { data, error } = await this.supabase
       .getClient()
       .from(this.table)
-      .select('*')
+      .select('*, city:cities(*), category:categories(*)')
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -47,7 +47,7 @@ export class RestaurantsRepository {
     const { data, error } = await this.supabase
       .getClient()
       .from(this.table)
-      .select('*')
+      .select('*, city:cities(*), category:categories(*)')
       .eq('id', id)
       .single();
 
@@ -164,7 +164,7 @@ export class RestaurantsRepository {
     tagId?: string;
     q?: string;
   }) {
-    let query = this.supabase.getClient().from(this.table).select('*');
+    let query = this.supabase.getClient().from(this.table).select('*, city:cities(*), category:categories(*)');
 
     if (filters.cityId) {
       query = query.eq('city_id', filters.cityId);
@@ -198,34 +198,7 @@ export class RestaurantsRepository {
     return data;
   }
 
-  /**
-   * Updates the drive_folder_id for a restaurant
-   * @param id - The restaurant ID
-   * @param driveFolderId - The Google Drive folder ID
-   * @returns The updated restaurant
-   */
-  async updateDriveFolderId(
-    id: string,
-    driveFolderId: string,
-  ): Promise<Restaurant> {
-    const { data, error } = await this.supabase
-      .getClient()
-      .from(this.table)
-      .update({ drive_folder_id: driveFolderId })
-      .eq('id', id)
-      .select('*')
-      .single();
 
-    if (error) {
-      throw new InternalServerErrorException(error.message);
-    }
-
-    if (!data) {
-      throw new NotFoundException(`Restaurant with ID ${id} not found`);
-    }
-
-    return data;
-  }
 
   /**
    * Add an image to a restaurant
@@ -310,5 +283,59 @@ export class RestaurantsRepository {
     }
 
     return count || 0;
+  }
+
+  async incrementRatingCount(id: string): Promise<void> {
+    // Supabase doesn't have a direct increment method in the JS client like Prisma/TypeORM
+    // We can use an RPC call if defined, or fetch-update.
+    // For safety/concurrency, RPC is better, but for now we'll do fetch-update or raw query if possible.
+    // Actually, Supabase JS client supports .rpc() if we have a function.
+    // Without RPC, we risk race conditions.
+    // However, given the constraints, we will try to use a raw query or just fetch-update for now.
+    // Let's assume we can use a simple fetch-update for this task as setting up RPC might be out of scope.
+
+    // Better approach: Use the 'rpc' method if a function exists, otherwise fetch-update.
+    // Since we can't create SQL functions easily here, we will do fetch-update.
+
+    const { data: restaurant, error: fetchError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('rating_count')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) throw new InternalServerErrorException(fetchError.message);
+
+    const newCount = (restaurant.rating_count || 0) + 1;
+
+    const { error: updateError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .update({ rating_count: newCount })
+      .eq('id', id);
+
+    if (updateError) throw new InternalServerErrorException(updateError.message);
+  }
+
+  async decrementRatingCount(id: string): Promise<void> {
+    const { data: restaurant, error: fetchError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('rating_count')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) throw new InternalServerErrorException(fetchError.message);
+
+    const currentCount = restaurant.rating_count || 0;
+    const newCount = currentCount > 0 ? currentCount - 1 : 0;
+
+    const { error: updateError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .update({ rating_count: newCount })
+      .eq('id', id);
+
+    if (updateError) throw new InternalServerErrorException(updateError.message);
   }
 }

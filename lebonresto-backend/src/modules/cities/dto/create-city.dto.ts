@@ -16,4 +16,13 @@ export class CreateCityDto {
   @IsOptional()
   @IsString()
   country?: string;
+
+  @ApiPropertyOptional({ example: 0, default: 0 })
+  @IsOptional()
+  count_restaurants?: number;
+
+  @ApiPropertyOptional({ example: 'https://example.com/city.jpg' })
+  @IsOptional()
+  @IsString()
+  city_image?: string;
 }

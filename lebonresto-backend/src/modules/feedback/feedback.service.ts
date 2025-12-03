@@ -2,13 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { FeedbackRepository } from './feedback.repository';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { RestaurantsRepository } from '../restaurants/restaurants.repository';
 
 @Injectable()
 export class FeedbackService {
-  constructor(private readonly feedbackRepository: FeedbackRepository) {}
+  constructor(
+    private readonly feedbackRepository: FeedbackRepository,
+    private readonly restaurantsRepository: RestaurantsRepository,
+  ) { }
 
-  create(createFeedbackDto: CreateFeedbackDto) {
-    return this.feedbackRepository.create(createFeedbackDto);
+  async create(createFeedbackDto: CreateFeedbackDto) {
+    const feedback = await this.feedbackRepository.create(createFeedbackDto);
+    if (feedback && createFeedbackDto.restaurant_id) {
+      await this.restaurantsRepository.incrementRatingCount(createFeedbackDto.restaurant_id);
+    }
+    return feedback;
   }
 
   findAll() {
@@ -23,7 +31,11 @@ export class FeedbackService {
     return this.feedbackRepository.update(id, updateFeedbackDto);
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    const feedback = await this.feedbackRepository.findOne(id);
+    if (feedback && feedback.restaurant_id) {
+      await this.restaurantsRepository.decrementRatingCount(feedback.restaurant_id);
+    }
     return this.feedbackRepository.remove(id);
   }
 }

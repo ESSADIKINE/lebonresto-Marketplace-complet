@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react'
 import { listData } from '../data/data'
 import Link from 'next/link'
@@ -7,7 +9,7 @@ import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 
 export default function FeaturedListingTwo() {
-  return (
+    return (
         <div className="row align-items-center justify-content-center">
             <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div className="owl-carousel owl-theme itemslider">
@@ -16,7 +18,7 @@ export default function FeaturedListingTwo() {
                         spaceBetween={15}
                         modules={[Autoplay]}
                         loop={true}
-                        autoplay={{delay: 2000, disableOnInteraction: false,}}
+                        autoplay={{ delay: 2000, disableOnInteraction: false, }}
                         breakpoints={{
                             320: { slidesPerView: 1 },
                             640: { slidesPerView: 2 },
@@ -24,74 +26,74 @@ export default function FeaturedListingTwo() {
                             1440: { slidesPerView: 4 },
                         }}
                     >
-                    {listData.map((item,index)=>{
-                        let Icon = item.tagIcon
-                        return(
-                            <SwiperSlide className="singleItem" key={index}>
-                                <div className="listingitem-container">
-                                    <div className="singlelisting-item bg-light border-0">
-                                        <div className="listing-top-item">
-                                            <div className="position-absolute end-0 top-0 me-3 mt-3 z-2">
-                                                <Link href="#" className="bookmarkList" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0"/></Link>
-                                            </div>
-                                            <Link href="#" className="topLink">
-                                                <div className="position-absolute start-0 top-0 ms-3 mt-3 z-2">
-                                                    <div className="d-flex align-items-center justify-content-start gap-2">
-                                                        {item.status === 'open' ? (<span className="badge badge-xs text-uppercase listOpen">Open</span>) :(<span className="badge badge-xs text-uppercase listClose">Closed</span>)}
-    
-                                                        <span className="badge badge-xs badge-transparent">$$$</span>
-    
-                                                        {item.featured === true && 
-                                                            <span className="badge badge-xs badge-transparent"><BsStar className="mb-0 me-1"/>Featured</span>
-                                                        }
-                                                    </div>
+                        {listData.map((item, index) => {
+                            let Icon = item.tagIcon
+                            return (
+                                <SwiperSlide className="singleItem" key={index}>
+                                    <div className="listingitem-container">
+                                        <div className="singlelisting-item bg-light border-0">
+                                            <div className="listing-top-item">
+                                                <div className="position-absolute end-0 top-0 me-3 mt-3 z-2">
+                                                    <Link href="#" className="bookmarkList" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0" /></Link>
                                                 </div>
-                                                <img src={item.image} className="img-fluid" alt="Listing Image"/>
-                                            </Link>
-                                            <div className="opssListing position-absolute start-0 bottom-0 ms-3 mb-4 z-2">
-                                                <div className="d-flex align-items-center justify-content-between gap-2">
-                                                    <div className="listing-avatar">
-                                                        <Link href="#" className="avatarImg"><img src={item.user} className="img-fluid circle" alt="Avatar"/></Link>
+                                                <Link href={`/restaurants/${item.id}`} className="topLink">
+                                                    <div className="position-absolute start-0 top-0 ms-3 mt-3 z-2">
+                                                        <div className="d-flex align-items-center justify-content-start gap-2">
+                                                            {item.status === 'open' ? (<span className="badge badge-xs text-uppercase listOpen">Open</span>) : (<span className="badge badge-xs text-uppercase listClose">Closed</span>)}
+
+                                                            <span className="badge badge-xs badge-transparent">$$$</span>
+
+                                                            {item.featured === true &&
+                                                                <span className="badge badge-xs badge-transparent"><BsStar className="mb-0 me-1" />Featured</span>
+                                                            }
+                                                        </div>
                                                     </div>
-                                                    <div className="listing-details">
-                                                        <h4 className="listingTitle"><Link href="/single-listing-03" className="titleLink">{item.title}<span className="verified"><BsPatchCheckFill className="bi bi-patch-check-fill m-0"/></span></Link></h4>
-                                                        <div className="list-infos">
-                                                            <div className="gap-3 mt-1">
-                                                                <div className="list-distance text-light d-flex align-items-center"><BsGeoAlt className="mb-0 me-2"/>{item.loction}</div>
-                                                                <div className="list-calls text-light hide-mob mt-1 d-flex align-items-center"><BsTelephone className="mb-0 me-2"/>{item.call}</div>
+                                                    <img src={item.image} className="img-fluid" alt="Listing Image" />
+                                                </Link>
+                                                <div className="opssListing position-absolute start-0 bottom-0 ms-3 mb-4 z-2">
+                                                    <div className="d-flex align-items-center justify-content-between gap-2">
+                                                        <div className="listing-avatar">
+                                                            <Link href="#" className="avatarImg"><img src={item.user} className="img-fluid circle" alt="Avatar" /></Link>
+                                                        </div>
+                                                        <div className="listing-details">
+                                                            <h4 className="listingTitle"><Link href={`/restaurants/${item.id}`} className="titleLink">{item.title}<span className="verified"><BsPatchCheckFill className="bi bi-patch-check-fill m-0" /></span></Link></h4>
+                                                            <div className="list-infos">
+                                                                <div className="gap-3 mt-1">
+                                                                    <div className="list-distance text-light d-flex align-items-center"><BsGeoAlt className="mb-0 me-2" />{item.loction}</div>
+                                                                    <div className="list-calls text-light hide-mob mt-1 d-flex align-items-center"><BsTelephone className="mb-0 me-2" />{item.call}</div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div className="listing-footer-item border-0">
-                                            <div className="d-flex align-items-center justify-content-between gap-2">
-                                                <div className="catdWraps">
-                                                    <div className="flex-start">
-                                                        <Link href="#" className="d-flex align-items-center justify-content-start gap-2">
-                                                            <span className={item.tagIconStyle}><Icon className=""></Icon></span>
-                                                            <span className="catTitle">{item.tag}</span>
-                                                        </Link>
+                                            <div className="listing-footer-item border-0">
+                                                <div className="d-flex align-items-center justify-content-between gap-2">
+                                                    <div className="catdWraps">
+                                                        <div className="flex-start">
+                                                            <Link href="#" className="d-flex align-items-center justify-content-start gap-2">
+                                                                <span className={item.tagIconStyle}><Icon className=""></Icon></span>
+                                                                <span className="catTitle">{item.tag}</span>
+                                                            </Link>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="listing-shares">
-                                                    <div className="d-flex align-items-center justify-content-start gap-2">
-                                                        <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="View Listing"><BsEyeFill className="m-0"/></Link>
-                                                        <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0"/></Link>
-                                                        <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Share Listing"><BsShareFill className="m-0"/></Link>
+                                                    <div className="listing-shares">
+                                                        <div className="d-flex align-items-center justify-content-start gap-2">
+                                                            <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="View Listing"><BsEyeFill className="m-0" /></Link>
+                                                            <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Save Listing"><BsSuitHeart className="m-0" /></Link>
+                                                            <Link href="#" className="smallLinks" data-bs-toggle="tooltip" data-bs-title="Share Listing"><BsShareFill className="m-0" /></Link>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </SwiperSlide>
-                        )
-                    })}
+                                </SwiperSlide>
+                            )
+                        })}
                     </Swiper>
                 </div>
             </div>
         </div>
-  )
+    )
 }

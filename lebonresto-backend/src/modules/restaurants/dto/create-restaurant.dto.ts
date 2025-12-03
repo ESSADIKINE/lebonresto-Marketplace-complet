@@ -93,4 +93,14 @@ export class CreateRestaurantDto {
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   is_active?: boolean;
+
+  @ApiProperty({ example: 'https://res.cloudinary.com/demo/image/upload/v1/restaurant.jpg' })
+  @IsString()
+  @IsNotEmpty()
+  restaurant_image: string;
+
+  @ApiPropertyOptional({ example: 'Ouvert', default: 'Ouvert' })
+  @IsOptional()
+  @IsString()
+  resturant_status?: string;
 }

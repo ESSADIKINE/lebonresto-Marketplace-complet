@@ -11,4 +11,13 @@ export class CreateCategoryDto {
   @IsOptional()
   @IsString()
   slug?: string;
+
+  @ApiPropertyOptional({ example: 0, default: 0 })
+  @IsOptional()
+  count_restaurants?: number;
+
+  @ApiPropertyOptional({ example: 'https://example.com/category.jpg' })
+  @IsOptional()
+  @IsString()
+  category_image?: string;
 }

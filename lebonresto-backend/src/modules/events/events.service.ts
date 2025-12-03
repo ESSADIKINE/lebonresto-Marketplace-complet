@@ -12,7 +12,7 @@ export class EventsService {
   private readonly logger = new Logger(EventsService.name);
   private readonly table = 'events';
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(private readonly supabase: SupabaseService) { }
 
   async create(
     createEventDto: CreateEventDto,
@@ -43,6 +43,22 @@ export class EventsService {
     if (error) {
       this.logger.error(`Error finding events: ${error.message}`);
       throw new InternalServerErrorException('Error finding events');
+    }
+
+    return data;
+  }
+
+  async findAll(): Promise<Event[]> {
+    const { data, error } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('*, restaurant:restaurants(*)')
+      .gte('event_date', new Date().toISOString())
+      .order('event_date', { ascending: true });
+
+    if (error) {
+      this.logger.error(`Error finding all events: ${error.message}`);
+      throw new InternalServerErrorException('Error finding all events');
     }
 
     return data;

@@ -5,24 +5,41 @@ import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { RestaurantStatus } from './entities/restaurant.entity';
 import { CloudinaryService } from '../images/cloudinary.service';
 
+import { CitiesRepository } from '../cities/cities.repository';
+import { CategoriesRepository } from '../categories/categories.repository';
+
 @Injectable()
 export class RestaurantsService {
   constructor(
     private readonly restaurantsRepository: RestaurantsRepository,
     private readonly cloudinaryService: CloudinaryService,
-  ) {}
+    private readonly citiesRepository: CitiesRepository,
+    private readonly categoriesRepository: CategoriesRepository,
+  ) { }
 
   async create(createRestaurantDto: CreateRestaurantDto) {
     // Initialize default values for fields not in DTO
     const restaurantData = {
       ...createRestaurantDto,
-      view_count: 0,
+      rating_count: 0,
       rating_avg: 0,
       is_active: createRestaurantDto.is_active ?? true,
       status: createRestaurantDto.status ?? RestaurantStatus.BASIC,
     };
 
-    return this.restaurantsRepository.create(restaurantData);
+    const createdRestaurant = await this.restaurantsRepository.create(restaurantData);
+
+    // Increment city count
+    if (createdRestaurant.city_id) {
+      await this.citiesRepository.incrementRestaurantCount(createdRestaurant.city_id);
+    }
+
+    // Increment category count
+    if (createdRestaurant.category_id) {
+      await this.categoriesRepository.incrementRestaurantCount(createdRestaurant.category_id);
+    }
+
+    return createdRestaurant;
   }
 
   async findAll() {
@@ -43,11 +60,47 @@ export class RestaurantsService {
   }
 
   async update(id: string, updateRestaurantDto: UpdateRestaurantDto) {
-    return this.restaurantsRepository.update(id, updateRestaurantDto);
+    const existingRestaurant = await this.restaurantsRepository.findOne(id);
+    const updatedRestaurant = await this.restaurantsRepository.update(id, updateRestaurantDto);
+
+    // Handle city change count update
+    if (
+      updateRestaurantDto.city_id &&
+      existingRestaurant.city_id !== updateRestaurantDto.city_id
+    ) {
+      if (existingRestaurant.city_id) {
+        await this.citiesRepository.decrementRestaurantCount(existingRestaurant.city_id);
+      }
+      await this.citiesRepository.incrementRestaurantCount(updateRestaurantDto.city_id);
+    }
+
+    // Handle category change count update
+    if (
+      updateRestaurantDto.category_id &&
+      existingRestaurant.category_id !== updateRestaurantDto.category_id
+    ) {
+      if (existingRestaurant.category_id) {
+        await this.categoriesRepository.decrementRestaurantCount(existingRestaurant.category_id);
+      }
+      await this.categoriesRepository.incrementRestaurantCount(updateRestaurantDto.category_id);
+    }
+
+    return updatedRestaurant;
   }
 
   async remove(id: string) {
-    return this.restaurantsRepository.remove(id);
+    const restaurant = await this.restaurantsRepository.findOne(id);
+    await this.restaurantsRepository.remove(id);
+
+    // Decrement city count
+    if (restaurant.city_id) {
+      await this.citiesRepository.decrementRestaurantCount(restaurant.city_id);
+    }
+
+    // Decrement category count
+    if (restaurant.category_id) {
+      await this.categoriesRepository.decrementRestaurantCount(restaurant.category_id);
+    }
   }
 
   // Relational Methods

@@ -8,6 +8,6 @@ import { DatabaseModule } from '../../database/database.module';
   imports: [DatabaseModule],
   controllers: [CitiesController],
   providers: [CitiesService, CitiesRepository],
-  exports: [CitiesService],
+  exports: [CitiesService, CitiesRepository],
 })
-export class CitiesModule {}
+export class CitiesModule { }

@@ -19,9 +19,9 @@ export default function Footer() {
                             </div>
                             <div className="footerSocialwrap">
                                 <ul className="footersocial">
-                                    <li><Link href="#" className="social-link"><FaFacebookF className="" /></Link></li>
-                                    <li><Link href="#" className="social-link"><FaInstagram className="" /></Link></li>
-                                    <li><Link href="#" className="social-link"><FaLinkedin className="" /></Link></li>
+                                    <li><Link href="#" className="social-link" aria-label="Facebook"><FaFacebookF className="" /></Link></li>
+                                    <li><Link href="#" className="social-link" aria-label="Instagram"><FaInstagram className="" /></Link></li>
+                                    <li><Link href="#" className="social-link" aria-label="LinkedIn"><FaLinkedin className="" /></Link></li>
                                 </ul>
                             </div>
                         </div>
@@ -31,10 +31,10 @@ export default function Footer() {
                         <div className="footer-widget mb-5 mb-md-5 mb-lg-0">
                             <h4 className="widget-title text-pri">Découvrir</h4>
                             <ul className="footer-menu">
-                                <li><Link href="/grid-layout">Restaurants à Casablanca</Link></li>
-                                <li><Link href="/grid-layout">Restaurants à Rabat</Link></li>
-                                <li><Link href="/grid-layout">Restaurants à Marrakech</Link></li>
-                                <li><Link href="/grid-layout">Restaurants à Tanger</Link></li>
+                                <li><Link href="/restaurants_grid">Restaurants à Casablanca</Link></li>
+                                <li><Link href="/restaurants_grid">Restaurants à Rabat</Link></li>
+                                <li><Link href="/restaurants_grid">Restaurants à Marrakech</Link></li>
+                                <li><Link href="/restaurants_grid">Restaurants à Tanger</Link></li>
                                 <li><Link href="/half-map">Recherche sur carte</Link></li>
                             </ul>
                         </div>
