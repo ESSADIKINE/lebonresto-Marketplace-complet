@@ -1,261 +1,319 @@
 /**
- * TypeScript Type Definitions for LeBonResto API
+ * LeBonResto API Types
  * 
- * These types match the backend API response structures
+ * TypeScript interfaces for all entities in the LeBonResto marketplace
  */
 
-// ============================================
-// AUTH & USER TYPES
-// ============================================
+// ========================
+// Core Entities
+// ========================
 
-export interface Customer {
-    id: string;
-    email: string;
-    first_name: string;
-    last_name: string;
-    phone?: string;
-    avatar_url?: string;
-    created_at: string;
-    updated_at?: string;
-}
-
-export interface LoginResponse {
-    access_token: string;
-    refresh_token?: string;
-    user: Customer;
-}
-
-export interface RegisterResponse {
-    access_token: string;
-    refresh_token?: string;
-    user: Customer;
-}
-
-// ============================================
-// REFERENCE DATA TYPES
-// ============================================
-
-export interface City {
-    id: string;
+export interface Restaurant {
+    id: number;
+    owner_id: number;
     name: string;
+    description?: string;
+    logo_url?: string;
+    address?: string;
+    latitude?: number;
+    longitude?: number;
+    phone?: string;
+    email?: string;
+    status: 'premium' | 'standard' | 'basic';
+    city_id?: number;
+    category_id?: number;
+    visit360_url?: string;
+    video_url?: string;
+    is_active: boolean;
+    rating_count: number;
+    rating_avg: number;
     created_at: string;
+    updated_at: string;
+    resturant_status?: string;
+    restaurant_image?: string;
+    min_price?: number;
+    max_price?: number;
+    city?: City;
+    category?: Category;
+    owner?: Owner;
+    tags?: Tag[];
+    max_discount_percentage?: number;
 }
 
 export interface Category {
-    id: string;
+    id: number;
+    name: string;
+    slug: string;
+    created_at: string;
+    count_restaurants?: number;
+    category_image?: string;
+}
+
+export interface City {
+    id: number;
+    name: string;
+    region?: string;
+    country?: string;
+    created_at: string;
+    count_restaurants?: number;
+    city_image?: string;
+}
+
+export interface Customer {
+    id: number;
+    email: string;
+    password_hash?: string;
+    name: string;
+    phone?: string;
+    avatar_url?: string;
+    is_verified: boolean;
+    last_login?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Owner {
+    id: number;
+    email: string;
+    password_hash?: string;
+    name: string;
+    phone?: string;
+    avatar_url?: string;
+    company_name?: string;
+    vat_number?: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Admin {
+    id: number;
+    email: string;
+    password_hash?: string;
+    name: string;
+    avatar_url?: string;
+    role: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Menu {
+    id: number;
+    restaurant_id: number;
+    title: string;
+    description?: string;
+    created_at: string;
+    pdf_url?: string;
+    restaurant?: Restaurant;
+}
+
+export interface Plat {
+    id: number;
+    restaurant_id: number;
     name: string;
     description?: string;
+    price: number;
+    image_url?: string;
+    is_published: boolean;
+    is_premium: boolean;
+    created_at: string;
+    updated_at: string;
+    restaurant?: Restaurant;
+}
+
+export interface Reservation {
+    id: number;
+    customer_id: number;
+    restaurant_id: number;
+    reservation_time: string;
+    guest_count: number;
+    notes?: string;
+    automation_method?: string;
+    status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+    created_at: string;
+    updated_at: string;
+    customer?: Customer;
+    restaurant?: Restaurant;
+}
+
+export interface Feedback {
+    id: number;
+    customer_id: number;
+    restaurant_id: number;
+    reservation_id?: number;
+    rating: number;
+    comment?: string;
+    sentiment_score?: number;
+    created_at: string;
+    customer?: Customer;
+    restaurant?: Restaurant;
+}
+
+export interface Event {
+    id: number;
+    restaurant_id: number;
+    title: string;
+    description?: string;
+    event_date: string;
+    image_url?: string;
+    is_paid: boolean;
+    price?: number;
+    requires_reservation: boolean;
+    created_at: string;
+    is_promo: boolean;
+    discount_percentage?: number;
+    promo_start_at?: string;
+    promo_end_at?: string;
+    restaurant?: Restaurant;
+}
+
+export interface Notification {
+    id: number;
+    user_id: number;
+    message: string;
+    type: string;
+    seen: boolean;
     created_at: string;
 }
 
 export interface Tag {
-    id: string;
+    id: number;
     name: string;
     created_at: string;
-}
-
-// ============================================
-// RESTAURANT TYPES
-// ============================================
-
-export type RestaurantStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'SUSPENDED';
-
-export interface Restaurant {
-    id: string;
-    name: string;
-    description?: string;
-    address: string;
-    phone?: string;
-    email?: string;
-    website?: string;
-    city_id: string;
-    category_id: string;
-    owner_id: string;
-    status: RestaurantStatus;
-    created_at: string;
-    updated_at?: string;
-
-    // Populated relations
-    city?: City;
-    category?: Category;
-    tags?: Tag[];
-}
-
-export interface RestaurantsResponse {
-    data: Restaurant[];
-    total: number;
-    page: number;
-    limit: number;
 }
 
 export interface RestaurantImage {
-    id: string;
+    id: number;
+    restaurant_id: number;
     url: string;
-    restaurant_id: string;
-    is_primary: boolean;
+    label?: string;
+    uploaded_by?: string;
     created_at: string;
 }
 
-export interface Menu {
-    id: string;
-    name: string;
-    description?: string;
-    restaurant_id: string;
-    pdf_url?: string;
+export interface SavedRestaurant {
+    id: number;
+    customer_id: number;
+    restaurant_id: number;
     created_at: string;
+    restaurant?: Restaurant;
 }
 
-export interface Plat {
-    id: string;
-    name: string;
-    description?: string;
-    price: number;
-    restaurant_id: string;
-    menu_id?: string;
-    image_url?: string;
-    created_at: string;
+export interface RestaurantSummary {
+    restaurant_id: number;
+    total_reservations: number;
+    total_feedback: number;
+    average_rating: number;
+    total_events: number;
 }
 
-export type EventType = 'MUSIC' | 'SPECIAL_MENU' | 'HOLIDAY' | 'PROMOTION' | 'OTHER';
-
-export interface Event {
-    id: string;
-    title: string;
-    description?: string;
-    restaurant_id: string;
-    event_date: string;
-    event_type: EventType;
-    created_at: string;
-}
-
-export interface Feedback {
-    id: string;
-    customer_id: string;
-    restaurant_id: string;
-    rating: number; // 1-5
-    comment?: string;
-    created_at: string;
-
-    // Populated customer info
-    customer?: {
-        id: string;
-        first_name: string;
-        last_name: string;
-    };
-}
-
-// ============================================
-// RESERVATION TYPES
-// ============================================
-
-export type ReservationStatus =
-    | 'PENDING'
-    | 'CONFIRMED'
-    | 'CANCELLED'
-    | 'COMPLETED'
-    | 'NO_SHOW';
-
-export interface Reservation {
-    id: string;
-    customer_id: string;
-    restaurant_id: string;
-    reservation_date: string;
-    party_size: number;
-    status: ReservationStatus;
-    special_requests?: string;
-    created_at: string;
-    updated_at?: string;
-
-    // Populated relations
-    restaurant?: {
-        id: string;
-        name: string;
-        address: string;
-        phone?: string;
-    };
-}
-
-export interface CreateReservationInput {
-    customer_id?: string; // Optional if derived from auth token
-    restaurant_id: string;
-    reservation_date: string;
-    party_size: number;
-    special_requests?: string;
-}
-
-// ============================================
-// FEEDBACK TYPES
-// ============================================
-
-export interface CreateFeedbackInput {
-    restaurant_id: string;
-    rating: number; // 1-5
-    comment?: string;
-    reservation_id?: string; // Optional link to reservation
-}
-
-export interface UpdateFeedbackInput {
-    rating?: number;
-    comment?: string;
-}
-
-// ============================================
-// NOTIFICATION TYPES
-// ============================================
-
-export interface Notification {
-    id: string;
-    user_id: string;
-    message: string;
-    is_seen: boolean;
-    created_at: string;
-    updated_at?: string;
-}
-
-// ============================================
-// CONTACT TYPES
-// ============================================
-
-export interface ContactMessageInput {
+export interface ContactMessage {
+    id: number;
     name: string;
     email: string;
-    subject?: string;
+    subject: string;
     message: string;
+    type?: string;
+    created_at: string;
 }
 
-// ============================================
-// FILTER TYPES
-// ============================================
+// ========================
+// Request/Response Types
+// ========================
 
-export interface RestaurantFilters {
-    city_id?: string;
-    category_id?: string;
-    tags?: string; // comma-separated tag IDs
-    q?: string; // search query
+export interface LoginRequest {
+    email: string;
+    password: string;
+    role?: 'customer' | 'owner' | 'admin';
+}
+
+export interface LoginResponse {
+    access_token: string;
+    user: Customer | Owner | Admin;
+}
+
+export interface RegisterCustomerRequest {
+    email: string;
+    password: string;
+    name: string;
+    phone?: string;
+}
+
+export interface RegisterCustomerResponse {
+    access_token: string;
+    user: Customer;
+}
+
+export interface CreateReservationRequest {
+    customer_id?: number;
+    restaurant_id: number;
+    reservation_time: string;
+    guest_count: number;
+    notes?: string;
+}
+
+export interface CreateFeedbackRequest {
+    customer_id?: number;
+    restaurant_id: number;
+    reservation_id?: number;
+    rating: number;
+    comment?: string;
+}
+
+export interface CreateRestaurantRequest {
+    owner_id: number;
+    name: string;
+    description?: string;
+    address?: string;
+    latitude?: number;
+    longitude?: number;
+    phone?: string;
+    email?: string;
+    city_id?: number;
+    category_id?: number;
+    status?: 'premium' | 'standard' | 'basic';
+}
+
+export interface UpdateCustomerRequest {
+    name?: string;
+    phone?: string;
+    avatar_url?: string;
+}
+
+// ========================
+// Query Params
+// ========================
+
+export interface GetRestaurantsParams {
+    cityId?: number;
+    categoryId?: number;
+    tags?: string;
+    q?: string;
     page?: number;
+    limit?: number;
+    status?: string;
+    sort?: string;
+}
+
+export interface SearchRestaurantsParams {
+    query: string;
+    cityId?: number;
+    categoryId?: number;
     limit?: number;
 }
 
-// ============================================
-// AUTH INPUT TYPES
-// ============================================
-
-export interface LoginInput {
-    email: string;
-    password: string;
+export interface GetMostReservedParams {
+    limit?: number;
+    month?: string;
 }
 
-export interface RegisterInput {
-    email: string;
-    password: string;
-    first_name: string;
-    last_name: string;
-    phone?: string;
-}
+// ========================
+// Paginated Response
+// ========================
 
-export interface UpdateCustomerProfileInput {
-    first_name?: string;
-    last_name?: string;
-    phone?: string;
-    avatar_url?: string;
+export interface PaginatedResponse<T> {
+    data: T[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
 }
