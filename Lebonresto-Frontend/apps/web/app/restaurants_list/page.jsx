@@ -21,7 +21,11 @@ async function getRestaurants(page = 1, limit = 8) {
         if (!res.ok) {
             return { data: [], total: 0, page, limit, totalPages: 0 };
         }
-        return await res.json();
+        const result = await res.json();
+        if (!result?.data) {
+            console.warn("API returned 200 but missing 'data' property:", result);
+        }
+        return result;
     } catch (error) {
         console.error("Failed to fetch restaurants:", error);
         return { data: [], total: 0, page, limit, totalPages: 0 };
@@ -31,13 +35,16 @@ async function getRestaurants(page = 1, limit = 8) {
 export default async function RestaurantsList({ searchParams }) {
     const page = parseInt(searchParams?.page || '1', 10);
     const limit = 8;
-    const { data: restaurants, total, totalPages } = await getRestaurants(page, limit);
+    const result = await getRestaurants(page, limit);
+    let restaurants = Array.isArray(result) ? result : (result?.data || []);
+    const total = Array.isArray(result) ? result.length : (result?.total || 0);
+    const totalPages = Array.isArray(result) ? 1 : (result?.totalPages || 0);
 
     return (
         <>
             <NavbarLight />
 
-            <div className="bg-white py-3 sticky-lg-top z-3">
+            <div className="bg-white py-3 z-3" style={{ position: 'sticky', top: '80px', marginTop: '80px' }}>
                 <FilterOne list={true} />
             </div>
 

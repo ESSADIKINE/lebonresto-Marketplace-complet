@@ -36,6 +36,7 @@ export const apiSlice = createApi({
         'Feedback',      // Customer reviews/feedback
         'Event',         // Restaurant events
         'Notification',  // Customer notifications
+        'SavedRestaurant', // Saved restaurants
     ],
     endpoints: () => ({}), // Endpoints will be injected from other files
 });

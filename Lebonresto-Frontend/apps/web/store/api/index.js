@@ -36,6 +36,15 @@ export {
     useGetRestaurantPlatsQuery,
     useGetRestaurantEventsQuery,
     useGetRestaurantFeedbackQuery,
+    useGetPromoRestaurantsQuery,
+    useGetMostReservedRestaurantsQuery,
+    useGetRecommendedRestaurantsQuery,
+    useGetLatestRestaurantsQuery,
+    useGetRestaurantTagsQuery,
+    useGetRestaurantSummaryQuery,
+    useSaveRestaurantMutation,
+    useUnsaveRestaurantMutation,
+    useGetSavedRestaurantsQuery,
 } from './restaurantsApi';
 
 // Reservations API
@@ -45,6 +54,7 @@ export {
     useCreateReservationMutation,
     useGetReservationByIdQuery,
     useUpdateReservationMutation,
+    useGetRestaurantReservationsQuery,
 } from './reservationsApi';
 
 // Feedback API

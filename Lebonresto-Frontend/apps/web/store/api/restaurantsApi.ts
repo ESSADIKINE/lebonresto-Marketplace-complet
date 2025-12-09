@@ -77,6 +77,70 @@ export const restaurantsApi = apiSlice.injectEndpoints({
                 { type: 'Feedback', id: `RESTAURANT_${restaurantId}` },
             ],
         }),
+
+        // --- New Endpoints for Home Page ---
+
+        // Get Restaurants with Promos
+        getPromoRestaurants: builder.query({
+            query: () => '/restaurants/promos',
+            providesTags: [{ type: 'Restaurant', id: 'PROMOS' }],
+        }),
+
+        // Get Most Reserved Restaurants
+        getMostReservedRestaurants: builder.query({
+            query: ({ limit = 10, month } = {}) => {
+                const params = new URLSearchParams();
+                if (limit) params.append('limit', limit.toString());
+                if (month) params.append('month', month);
+                return `/restaurants/most-reserved?${params.toString()}`;
+            },
+            providesTags: [{ type: 'Restaurant', id: 'MOST_RESERVED' }],
+        }),
+
+        // Get Recommended (Premium/Standard status)
+        getRecommendedRestaurants: builder.query({
+            query: () => '/restaurants?status=premium,standard,basic',
+            providesTags: [{ type: 'Restaurant', id: 'RECOMMENDED' }],
+        }),
+
+        // Get Latest Restaurants
+        getLatestRestaurants: builder.query({
+            query: () => '/restaurants?sort=createdAtDesc',
+            providesTags: [{ type: 'Restaurant', id: 'LATEST' }],
+        }),
+
+        // --- Detail Page Endpoints ---
+
+        getRestaurantTags: builder.query({
+            query: (id) => `/restaurants/${id}/tags`,
+            providesTags: (result, error, id) => [{ type: 'Tag', id: `RESTAURANT_${id}` }],
+        }),
+
+        getRestaurantSummary: builder.query({
+            query: (id) => `/restaurants/${id}/summary`,
+            providesTags: (result, error, id) => [{ type: 'Restaurant', id: `SUMMARY_${id}` }],
+        }),
+
+        saveRestaurant: builder.mutation({
+            query: (id) => ({
+                url: `/restaurants/${id}/save`,
+                method: 'POST',
+            }),
+            invalidatesTags: ['SavedRestaurant'],
+        }),
+
+        unsaveRestaurant: builder.mutation({
+            query: (id) => ({
+                url: `/restaurants/${id}/save`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: ['SavedRestaurant'],
+        }),
+
+        getSavedRestaurants: builder.query({
+            query: () => '/me/saved-restaurants',
+            providesTags: ['SavedRestaurant'],
+        }),
     }),
 });
 
@@ -88,4 +152,13 @@ export const {
     useGetRestaurantPlatsQuery,
     useGetRestaurantEventsQuery,
     useGetRestaurantFeedbackQuery,
+    useGetPromoRestaurantsQuery,
+    useGetMostReservedRestaurantsQuery,
+    useGetRecommendedRestaurantsQuery,
+    useGetLatestRestaurantsQuery,
+    useGetRestaurantTagsQuery,
+    useGetRestaurantSummaryQuery,
+    useSaveRestaurantMutation,
+    useUnsaveRestaurantMutation,
+    useGetSavedRestaurantsQuery,
 } = restaurantsApi;

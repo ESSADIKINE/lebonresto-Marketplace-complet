@@ -2,7 +2,6 @@ import React from 'react';
 import NavbarLight from '../components/navbar/navbar-light';
 import HeroSection from '../components/hero-section';
 import CategoryTwo from '../components/category-two';
-import FeaturedListing from '../components/featured-listing';
 import ExploreCity from '../components/explore-city';
 import ClientOne from '../components/client-one';
 import BlogOne from '../components/blog-one';
@@ -11,80 +10,64 @@ import FooterTop from '../components/footer-top';
 import Footer from '../components/footer';
 import BackToTop from '../components/back-to-top';
 
-async function getData() {
-    const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+// New Sections using RTK Query
+import PromosSection from '../components/home-sections/promos-section';
+import RecommendedSection from '../components/home-sections/recommended-section';
+import MostReservedSection from '../components/home-sections/most-reserved-section';
+import NewestSection from '../components/home-sections/newest-section';
 
-    try {
-        const [restaurantsRes, citiesRes, categoriesRes, feedbackRes] = await Promise.allSettled([
-            fetch(`${baseURL}/restaurants`, { next: { revalidate: 60 } }),
-            fetch(`${baseURL}/cities`, { next: { revalidate: 60 } }),
-            fetch(`${baseURL}/categories`, { next: { revalidate: 60 } }),
-            fetch(`${baseURL}/feedback`, { next: { revalidate: 60 } })
-        ]);
-
-        const restaurants = restaurantsRes.status === 'fulfilled' && restaurantsRes.value.ok ? await restaurantsRes.value.json() : [];
-        const cities = citiesRes.status === 'fulfilled' && citiesRes.value.ok ? await citiesRes.value.json() : [];
-        const categories = categoriesRes.status === 'fulfilled' && categoriesRes.value.ok ? await categoriesRes.value.json() : [];
-        const feedback = feedbackRes.status === 'fulfilled' && feedbackRes.value.ok ? await feedbackRes.value.json() : [];
-
-        return { restaurants, cities, categories, feedback };
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return { restaurants: [], cities: [], categories: [], feedback: [] };
-    }
-}
-
-export default async function Home() {
-    const { restaurants, cities, categories, feedback } = await getData();
-
+export default function Home() {
     return (
         <>
             <NavbarLight />
-            <HeroSection cities={cities} />
 
-            <section className="pb-0">
-                <div className="container">
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
-                            <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Catégories populaires de <span className="text-primary">restaurants</span></h3>
-                                <p>Explorez tous les types de cuisines disponibles au Maroc</p>
-                            </div>
-                        </div>
-                    </div>
-                    <CategoryTwo categories={categories} />
-                </div>
-            </section>
+            {/* 1. Hero Section (Search/Filter) */}
+            <HeroSection />
 
-            <section>
-                <div className="container">
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
-                            <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Restaurants populaires au <span className="text-primary">Maroc</span></h3>
-                                <p>Découvrez les meilleurs restaurants recommandés par nos clients</p>
-                            </div>
-                        </div>
-                    </div>
-                    <FeaturedListing restaurants={restaurants} cities={cities} categories={categories} />
-                </div>
-            </section>
+            {/* 2. Meilleures Offres (Promos) */}
+            <PromosSection />
 
+            {/* 3. Suggestions (Recommended: Premium > Standard > Basic) */}
+            <RecommendedSection />
+
+            {/* 4. Plus Réservés (Most Reserved) */}
+            <MostReservedSection />
+
+            {/* 5. Catégories (Votre envie du moment ?) */}
             <section className="bg-light">
                 <div className="container">
                     <div className="row align-items-center justify-content-center">
                         <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
                             <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Explorer les restaurants par <span className="text-primary">ville</span></h3>
-                                <p>Trouvez les meilleurs restaurants dans votre ville</p>
+                                <h3 className="sectionHeading">Votre envie du <span className="text-primary">moment ?</span></h3>
+                                <p>Explorez les types de cuisine et trouvez le restaurant idéal.</p>
                             </div>
                         </div>
                     </div>
-                    <ExploreCity cities={cities} />
+                    <CategoryTwo />
                 </div>
             </section>
 
+            {/* 6. Nouveautés notables */}
+            <NewestSection />
+
+            {/* 7. Autres villes au Maroc */}
             <section>
+                <div className="container">
+                    <div className="row align-items-center justify-content-center">
+                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
+                            <div className="secHeading-wrap text-center">
+                                <h3 className="sectionHeading">Autres villes au <span className="text-primary">Maroc</span></h3>
+                                <p>Découvrez d’autres destinations gourmandes.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <ExploreCity />
+                </div>
+            </section>
+
+            {/* 8. Avis clients */}
+            <section className="bg-light">
                 <div className="container">
                     <div className="row align-items-center justify-content-center">
                         <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
@@ -94,10 +77,11 @@ export default async function Home() {
                             </div>
                         </div>
                     </div>
-                    <ClientOne reviews={feedback} />
+                    <ClientOne />
                 </div>
             </section>
 
+            {/* 9. Actualités / Blog */}
             <section className="light-top-gredient">
                 <div className="container">
                     <div className="row align-items-center justify-content-center">
@@ -112,6 +96,7 @@ export default async function Home() {
                 </div>
             </section>
 
+            {/* 10. Événements */}
             <section className="pt-0">
                 <div className="container">
                     <div className="row align-items-center justify-content-center">

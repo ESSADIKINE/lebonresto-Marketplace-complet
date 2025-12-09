@@ -2,103 +2,121 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { BsPersonCircle, BsBasket2, BsSearch, BsGeoAlt, BsSpeedometer, BsPersonLinesFill, BsJournalCheck, BsUiRadiosGrid, BsBookmarkStar, BsChatDots, BsYelp, BsWallet, BsPatchPlus, BsBoxArrowInRight, BsPersonPlus, BsQuestionCircle, BsShieldCheck, BsPersonVcard, BsCalendar2Check, BsPersonCheck, BsBlockquoteLeft, BsEnvelopeCheck, BsCoin, BsPatchQuestion, BsHourglassTop, BsInfoCircle, BsXOctagon, BsGear, BsGeoAltFill, BsX, BsShop } from "react-icons/bs";
-import { FiX } from 'react-icons/fi';
-import { BiSolidShoppingBagAlt } from 'react-icons/bi'
+import { usePathname, useRouter } from 'next/navigation'
+import { BsPersonCircle, BsSearch } from "react-icons/bs";
 
 export default function NavbarLight() {
     const [scroll, setScroll] = useState(false);
-    const [windowWidth, setWindowWidth] = useState(0);
-    const [toggle, setIsToggle] = useState(false);
+    const [showSearch, setShowSearch] = useState(false);
+
+    // Search state
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCityId, setSelectedCityId] = useState('');
+    const [cities, setCities] = useState([]);
 
     const pathname = usePathname();
-    const current = pathname;
+    const router = useRouter();
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
         window.scrollTo(0, 0)
-        setWindowWidth(window.innerWidth)
+
+        // Fetch cities
+        const fetchCities = async () => {
+            try {
+                const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
+                const res = await fetch(`${baseURL}/cities`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setCities(data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch cities:", error);
+            }
+        };
+        fetchCities();
 
         const handlerScroll = () => {
             if (window.scrollY > 50) {
                 setScroll(true)
             } else { setScroll(false) }
+
+            // Show search bar after 100vh (approx 800px or window.innerHeight)
+            if (window.scrollY > window.innerHeight) {
+                setShowSearch(true);
+            } else {
+                setShowSearch(false);
+            }
         }
 
-        const handleResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-
         window.addEventListener('scroll', handlerScroll)
-        window.addEventListener('resize', handleResize);
 
         return () => {
             window.removeEventListener('scroll', handlerScroll)
-            window.removeEventListener('resize', handleResize);
         };
     }, [pathname])
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+
+        const params = new URLSearchParams();
+        if (searchQuery) params.set('q', searchQuery);
+        if (selectedCityId) params.set('city_id', selectedCityId);
+
+        router.push(`/restaurants_grid?${params.toString()}`);
+    };
 
     return (
         <>
             <div className={`header header-transparent dark navdark ${scroll ? 'header-fixed' : ''}`} data-sticky-element="">
-                <div className="container-fluid">
-                    <nav id="navigation" className={windowWidth > 991 ? "navigation navigation-landscape" : "navigation navigation-portrait"}>
-                        <div className="nav-header">
-                            <Link className="nav-brand" href="/">
-                                <span className="fw-bold fs-3 text-primary">LeBonResto</span>
-                            </Link>
-                            <button className="nav-toggle bg-transparent border-0" onClick={() => setIsToggle(!toggle)} aria-label="Toggle navigation">
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                                <span className="icon-bar"></span>
-                            </button>
-                            <div className="mobile_nav">
-                                <ul>
-                                    <li>
-                                        <Link href="/login" className="d-flex align-items-center" aria-label="Login"><BsPersonCircle className="me-1" /></Link>
-                                    </li>
-                                </ul>
+                <div className="container-fluid d-flex align-items-center justify-content-between py-2">
+                    {/* 1. Logo */}
+                    <Link className="nav-brand" href="/">
+                        <span className="fw-bold fs-3 text-primary">LeBonResto</span>
+                    </Link>
+
+                    {/* 2. Centered Search Bar - Visible on Scroll */}
+                    <div className={`d-none d-lg-flex align-items-center justify-content-center flex-grow-1 ${showSearch ? 'opacity-100 visible' : 'opacity-0 invisible'}`} style={{ transition: 'all 0.3s ease', position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+                        <form onSubmit={handleSearch} className="d-flex align-items-center gap-2 bg-white rounded-pill border px-2 py-1 shadow-sm" style={{ width: '500px' }}>
+                            <div className="d-flex align-items-center flex-grow-1 border-end pe-2">
+                                <BsSearch className="text-muted ms-2 me-2" />
+                                <input
+                                    type="text"
+                                    className="form-control border-0 shadow-none py-1"
+                                    placeholder="Restaurant, cuisine..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
                             </div>
-                        </div>
-                        <div className={`nav-menus-wrapper ${toggle ? 'nav-menus-wrapper-open' : ''}`} style={{ transitionProperty: toggle ? 'none' : 'left' }}>
-                            <button className='nav-menus-wrapper-close-button bg-transparent border-0' onClick={() => setIsToggle(!toggle)} aria-label="Close navigation">✕</button>
-                            <ul className="nav-menu">
-                                <li className={`${current === '/' ? 'active' : ''}`}><Link href="/">Accueil</Link></li>
+                            <div className="d-flex align-items-center flex-grow-1" style={{ maxWidth: '180px' }}>
+                                <select
+                                    className="form-select border-0 shadow-none py-1"
+                                    value={selectedCityId}
+                                    onChange={(e) => setSelectedCityId(e.target.value)}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <option value="">Toutes les villes</option>
+                                    {cities.map((city) => (
+                                        <option key={city.id} value={city.id}>{city.name}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <button type="submit" className="btn btn-primary btn-sm rounded-pill px-3">
+                                <BsSearch />
+                            </button>
+                        </form>
+                    </div>
 
-                                <li className={`${['/restaurants_grid', '/restaurants_list', '/half-map', '/restaurants'].includes(current) ? 'active' : ''}`}>
-                                    <Link href="/restaurants_grid">Restaurants</Link>
-                                    <ul className="nav-dropdown nav-submenu">
-                                        <li><Link href="/restaurants_grid">Vue Grille</Link></li>
-                                        <li><Link href="/restaurants_list">Vue Liste</Link></li>
-                                        <li><Link href="/half-map">Carte</Link></li>
-                                    </ul>
-                                </li>
-
-                                <li className={`${current === '/about-us' ? 'active' : ''}`}><Link href="/about-us">À propos</Link></li>
-                                <li className={`${current === '/blog' ? 'active' : ''}`}><Link href="/blog">Blog</Link></li>
-                                <li className={`${current === '/contact-us' ? 'active' : ''}`}><Link href="/contact-us">Contact</Link></li>
-                            </ul>
-
-                            <ul className="nav-menu nav-menu-social align-to-right">
-                                <li>
-                                    <Link href="/login" className="d-flex align-items-center text-dark fw-medium">
-                                        <BsPersonCircle className="fs-6 me-2" />
-                                        <span className="navCl">Connexion</span>
-                                    </Link>
-                                </li>
-                                <li className="list-buttons light">
-                                    <Link href="http://localhost:3000" target="_blank" rel="noopener noreferrer" className="bg-primary">
-                                        <BsShop className="fs-6 me-2" />
-                                        Espace Restaurateur
-                                    </Link>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav >
-                </div >
-            </div >
+                    {/* 3. Connection Button */}
+                    <div>
+                        <Link href="/login" className="d-flex align-items-center text-dark fw-medium btn btn-light-primary rounded-pill px-4">
+                            <BsPersonCircle className="fs-6 me-2" />
+                            <span className="navCl">Connexion</span>
+                        </Link>
+                    </div>
+                </div>
+            </div>
             <div className="clearfix"></div>
         </>
     )

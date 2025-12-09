@@ -1,59 +1,40 @@
 import { apiSlice } from './apiSlice';
 
-/**
- * Reservation API Endpoints (Customer)
- * 
- * Handles customer reservations - viewing and creating
- */
-
 export const reservationsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        // Get Current Customer's Reservations
-        getMyReservations: builder.query({
-            query: () => '/reservations/me',
-            providesTags: (result) =>
-                result
-                    ? [
-                        ...result.map(({ id }) => ({ type: 'Reservation' as const, id })),
-                        { type: 'Reservation' as const, id: 'LIST' },
-                    ]
-                    : [{ type: 'Reservation' as const, id: 'LIST' }],
-        }),
-
-        // Create a New Reservation
+        // Create new reservation
         createReservation: builder.mutation({
             query: (reservationData) => ({
                 url: '/reservations',
                 method: 'POST',
                 body: reservationData,
             }),
-            invalidatesTags: [{ type: 'Reservation', id: 'LIST' }],
+            invalidatesTags: ['Reservation', 'Restaurant'], // Invalidate restaurant to update most-reserved stats if needed
         }),
 
-        // Get Single Reservation Details (if needed)
+        // Get reservations by restaurant (for admin or checking availability)
+        getRestaurantReservations: builder.query({
+            query: (restaurantId) => `/restaurants/${restaurantId}/reservations`,
+            providesTags: (result, error, id) => [{ type: 'Reservation', id: `LIST_RESTAURANT_${id}` }],
+        }),
+
+        // Get single reservation
         getReservationById: builder.query({
             query: (id) => `/reservations/${id}`,
             providesTags: (result, error, id) => [{ type: 'Reservation', id }],
         }),
 
-        // Update Reservation (e.g., cancel)
-        updateReservation: builder.mutation({
-            query: ({ id, ...data }) => ({
-                url: `/reservations/${id}`,
-                method: 'PATCH',
-                body: data,
-            }),
-            invalidatesTags: (result, error, { id }) => [
-                { type: 'Reservation', id },
-                { type: 'Reservation', id: 'LIST' },
-            ],
+        // Get reservations for current customer (if needed later)
+        getMyReservations: builder.query({
+            query: () => '/me/reservations',
+            providesTags: ['Reservation'],
         }),
     }),
 });
 
 export const {
-    useGetMyReservationsQuery,
     useCreateReservationMutation,
+    useGetRestaurantReservationsQuery,
     useGetReservationByIdQuery,
-    useUpdateReservationMutation,
+    useGetMyReservationsQuery,
 } = reservationsApi;

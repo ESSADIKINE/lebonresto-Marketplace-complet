@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { BsSearch } from 'react-icons/bs';
 import Image from 'next/image';
+import { useGetCitiesQuery } from '../store/api';
 
 const bg = '/assets/img/banner-1.jpg';
 const bg1 = '/assets/img/banner-4.jpg';
@@ -12,11 +13,14 @@ const bg3 = '/assets/img/banner-6.jpg';
 const bg4 = '/assets/img/banner-7.jpg';
 const hero1 = '/assets/img/side-img.png';
 
-export default function HeroSection({ cities }) {
+export default function HeroSection({ cities: initialCities }) {
     const router = useRouter();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedCityId, setSelectedCityId] = useState('');
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const { data: apiCities } = useGetCitiesQuery(undefined, { skip: !!initialCities });
+    const cities = initialCities || apiCities || [];
 
     const images = [bg1, bg2, bg3, bg4];
 
