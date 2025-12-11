@@ -24,6 +24,16 @@ export const reservationsApi = apiSlice.injectEndpoints({
             providesTags: (result, error, id) => [{ type: 'Reservation', id }],
         }),
 
+        // Update reservation
+        updateReservation: builder.mutation({
+            query: ({ id, ...data }) => ({
+                url: `/reservations/${id}`,
+                method: 'PATCH',
+                body: data,
+            }),
+            invalidatesTags: (result, error, { id }) => [{ type: 'Reservation', id }],
+        }),
+
         // Get reservations for current customer (if needed later)
         getMyReservations: builder.query({
             query: () => '/me/reservations',
@@ -36,5 +46,6 @@ export const {
     useCreateReservationMutation,
     useGetRestaurantReservationsQuery,
     useGetReservationByIdQuery,
+    useUpdateReservationMutation,
     useGetMyReservationsQuery,
 } = reservationsApi;

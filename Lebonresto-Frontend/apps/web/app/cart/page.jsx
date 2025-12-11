@@ -6,8 +6,7 @@ import Link from 'next/link'
 import { MdArrowForwardIos } from 'react-icons/md'
 import { BsXLg } from 'react-icons/bs'
 import FooterTop from '../../components/footer-top'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 
 const img1 = '/assets/img/h.jpg'
 const img2 = '/assets/img/j.jpg'
@@ -246,8 +245,7 @@ export default function Cart() {
             </section>
 
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

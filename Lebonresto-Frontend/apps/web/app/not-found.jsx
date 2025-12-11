@@ -1,17 +1,16 @@
+'use client';
+
 import React from 'react'
-import NavbarLight from '../components/navbar/navbar-light'
 import Link from 'next/link'
 import { MdArrowForwardIos } from 'react-icons/md'
 import FooterTop from '../components/footer-top'
-import Footer from '../components/footer'
-import BackToTop from '../components/back-to-top'
 
 const bg = '/assets/img/error.svg'
 
 export default function NotFound() {
     return (
         <>
-            <NavbarLight />
+            {/* Navbar removed - managed by RootLayout */}
 
             <section className="bg-light">
                 <div className="container">
@@ -53,8 +52,6 @@ export default function NotFound() {
             </section>
 
             <FooterTop />
-            <Footer />
-            <BackToTop />
         </>
     )
 }

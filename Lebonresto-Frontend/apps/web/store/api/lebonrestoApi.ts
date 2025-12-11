@@ -228,9 +228,6 @@ export const lebonrestoApi = createApi({
             ],
         }),
 
-        // ========================
-        // ADMINS ENDPOINTS
-        // ========================
 
         // curl -X POST "http://localhost:3000/admins" -H "Content-Type: application/json" -d '{...}'
         createAdmin: builder.mutation<Admin, Partial<Admin>>({
@@ -1026,6 +1023,19 @@ export const lebonrestoApi = createApi({
             query: () => '/me/saved-restaurants',
             providesTags: [{ type: 'SavedRestaurant', id: 'LIST' }],
         }),
+
+        // ========================
+        // RESTAURANT LEADS
+        // ========================
+
+        // curl -X POST "http://localhost:3000/restaurant-leads"
+        createRestaurantLead: builder.mutation<any, any>({
+            query: (body) => ({
+                url: '/restaurant-leads',
+                method: 'POST',
+                body,
+            }),
+        }),
     }),
 });
 
@@ -1144,6 +1154,7 @@ export const {
     useSaveRestaurantMutation,
     useUnsaveRestaurantMutation,
     useGetMySavedRestaurantsQuery,
+    useCreateRestaurantLeadMutation,
 } = lebonrestoApi;
 
 export default lebonrestoApi;

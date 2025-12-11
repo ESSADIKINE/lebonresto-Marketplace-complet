@@ -1,11 +1,8 @@
 'use client';
 
 import React from 'react'
-import Link from 'next/link'
-import Image from 'next/image'
 import { useGetRestaurantsQuery } from '../store/api'
-import { BsGeoAlt, BsPatchCheckFill, BsStar, BsStarFill, BsSuitHeart, BsTelephone } from 'react-icons/bs'
-import { FaUtensils } from 'react-icons/fa6';
+import RestaurantCard from './restaurant/RestaurantCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -67,108 +64,8 @@ export default function FeaturedListing({ restaurants: initialRestaurants, citie
 
                             return (
                                 <SwiperSlide className="singleItem" key={index}>
-                                    <div className="listingitem-container">
-                                        <div className="singlelisting-item bg-light border-0">
-                                            <div className="listing-top-item">
-                                                <div className="position-absolute end-0 top-0 me-3 mt-3 z-2">
-                                                    <Link href="#" className="bookmarkList" data-bs-toggle="tooltip" data-bs-title="Save Listing" aria-label="Save to favorites"><BsSuitHeart className="m-0" /></Link>
-                                                </div>
-                                                <Link href={`/restaurants/${item.id}`} className="topLink">
-                                                    <div className="position-absolute start-0 top-0 ms-3 mt-3 z-2">
-                                                        <div className="d-flex align-items-center justify-content-start gap-2">
-                                                            <span className={`badge badge-xs text-uppercase ${item.resturant_status === 'Ouvert' ? 'listOpen' : 'listClose'}`}>
-                                                                {item.resturant_status || 'Closed'}
-                                                            </span>
-
-                                                            <span className="badge badge-xs badge-transparent">$$$</span>
-
-                                                            {item.is_featured &&
-                                                                <span className="badge badge-xs badge-transparent"><BsStar className="mb-0 me-1" />Featured</span>
-                                                            }
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ position: 'relative', height: '250px', width: '100%' }}>
-                                                        <Image
-                                                            src={restaurantImage}
-                                                            alt={item.name}
-                                                            fill
-                                                            className="img-fluid"
-                                                            style={{ objectFit: 'cover' }}
-                                                        />
-                                                    </div>
-                                                </Link>
-                                                <div className="opssListing position-absolute start-0 bottom-0 ms-3 mb-4 z-2">
-                                                    <div className="d-flex align-items-center justify-content-between gap-2">
-                                                        <div className="listing-avatar">
-                                                            <Link href="#" className="avatarImg">
-                                                                <Image
-                                                                    src={ownerImage}
-                                                                    className="img-fluid circle"
-                                                                    alt="Avatar"
-                                                                    width={40}
-                                                                    height={40}
-                                                                    style={{ objectFit: 'cover' }}
-                                                                />
-                                                            </Link>
-                                                        </div>
-                                                        <div className="listing-details">
-                                                            <h4 className="listingTitle">
-                                                                <Link href={`/restaurants/${item.id}`} className="titleLink">
-                                                                    {item.name}
-                                                                    <span className="verified"><BsPatchCheckFill className="bi bi-patch-check-fill m-0" /></span>
-                                                                </Link>
-                                                            </h4>
-                                                            <div className="list-infos">
-                                                                <div className="gap-3 mt-1">
-                                                                    <div className="list-distance text-light d-flex align-items-center">
-                                                                        <BsGeoAlt className="mb-0 me-2" />
-                                                                        {cityName}
-                                                                    </div>
-                                                                    <div className="list-calls text-light hide-mob mt-1 d-flex align-items-center">
-                                                                        <BsTelephone className="mb-0 me-2" />
-                                                                        {item.phone || '+123 456 7890'}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="listing-footer-item border-0">
-                                                <div className="d-flex align-items-center justify-content-between gap-2">
-                                                    <div className="catdWraps">
-                                                        <div className="flex-start">
-                                                            {category && (
-                                                                <Link href={{ pathname: '/restaurants_grid', query: { category_id: item.category_id } }} className="d-flex align-items-center justify-content-start gap-2">
-                                                                    <span className="catIcon bg-primary">
-                                                                        {category.category_image ? (
-                                                                            <Image
-                                                                                src={category.category_image}
-                                                                                alt={categoryName}
-                                                                                width={16}
-                                                                                height={16}
-                                                                                style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }}
-                                                                            />
-                                                                        ) : (
-                                                                            <FaUtensils className="text-white" />
-                                                                        )}
-                                                                    </span>
-                                                                    <span className="catTitle">{categoryName}</span>
-                                                                </Link>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <div className="listing-rates">
-                                                        <span className="d-flex align-items-center justify-content-start gap-1 text-sm">
-                                                            {[...Array(5)].map((_, i) => (
-                                                                <BsStarFill key={i} className={`mb-0 ${i < Math.round(ratingAvg) ? 'text-warning' : 'text-muted'}`} />
-                                                            ))}
-                                                        </span>
-                                                        <span className="text-md text-muted-2 hide-mob mt-2">({ratingCount} Reviews)</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <div className="p-2 h-100">
+                                        <RestaurantCard restaurant={item} layout="grid" />
                                     </div>
                                 </SwiperSlide>
                             )

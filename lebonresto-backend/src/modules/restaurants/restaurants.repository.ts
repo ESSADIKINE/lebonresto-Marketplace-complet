@@ -6,11 +6,12 @@ import {
 import { SupabaseService } from '../../database/supabase.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { Restaurant } from './entities/restaurant.entity';
+import { Restaurant, RestaurantStatus } from './entities/restaurant.entity';
 
 @Injectable()
 export class RestaurantsRepository {
   private readonly table = 'restaurants';
+  private readonly promoView = 'view_restaurants_with_promos';
 
   constructor(private readonly supabase: SupabaseService) { }
 
@@ -29,17 +30,168 @@ export class RestaurantsRepository {
     return created;
   }
 
-  async findAll(): Promise<Restaurant[]> {
-    const { data, error } = await this.supabase
+  async findAll(filters: {
+    status?: string | string[];
+    sort?: string;
+    cityId?: string;
+    categoryId?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    minRating?: number;
+    q?: string;
+    latitude?: number;
+    longitude?: number;
+    radius?: number;
+  }): Promise<Restaurant[]> {
+    let query = this.supabase
       .getClient()
       .from(this.table)
-      .select('*, city:cities(*), category:categories(*)')
-      .order('created_at', { ascending: false });
+      .select('*, city:cities(*), category:categories(*)');
+
+    // Filter by Status
+    if (filters.status) {
+      const statuses = Array.isArray(filters.status) ? filters.status : filters.status.split(',');
+      if (statuses.length > 0) {
+        query = query.in('status', statuses);
+      }
+    }
+
+    // Filter by City (Multi-select)
+    if (filters.cityId) {
+      const ids = filters.cityId.split(',');
+      if (ids.length > 0) {
+        query = query.in('city_id', ids);
+      }
+    }
+
+    // Filter by Category (Multi-select)
+    if (filters.categoryId) {
+      const ids = filters.categoryId.split(',');
+      if (ids.length > 0) {
+        query = query.in('category_id', ids);
+      }
+    }
+
+    // Filter by Rating
+    if (filters.minRating) {
+      query = query.gte('rating_avg', filters.minRating);
+    }
+
+    // Filter by Text Search (q)
+    if (filters.q) {
+      query = query.or(`name.ilike.%${filters.q}%,description.ilike.%${filters.q}%`);
+    }
+
+    // Filter by Price Range
+    if (filters.minPrice !== undefined) {
+      query = query.gte('min_price', filters.minPrice);
+    }
+    if (filters.maxPrice !== undefined) {
+      query = query.lte('max_price', filters.maxPrice);
+    }
+
+    // Sorting
+    if (filters.sort === 'createdAtDesc') {
+      query = query.order('created_at', { ascending: false });
+    } else {
+      query = query.order('created_at', { ascending: false });
+    }
+
+    const { data: rawData, error } = await query;
 
     if (error) {
       throw new InternalServerErrorException(error.message);
     }
 
+
+
+    let data = rawData;
+
+    // Filter by Distance (In-Memory) & Calculate Distance
+    if (filters.latitude && filters.longitude) {
+      const { latitude: userLat, longitude: userLng, radius } = filters;
+
+      // Calculate distance for all restaurants first
+      data = data.map(restaurant => {
+        if (!restaurant.latitude || !restaurant.longitude) {
+          return restaurant;
+        }
+
+        const R = 6371; // Earth radius in km
+        const dLat = (restaurant.latitude - userLat) * (Math.PI / 180);
+        const dLon = (restaurant.longitude - userLng) * (Math.PI / 180);
+        const a =
+          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+          Math.cos(userLat * (Math.PI / 180)) *
+          Math.cos(restaurant.latitude * (Math.PI / 180)) *
+          Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // Distance in km
+
+        return { ...restaurant, distance };
+      });
+
+      // Filter by Radius if provided
+      if (radius) {
+        data = data.filter((r) => r.distance !== undefined && r.distance <= radius);
+      } else {
+        // If sorting by distance is implied or desired when location is provided
+        // We probably only want to filter valid coordinates if we are doing distance logic
+        data = data.filter(r => r.distance !== undefined);
+      }
+
+      // Sort by distance if distance filter is active OR just location is provided
+      // (Usually if user gives location, they want closest first)
+      data.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
+    }
+
+    // In-memory sort fallback for Status if desired
+    if (!filters.sort && data && !filters.radius) {
+      const score = (s: string) => {
+        if (s === RestaurantStatus.PREMIUM) return 3;
+        if (s === RestaurantStatus.STANDARD) return 2;
+        if (s === RestaurantStatus.BASIC) return 1;
+        return 0;
+      };
+      data.sort((a, b) => {
+        const diff = score(b.status) - score(a.status);
+        if (diff !== 0) return diff;
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      });
+    }
+
+    return data;
+  }
+
+  async findWithPromos() {
+    // Uses the View created by SQL script
+    const { data, error } = await this.supabase
+      .getClient()
+      .from(this.promoView)
+      .select('*, city:cities(*), category:categories(*)')
+      .order('max_discount_percentage', { ascending: false })
+      .order('nearest_promo_start_at', { ascending: true, nullsFirst: false });
+
+    if (error) {
+      // Fallback if View doesn't exist?
+      throw new InternalServerErrorException(`Could not fetch promos. Ensure 'view_restaurants_with_promos' exists. Error: ${error.message}`);
+    }
+    return data;
+  }
+
+  async findMostReserved(startDate: string, endDate: string, limit: number) {
+    // Uses the RPC function created by SQL script
+    const { data, error } = await this.supabase
+      .getClient()
+      .rpc('get_most_reserved_restaurants', {
+        start_date: startDate,
+        end_date: endDate,
+        limit_count: limit
+      });
+
+    if (error) {
+      throw new InternalServerErrorException(`Could not fetch most reserved. key: ${error.message}`);
+    }
     return data;
   }
 
@@ -170,7 +322,8 @@ export class RestaurantsRepository {
       query = query.eq('city_id', filters.cityId);
     }
     if (filters.categoryId) {
-      query = query.eq('category_id', filters.categoryId);
+      const ids = filters.categoryId.split(',');
+      query = query.in('category_id', ids);
     }
     if (filters.q) {
       query = query.or(
@@ -286,16 +439,6 @@ export class RestaurantsRepository {
   }
 
   async incrementRatingCount(id: string): Promise<void> {
-    // Supabase doesn't have a direct increment method in the JS client like Prisma/TypeORM
-    // We can use an RPC call if defined, or fetch-update.
-    // For safety/concurrency, RPC is better, but for now we'll do fetch-update or raw query if possible.
-    // Actually, Supabase JS client supports .rpc() if we have a function.
-    // Without RPC, we risk race conditions.
-    // However, given the constraints, we will try to use a raw query or just fetch-update for now.
-    // Let's assume we can use a simple fetch-update for this task as setting up RPC might be out of scope.
-
-    // Better approach: Use the 'rpc' method if a function exists, otherwise fetch-update.
-    // Since we can't create SQL functions easily here, we will do fetch-update.
 
     const { data: restaurant, error: fetchError } = await this.supabase
       .getClient()

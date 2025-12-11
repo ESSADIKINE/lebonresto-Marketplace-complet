@@ -3,8 +3,7 @@
 import React from 'react'
 import NavbarLight from '../../components/navbar/navbar-light'
 import FooterTop from '../../components/footer-top'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 
 export default function Elements() {
     return (
@@ -16,8 +15,7 @@ export default function Elements() {
                 </div>
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

@@ -2,8 +2,7 @@
 
 import React from 'react'
 import NavbarLight from '../../components/navbar/navbar-light'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 import { BsGeoAlt, BsEnvelope, BsTelephone } from 'react-icons/bs'
 
 const bg = '/assets/img/title-banner.jpg'
@@ -91,8 +90,7 @@ export default function ContactUs() {
                 </div>
             </section>
 
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

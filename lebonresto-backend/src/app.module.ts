@@ -18,6 +18,8 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { CitiesModule } from './modules/cities/cities.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { TagsModule } from './modules/tags/tags.module';
+import { SavedRestaurantsModule } from './modules/saved-restaurants/saved-restaurants.module';
+import { RestaurantLeadsModule } from './modules/restaurant-leads/restaurant-leads.module';
 import configuration from './common/config/configuration';
 import { validationSchema } from './common/config/validation';
 
@@ -43,8 +45,10 @@ import { validationSchema } from './common/config/validation';
     CitiesModule,
     CategoriesModule,
     TagsModule,
+    SavedRestaurantsModule,
+    RestaurantLeadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

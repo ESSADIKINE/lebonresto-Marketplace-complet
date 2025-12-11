@@ -6,8 +6,7 @@ import Link from 'next/link'
 import { Link as ScrollLink } from 'react-scroll'
 import { articles } from '../../data/data'
 import FooterTop from '../../components/footer-top'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 import { MdArrowForwardIos } from 'react-icons/md'
 
 const bg = '/assets/img/title-bg.png'
@@ -175,8 +174,7 @@ export default function HelpCenter() {
                 </div>
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
 
         </>
     )

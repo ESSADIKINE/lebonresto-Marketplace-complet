@@ -2,8 +2,7 @@
 
 import React from 'react'
 import NavbarLight from '../../components/navbar/navbar-light'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 import Link from 'next/link'
 
 const bg = '/assets/img/title-banner.jpg'
@@ -78,8 +77,7 @@ export default function Blog() {
                 </div>
             </section>
 
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

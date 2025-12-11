@@ -6,8 +6,7 @@ import Select from 'react-select';
 import NavbarLight from '../../components/navbar/navbar-light'
 import { MdArrowForwardIos } from 'react-icons/md'
 import FooterTop from '../../components/footer-top';
-import Footer from '../../components/footer';
-import BackToTop from '../../components/back-to-top';
+
 
 export default function CheckoutPage() {
 
@@ -388,8 +387,7 @@ export default function CheckoutPage() {
                 </div>
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

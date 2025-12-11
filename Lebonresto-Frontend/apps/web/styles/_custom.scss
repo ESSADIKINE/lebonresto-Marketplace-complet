@@ -68,10 +68,19 @@ $theme-colors: (
   border-color: #016B61;
 
   &:hover,
-  &:focus,
   &:active {
     background-color: #015349 !important;
     border-color: #015349 !important;
+  }
+
+  &:focus-visible {
+    background-color: #015349 !important;
+    border-color: #015349 !important;
+    box-shadow: 0 0 0 0.25rem rgba(1, 107, 97, 0.5);
+  }
+
+  &:focus:not(:focus-visible) {
+    box-shadow: none !important;
   }
 }
 
@@ -80,10 +89,19 @@ $theme-colors: (
   border-color: #016B61;
 
   &:hover,
-  &:focus,
   &:active {
     background-color: #016B61 !important;
     border-color: #016B61 !important;
+  }
+
+  &:focus-visible {
+    background-color: #016B61 !important;
+    border-color: #016B61 !important;
+    box-shadow: 0 0 0 0.25rem rgba(1, 107, 97, 0.5);
+  }
+
+  &:focus:not(:focus-visible) {
+    box-shadow: none !important;
   }
 }
 

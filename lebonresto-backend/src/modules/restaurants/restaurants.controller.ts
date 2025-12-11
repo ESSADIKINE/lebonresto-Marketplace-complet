@@ -10,6 +10,8 @@ import {
   ParseUUIDPipe,
   UseInterceptors,
   UploadedFiles,
+  ParseIntPipe,
+  DefaultValuePipe,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -30,7 +32,7 @@ export class RestaurantsController {
   constructor(
     private readonly restaurantsService: RestaurantsService,
     private readonly cloudinaryService: CloudinaryService,
-  ) {}
+  ) { }
 
   @Post()
   @ApiOperation({ summary: 'Create a new restaurant' })
@@ -40,8 +42,61 @@ export class RestaurantsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all restaurants' })
-  findAll() {
-    return this.restaurantsService.findAll();
+  @ApiQuery({ name: 'status', required: false, description: 'Filter by status (comma separated)' })
+  @ApiQuery({ name: 'sort', required: false, description: 'Sort by field (e.g. createdAtDesc)' })
+  @ApiQuery({ name: 'cityId', required: false })
+  @ApiQuery({ name: 'categoryId', required: false })
+  @ApiQuery({ name: 'minPrice', required: false })
+  @ApiQuery({ name: 'maxPrice', required: false })
+  @ApiQuery({ name: 'minRating', required: false })
+  @ApiQuery({ name: 'q', required: false })
+  @ApiQuery({ name: 'latitude', required: false })
+  @ApiQuery({ name: 'longitude', required: false })
+  @ApiQuery({ name: 'radius', required: false })
+  findAll(
+    @Query('status') status?: string,
+    @Query('sort') sort?: string,
+    @Query('cityId') cityId?: string,
+    @Query('categoryId') categoryId?: string,
+    @Query('minPrice') minPrice?: number,
+    @Query('maxPrice') maxPrice?: number,
+    @Query('minRating') minRating?: number,
+    @Query('q') q?: string,
+    @Query('latitude') latitude?: number,
+    @Query('longitude') longitude?: number,
+    @Query('radius') radius?: number,
+  ) {
+    console.log('GET /restaurants filters:', { status, sort, cityId, categoryId, minPrice, maxPrice, minRating, q, latitude, longitude, radius });
+    return this.restaurantsService.findAll({
+      status,
+      sort,
+      cityId,
+      categoryId,
+      minPrice,
+      maxPrice,
+      minRating,
+      q,
+      latitude,
+      longitude,
+      radius
+    });
+  }
+
+  @Get('promos')
+  @ApiOperation({ summary: 'Get restaurants with active promos' })
+  getPromos() {
+    return this.restaurantsService.getPromos();
+  }
+
+  @Get('most-reserved')
+  @ApiOperation({ summary: 'Get most reserved restaurants' })
+  @ApiQuery({ name: 'month', required: false, example: '2025-12' })
+  @ApiQuery({ name: 'limit', required: false, example: 10 })
+  getMostReserved(
+    @Query('month') month?: string,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+  ) {
+    return this.restaurantsService.getMostReserved(month, limit);
   }
 
   @Get('search')

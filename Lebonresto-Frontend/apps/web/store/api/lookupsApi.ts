@@ -25,6 +25,18 @@ export const lookupsApi = apiSlice.injectEndpoints({
             query: () => '/tags',
             providesTags: ['Tag'],
         }),
+
+        // Get City By ID
+        getCityById: builder.query({
+            query: (id) => `/cities/${id}`,
+            providesTags: (result, error, id) => [{ type: 'City', id }],
+        }),
+
+        // Get Category By ID
+        getCategoryById: builder.query({
+            query: (id) => `/categories/${id}`,
+            providesTags: (result, error, id) => [{ type: 'Category', id }],
+        }),
     }),
 });
 
@@ -32,4 +44,6 @@ export const {
     useGetCitiesQuery,
     useGetCategoriesQuery,
     useGetTagsQuery,
+    useGetCityByIdQuery,
+    useGetCategoryByIdQuery,
 } = lookupsApi;

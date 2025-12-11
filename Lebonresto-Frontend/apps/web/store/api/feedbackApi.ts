@@ -66,6 +66,14 @@ export const feedbackApi = apiSlice.injectEndpoints({
             query: () => '/feedback',
             providesTags: [{ type: 'Feedback', id: 'LIST' }],
         }),
+
+        // Get Customer Feedback
+        getCustomerFeedback: builder.query({
+            query: (customerId) => `/customers/${customerId}/feedback`,
+            providesTags: (result, error, customerId) => [
+                { type: 'Feedback', id: `CUSTOMER_${customerId}` },
+            ],
+        }),
     }),
 });
 
@@ -75,4 +83,5 @@ export const {
     useUpdateFeedbackMutation,
     useDeleteFeedbackMutation,
     useGetLatestFeedbackQuery,
+    useGetCustomerFeedbackQuery,
 } = feedbackApi;

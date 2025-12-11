@@ -5,6 +5,7 @@ import '../styles/style.scss';
 import './globals.css';
 import StoreProvider from '../store/StoreProvider';
 import { Poppins } from 'next/font/google';
+import MainLayoutWrapper from '../components/MainLayoutWrapper';
 
 const poppins = Poppins({
     subsets: ['latin'],
@@ -27,7 +28,9 @@ export default function RootLayout({ children }) {
         <html lang="fr">
             <body className={poppins.className}>
                 <StoreProvider>
-                    {children}
+                    <MainLayoutWrapper>
+                        {children}
+                    </MainLayoutWrapper>
                 </StoreProvider>
             </body>
         </html>

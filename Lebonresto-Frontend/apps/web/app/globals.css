@@ -1,1 +1,384 @@
 /* Global styles */
+
+/* Range Slider Customization */
+.form-range-transparent {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent !important;
+    pointer-events: none;
+    height: 100%;
+}
+
+/* Chrome, Safari, Edge, Opera */
+.form-range-transparent::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    pointer-events: auto;
+    /* Re-enable pointer events for the thumb */
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bs-primary, #dc3545);
+    border: 2px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 20;
+}
+
+/* Firefox */
+.form-range-transparent::-moz-range-thumb {
+    pointer-events: auto;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--bs-primary, #dc3545);
+    border: 2px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 20;
+    border: none;
+}
+
+.form-range-transparent:focus {
+    outline: none;
+}
+
+.form-range-transparent::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background: transparent;
+}
+
+/* Text Hover Utility */
+.hover-primary {
+    transition: color 0.2s ease;
+}
+
+.hover-primary:hover {
+    color: var(--bs-primary) !important;
+}
+
+/* Theme Hover Card Effect - Ensure text stays visible */
+.theme-hover-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.theme-hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Global Focus Reset (Accessibility Safe) */
+.btn:focus,
+.btn:active {
+    box-shadow: none !important;
+}
+
+/* View Mode Buttons (Grid/List) Override */
+.btn-group .btn-light:hover {
+    border-color: var(--bs-primary) !important;
+    color: var(--bs-primary) !important;
+    z-index: 2;
+}
+
+.btn-group .btn-primary {
+    z-index: 2;
+}
+
+/* ensure btn-light specifically doesn't stick focus color */
+.btn-light:focus:not(:focus-visible):not(.active):not(:hover) {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    color: #000;
+}
+
+/* --- Half Map & Leaflet Styles --- */
+.leaflet-container {
+    width: 100%;
+    height: 100% !important;
+    z-index: 1;
+    font-family: inherit;
+}
+
+/* Custom Marker */
+.lb-map-marker {
+    background: transparent;
+    border: none;
+}
+
+.lb-map-marker-inner {
+    background-color: var(--bs-primary, #00B074);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+    border: 2px solid white;
+    transition: transform 0.2s ease, z-index 0.2s;
+}
+
+.lb-map-marker-inner:hover {
+    transform: scale(1.2);
+    z-index: 2000;
+}
+
+.lb-map-marker-icon {
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Popup styling */
+.leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    padding: 0;
+    overflow: hidden;
+}
+
+.leaflet-popup-content {
+    margin: 0;
+    width: 220px !important;
+}
+
+.leaflet-popup-tip {
+    background: white;
+}
+
+/* --- Restaurant Filters Bar --- */
+.filters-bar-wrapper {
+    position: sticky;
+    top: 76px;
+    /* Approx navbar height */
+    z-index: 1020;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: top 0.3s;
+}
+
+.filters-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    border: 1px solid #dee2e6;
+    background: #fff;
+    color: #495057;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.filters-pill-btn:hover,
+.filters-pill-btn:active,
+.filters-pill-btn[aria-expanded="true"] {
+    background-color: #f8f9fa;
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+    text-decoration: none;
+}
+
+.filters-chip-scroll-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.filters-chip-scroll {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* IE */
+    scroll-behavior: smooth;
+    padding: 4px 2px;
+}
+
+.filters-chip-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.filters-scroll-arrow {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    flex-shrink: 0;
+    border: none;
+}
+
+/* Custom left/right arrow positioning helpers or just flex */
+.filter-chip {
+    border-radius: 50px;
+    padding: 6px 16px;
+    border: 1px solid #e0e0e0;
+    background: white;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.2s;
+    color: #555;
+    flex-shrink: 0;
+}
+
+.filter-chip:hover {
+    border-color: var(--bs-primary);
+    color: var(--bs-primary);
+    background: #fdfdfd;
+}
+
+.filter-chip.active {
+    background-color: var(--bs-primary);
+    border-color: var(--bs-primary);
+    color: white;
+}
+
+/* --- Global Button Text Hover Override --- */
+.btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-success:hover,
+.btn-info:hover,
+.btn-warning:hover,
+.btn-danger:hover,
+.btn-dark:hover,
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover,
+.btn-outline-success:hover,
+.btn-outline-danger:hover,
+.btn-outline-dark:hover {
+    color: #000 !important;
+}
+
+/* --- Card Redesign Styles --- */
+
+/* Premium Corner Ribbon */
+.premium-ribbon-wrapper {
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    width: 85px;
+    height: 85px;
+    overflow: hidden;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.premium-ribbon {
+    position: absolute;
+    top: 19px;
+    left: -21px;
+    transform: rotate(-45deg);
+    width: 120px;
+    background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+    color: #000;
+    text-align: center;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 5px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.premium-ribbon::before,
+.premium-ribbon::after {
+    content: "";
+    position: absolute;
+    bottom: -4px;
+    border-top: 4px solid #cfaa00;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+}
+
+.premium-ribbon::before {
+    left: 0;
+}
+
+.premium-ribbon::after {
+    right: 0;
+}
+
+/* Status Dot */
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.open {
+    background-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+.status-dot.closed {
+    background-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Category Pill (Image Overlay) */
+.category-overlay-pill {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(4px);
+    color: #000;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Save / Heart Icon */
+.card-save-icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    z-index: 5;
+    transition: transform 0.2s, color 0.2s;
+    color: #333;
+}
+
+.card-save-icon:hover {
+    transform: scale(1.1);
+    color: #dc3545;
+}
+
+/* Nouveau Content Badge */
+.nouveau-badge {
+    background: white;
+    border: 1px solid #e9ecef;
+    color: var(--bs-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    display: inline-block;
+}

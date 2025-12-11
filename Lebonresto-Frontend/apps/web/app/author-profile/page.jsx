@@ -4,8 +4,7 @@ import React from 'react'
 import Link from 'next/link'
 import NavbarLight from '../../components/navbar/navbar-light'
 import FooterTop from '../../components/footer-top'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 import { listData } from '../../data/data'
 import { BsBrowserChrome, BsCoin, BsEnvelope, BsEnvelopeCheckFill, BsFacebook, BsInstagram, BsLightningChargeFill, BsPatchCheckFill, BsPersonCheck, BsPhone, BsSend, BsStarFill, BsStarHalf, BsTelephone, BsTwitter, BsWhatsapp, BsYoutube } from 'react-icons/bs'
 import { FaArrowLeft, FaHeart, FaLocationDot, FaStar } from 'react-icons/fa6'
@@ -297,8 +296,7 @@ export default function AuthorProfile() {
             </section>
 
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

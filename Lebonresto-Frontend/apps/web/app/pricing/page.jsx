@@ -1,7 +1,6 @@
 import React from 'react'
 import NavbarLight from '../../components/navbar/navbar-light'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 import { BsCheckCircleFill } from 'react-icons/bs'
 import Link from 'next/link'
 
@@ -101,8 +100,7 @@ export default function Pricing() {
                 </div>
             </section>
 
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

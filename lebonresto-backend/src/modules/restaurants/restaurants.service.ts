@@ -42,8 +42,56 @@ export class RestaurantsService {
     return createdRestaurant;
   }
 
-  async findAll() {
-    return this.restaurantsRepository.findAll();
+  async findAll(filters: {
+    status?: string | string[];
+    sort?: string;
+    cityId?: string;
+    categoryId?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    minRating?: number;
+    q?: string;
+    latitude?: number;
+    longitude?: number;
+    radius?: number;
+  }) {
+    return this.restaurantsRepository.findAll(filters);
+  }
+
+  async getPromos() {
+    return this.restaurantsRepository.findWithPromos();
+  }
+
+  async getMostReserved(month?: string, limit: number = 10) {
+    let startDate: Date;
+    let endDate: Date;
+
+    const now = new Date();
+
+    if (month) {
+      // Parse YYYY-MM
+      const parts = month.split('-');
+      if (parts.length !== 2) {
+        // Fallback or error? defaulting to current month if bad format
+        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      } else {
+        const year = parseInt(parts[0], 10);
+        const m = parseInt(parts[1], 10) - 1; // JS month is 0-indexed
+        startDate = new Date(year, m, 1);
+      }
+    } else {
+      startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+    }
+
+    // End date is start of next month
+    endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 1);
+
+    return this.restaurantsRepository.findMostReserved(
+      startDate.toISOString(),
+      endDate.toISOString(),
+      limit
+    );
   }
 
   async search(params: {

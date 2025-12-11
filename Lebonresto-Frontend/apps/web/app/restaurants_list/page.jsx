@@ -6,8 +6,7 @@ import FilterOne from '../../components/filter-one';
 import { BsCoin, BsLightningChargeFill, BsPatchCheckFill, BsSearch, BsTelephone } from 'react-icons/bs';
 import { FaArrowLeft, FaArrowRight, FaHeart, FaLocationDot, FaStar } from 'react-icons/fa6';
 import FooterTop from '../../components/footer-top';
-import Footer from '../../components/footer';
-import BackToTop from '../../components/back-to-top';
+
 
 export const metadata = {
     title: 'Restaurants List - LeBonResto',
@@ -211,8 +210,7 @@ export default async function RestaurantsList({ searchParams }) {
                 </div>
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     );
 }

@@ -13,12 +13,19 @@ export const restaurantsApi = apiSlice.injectEndpoints({
             query: (filters = {}) => {
                 const params = new URLSearchParams();
 
-                if (filters.city_id) params.append('cityId', filters.city_id);
-                if (filters.category_id) params.append('categoryId', filters.category_id);
-                if (filters.tags) params.append('tags', filters.tags); // comma-separated tag ids
+                if (filters.cityId || filters.city_id) params.append('cityId', filters.cityId || filters.city_id);
+                if (filters.categoryId || filters.category_id) params.append('categoryId', filters.categoryId || filters.category_id);
+                if (filters.tags) params.append('tags', filters.tags);
                 if (filters.q) params.append('q', filters.q);
+                if (filters.minPrice) params.append('minPrice', filters.minPrice.toString());
+                if (filters.maxPrice) params.append('maxPrice', filters.maxPrice.toString());
+                if (filters.minRating) params.append('minRating', filters.minRating.toString());
                 if (filters.page) params.append('page', filters.page.toString());
                 if (filters.limit) params.append('limit', filters.limit.toString());
+                // Geospatial params
+                if (filters.latitude) params.append('latitude', filters.latitude.toString());
+                if (filters.longitude) params.append('longitude', filters.longitude.toString());
+                if (filters.radius) params.append('radius', filters.radius.toString());
 
                 const queryString = params.toString();
                 return `/restaurants${queryString ? `?${queryString}` : ''}`;

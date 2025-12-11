@@ -1,10 +1,8 @@
 'use client';
 
 import React from 'react';
-import NavbarLight from '../../../../components/navbar/navbar-light';
 import FooterTop from '../../../../components/footer-top';
-import Footer from '../../../../components/footer';
-import BackToTop from '../../../../components/back-to-top';
+
 import { useGetRestaurantByIdQuery } from '../../../../store/api';
 import ReservationForm from '../../../../components/reservation/reservation-form';
 import Link from 'next/link';
@@ -13,7 +11,6 @@ import { BsArrowLeft, BsGeoAlt, BsStarFill } from 'react-icons/bs';
 export default function ReservationPage({ params }) {
     const { id } = params;
 
-    // Fetch basic restaurant info
     const { data: restaurant, isLoading } = useGetRestaurantByIdQuery(id);
 
     if (isLoading) {
@@ -26,7 +23,7 @@ export default function ReservationPage({ params }) {
 
     return (
         <div className="bg-light min-vh-100 d-flex flex-column">
-            <NavbarLight />
+            {/* Navbar is global in layout */}
 
             <div className="flex-grow-1 container pt-5 pb-5">
 
@@ -37,7 +34,7 @@ export default function ReservationPage({ params }) {
                     </Link>
                 </div>
 
-                {/* Header Summary for Context */}
+                {/* Header Summary */}
                 <div className="row justify-content-center mb-5">
                     <div className="col-lg-8 text-center">
                         <h1 className="fw-bold mb-3">Réserver une table</h1>
@@ -61,14 +58,12 @@ export default function ReservationPage({ params }) {
                     </div>
                 </div>
 
-                {/* Reservation Flow */}
                 <ReservationForm restaurant={restaurant} />
 
             </div>
 
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </div>
     );
 }

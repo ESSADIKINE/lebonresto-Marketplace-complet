@@ -24,6 +24,8 @@ export {
     useGetCitiesQuery,
     useGetCategoriesQuery,
     useGetTagsQuery,
+    useGetCityByIdQuery,
+    useGetCategoryByIdQuery,
 } from './lookupsApi';
 
 // Restaurants API

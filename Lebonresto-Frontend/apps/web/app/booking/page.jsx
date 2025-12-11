@@ -5,8 +5,7 @@ import NavbarLight from '../../components/navbar/navbar-light'
 import Link from 'next/link'
 import { BsStarFill, BsStarHalf } from 'react-icons/bs'
 import FooterTop from '../../components/footer-top'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 import { MdArrowForwardIos } from 'react-icons/md'
 
 const listImg = '/assets/img/list-4.jpg'
@@ -265,8 +264,7 @@ export default function BookingPage() {
 
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

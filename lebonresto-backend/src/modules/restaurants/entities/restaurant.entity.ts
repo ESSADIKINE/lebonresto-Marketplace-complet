@@ -27,4 +27,7 @@ export class Restaurant {
   restaurant_image: string; // Required
   created_at: Date;
   updated_at: Date;
+  min_price?: number;
+  max_price?: number;
+  distance?: number;
 }

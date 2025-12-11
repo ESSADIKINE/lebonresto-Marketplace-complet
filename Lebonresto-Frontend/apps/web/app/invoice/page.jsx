@@ -3,8 +3,7 @@ import Link from 'next/link'
 import NavbarLight from '../../components/navbar/navbar-light'
 import { BsDownload, BsPrinter } from 'react-icons/bs'
 import FooterTop from '../../components/footer-top'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 
 const logo = '/assets/img/logo.svg'
 const bg = '/assets/img/auth-bg.png'
@@ -124,8 +123,7 @@ export default function InvoicePage() {
                 </div>
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

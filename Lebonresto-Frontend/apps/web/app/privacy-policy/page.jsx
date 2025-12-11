@@ -1,15 +1,14 @@
+'use client';
+
 import React from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
 import Link from 'next/link'
 import { MdArrowForwardIos } from 'react-icons/md'
-import Footer from '../../components/footer'
 import FooterTop from '../../components/footer-top'
-import BackToTop from '../../components/back-to-top'
 
 export default function PrivacyPolicy() {
     return (
         <>
-            <NavbarLight />
+            {/* Navbar removed - managed by RootLayout */}
 
             <section className="bg-light">
                 <div className="container">
@@ -74,8 +73,7 @@ export default function PrivacyPolicy() {
                 </div>
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

@@ -8,8 +8,7 @@ import BlogSidebar from '../../../components/blog-sidebar'
 import { FaQuoteLeft, FaThumbsDown, FaThumbsUp } from 'react-icons/fa'
 import { blogData } from '../../../data/data'
 import FooterTop from '../../../components/footer-top'
-import Footer from '../../../components/footer'
-import BackToTop from '../../../components/back-to-top'
+
 
 const blogImg = '/assets/img/gal-4.jpg'
 const team1 = '/assets/img/team-1.jpg'
@@ -258,8 +257,7 @@ export default function BlogDetail({ params }) {
                 </div>
             </section>
             <FooterTop />
-            <Footer />
-            <BackToTop />
+
 
         </div>
     )

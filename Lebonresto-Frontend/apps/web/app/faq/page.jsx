@@ -1,7 +1,6 @@
 import React from 'react'
 import NavbarLight from '../../components/navbar/navbar-light'
-import Footer from '../../components/footer'
-import BackToTop from '../../components/back-to-top'
+
 
 const bg = '/assets/img/title-banner.jpg'
 
@@ -103,8 +102,7 @@ export default function FAQ() {
                 </div>
             </section>
 
-            <Footer />
-            <BackToTop />
+
         </>
     )
 }

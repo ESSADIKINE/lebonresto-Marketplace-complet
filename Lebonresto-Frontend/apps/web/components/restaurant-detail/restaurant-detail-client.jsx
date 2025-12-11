@@ -28,12 +28,18 @@ import BackToTop from '../back-to-top';
 
 export default function RestaurantDetailClient({ id }) {
     // Parallel Fetching
+    // curl -X GET "http://localhost:3000/restaurants/{id}"
     const { data: restaurant, isLoading: loadingInfo } = useGetRestaurantByIdQuery(id);
+    // curl -X GET "http://localhost:3000/restaurants/{id}/images"
     const { data: images, isLoading: loadingImages } = useGetRestaurantImagesQuery(id);
-    const { data: menus } = useGetRestaurantMenusQuery(id);
-    const { data: plats } = useGetRestaurantPlatsQuery(id);
+    // curl -X GET "http://localhost:3000/restaurants/{id}/menus"
+    const { data: menus, isLoading: loadingMenus } = useGetRestaurantMenusQuery(id);
+    // curl -X GET "http://localhost:3000/restaurants/{id}/plats"
+    const { data: plats, isLoading: loadingPlats } = useGetRestaurantPlatsQuery(id);
+    // curl -X GET "http://localhost:3000/restaurants/{id}/feedback"
     const { data: feedback } = useGetRestaurantFeedbackQuery(id);
-    const { data: events } = useGetRestaurantEventsQuery(id);
+    // curl -X GET "http://localhost:3000/restaurants/{id}/events"
+    const { data: events, isLoading: loadingEvents } = useGetRestaurantEventsQuery(id);
     const { data: summary } = useGetRestaurantSummaryQuery(id);
     const { data: tags } = useGetRestaurantTagsQuery(id);
 
