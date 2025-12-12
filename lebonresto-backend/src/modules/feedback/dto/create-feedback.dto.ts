@@ -6,6 +6,7 @@ import {
   IsUUID,
   Min,
   Max,
+  IsInt,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
@@ -27,11 +28,25 @@ export class CreateFeedbackDto {
   reservation_id?: string;
 
   @ApiProperty({ example: 5, minimum: 1, maximum: 5 })
-  @IsNumber()
+  @IsInt()
   @Min(1)
   @Max(5)
   @IsNotEmpty()
-  rating: number;
+  rating_cuisine: number;
+
+  @ApiProperty({ example: 5, minimum: 1, maximum: 5 })
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  @IsNotEmpty()
+  rating_service: number;
+
+  @ApiProperty({ example: 5, minimum: 1, maximum: 5 })
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  @IsNotEmpty()
+  rating_ambiance: number;
 
   @ApiPropertyOptional({ example: 'Great food!' })
   @IsOptional()

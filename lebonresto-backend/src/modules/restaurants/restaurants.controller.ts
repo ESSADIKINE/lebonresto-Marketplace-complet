@@ -137,6 +137,18 @@ export class RestaurantsController {
 
   // Relational Endpoints
 
+  @Get(':id/details')
+  @ApiOperation({ summary: 'Get Unified Restaurant Details (Core + Relations + Aggregations)' })
+  getDetails(@Param('id', ParseUUIDPipe) id: string) {
+    return this.restaurantsService.getDetails(id);
+  }
+
+  @Get(':id/full')
+  @ApiOperation({ summary: 'Get Restaurant Full View (Optimized)' })
+  getFull(@Param('id', ParseUUIDPipe) id: string) {
+    return this.restaurantsService.getRestaurantFullById(id);
+  }
+
   @Get(':id/menus')
   @ApiOperation({ summary: 'Get menus for a restaurant' })
   getMenus(@Param('id', ParseUUIDPipe) id: string) {

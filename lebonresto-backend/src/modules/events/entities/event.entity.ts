@@ -9,4 +9,10 @@ export class Event {
   price?: number;
   requires_reservation: boolean;
   created_at: Date;
+
+  // Promo fields
+  is_promo: boolean;
+  discount_percentage?: number;
+  promo_start_at?: Date;
+  promo_end_at?: Date;
 }

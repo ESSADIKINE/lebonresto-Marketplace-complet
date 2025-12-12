@@ -1,92 +1,81 @@
-'use client';
 
 import React from 'react';
-import { BsClock, BsTelephone, BsGlobe, BsGeoAlt } from 'react-icons/bs';
+import { BsGeoAlt, BsTelephone, BsClock, BsGlobe } from 'react-icons/bs';
 
 export default function RestaurantInfoSidebar({ restaurant }) {
-    const googleMapsUrl = restaurant.latitude && restaurant.longitude
-        ? `https://www.google.com/maps?q=${restaurant.latitude},${restaurant.longitude}`
-        : null;
-
-    // Fallback if tags come as array of objects or strings
-    const tags = restaurant.tagsData || restaurant.tags || [];
+    if (!restaurant) return null;
 
     return (
-        <div className="card border-0 rounded-4 shadow-sm mb-4">
-            <div className="card-body p-4">
-                <h5 className="fw-bold mb-4">Informations pratiques</h5>
+        <div className="d-flex flex-column gap-4">
+            {/* Contact Card */}
+            <div className="card border-0 rounded-4 shadow-sm bg-white overflow-hidden">
+                <div className="card-body p-4">
+                    <h5 className="fw-bold mb-4">Informations</h5>
 
-                {/* Map Placeholder */}
-                <div className="map-frame rounded-3 overflow-hidden mb-3" style={{ height: '200px', backgroundColor: '#eee' }}>
-                    {/* Integrate real map here later */}
-                    <div className="w-100 h-100 d-flex align-items-center justify-content-center text-muted">
-                        <BsGeoAlt className="me-2" /> Carte
-                    </div>
-                </div>
-
-                {googleMapsUrl && (
-                    <a href={googleMapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-outline-primary btn-sm w-100 mb-4 rounded-pill fw-medium">
-                        Voir sur Google Maps
-                    </a>
-                )}
-
-                <div className="d-flex align-items-start mb-3">
-                    <div className="icon-box text-primary fs-5 bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style={{ width: '40px', height: '40px' }}>
-                        <BsGeoAlt />
-                    </div>
-                    <div>
-                        <h6 className="fw-medium mb-1">Adresse</h6>
-                        <p className="text-muted text-sm mb-0">{restaurant.address}, {restaurant.city?.name}</p>
-                    </div>
-                </div>
-
-                <div className="d-flex align-items-start mb-3">
-                    <div className="icon-box text-primary fs-5 bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style={{ width: '40px', height: '40px' }}>
-                        <BsClock />
-                    </div>
-                    <div>
-                        <h6 className="fw-medium mb-1">Horaires</h6>
-                        {/* Static for now, typically needs complex parsing */}
-                        <p className="text-muted text-sm mb-0">Ouvert aujourd'hui</p>
-                        <span className="text-success text-xs fw-bold">12:00 - 23:00</span>
-                    </div>
-                </div>
-
-                <div className="d-flex align-items-start mb-3">
-                    <div className="icon-box text-primary fs-5 bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style={{ width: '40px', height: '40px' }}>
-                        <BsTelephone />
-                    </div>
-                    <div>
-                        <h6 className="fw-medium mb-1">Téléphone</h6>
-                        <p className="text-muted text-sm mb-0">{restaurant.phone || 'Non renseigné'}</p>
-                    </div>
-                </div>
-
-                {restaurant.website && (
-                    <div className="d-flex align-items-start mb-3">
-                        <div className="icon-box text-primary fs-5 bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style={{ width: '40px', height: '40px' }}>
-                            <BsGlobe />
+                    <div className="d-flex flex-column gap-3">
+                        {/* Address */}
+                        <div className="d-flex align-items-start gap-3">
+                            <div className="bg-light rounded-circle p-2 text-primary">
+                                <BsGeoAlt size={18} />
+                            </div>
+                            <div>
+                                <h6 className="fw-bold mb-1">Adresse</h6>
+                                <p className="text-muted small mb-0">
+                                    {restaurant.address || 'Adresse non renseignée'}
+                                    <br />
+                                    {restaurant.city?.name}
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h6 className="fw-medium mb-1">Site Web</h6>
-                            <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="text-primary text-sm">Visiter le site</a>
+
+                        {/* Phone */}
+                        {restaurant.phone && (
+                            <div className="d-flex align-items-start gap-3">
+                                <div className="bg-light rounded-circle p-2 text-primary">
+                                    <BsTelephone size={18} />
+                                </div>
+                                <div>
+                                    <h6 className="fw-bold mb-1">Téléphone</h6>
+                                    <p className="text-muted small mb-0">
+                                        {restaurant.phone}
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Opening Hours (Placeholder logic) */}
+                        <div className="d-flex align-items-start gap-3">
+                            <div className="bg-light rounded-circle p-2 text-primary">
+                                <BsClock size={18} />
+                            </div>
+                            <div>
+                                <h6 className="fw-bold mb-1">Horaires</h6>
+                                <p className={`small mb-0 fw-bold ${restaurant.resturant_status === 'Ouvert' ? 'text-success' : 'text-danger'}`}>
+                                    {restaurant.resturant_status || 'Fermé'}
+                                </p>
+                                <p className="text-muted small mb-0">
+                                    09:00 - 23:00 (Est.)
+                                </p>
+                            </div>
                         </div>
                     </div>
-                )}
-
-                {tags.length > 0 && (
-                    <div className="mt-4 pt-4 border-top">
-                        <h6 className="fw-bold mb-3">Tags</h6>
-                        <div className="d-flex flex-wrap gap-2">
-                            {tags.map((tag, i) => (
-                                <span key={i} className="badge bg-light text-dark fw-normal border">
-                                    {typeof tag === 'string' ? tag : tag.name}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                )}
+                </div>
             </div>
+
+            {/* Map Placeholder */}
+            {restaurant.latitude && restaurant.longitude && (
+                <div className="card border-0 rounded-4 shadow-sm bg-white overflow-hidden" style={{ minHeight: '200px' }}>
+                    <div className="card-body p-0 position-relative h-100">
+                        {/* We can integrate Leaflet here later, for now just a placeholder visual */}
+                        <div className="bg-light w-100 h-100 d-flex align-items-center justify-content-center text-muted" style={{ minHeight: '200px' }}>
+                            <div className="text-center">
+                                <BsGlobe size={32} className="mb-2 opacity-50" />
+                                <p className="small m-0">Carte non chargée</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

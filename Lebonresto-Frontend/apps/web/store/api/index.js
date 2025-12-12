@@ -33,6 +33,7 @@ export {
     restaurantsApi,
     useGetRestaurantsQuery,
     useGetRestaurantByIdQuery,
+    useGetRestaurantDetailsQuery,
     useGetRestaurantImagesQuery,
     useGetRestaurantMenusQuery,
     useGetRestaurantPlatsQuery,

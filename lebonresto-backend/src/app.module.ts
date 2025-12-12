@@ -20,6 +20,7 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { TagsModule } from './modules/tags/tags.module';
 import { SavedRestaurantsModule } from './modules/saved-restaurants/saved-restaurants.module';
 import { RestaurantLeadsModule } from './modules/restaurant-leads/restaurant-leads.module';
+import { HorairesModule } from './modules/horaires/horaires.module';
 import configuration from './common/config/configuration';
 import { validationSchema } from './common/config/validation';
 
@@ -47,6 +48,7 @@ import { validationSchema } from './common/config/validation';
     TagsModule,
     SavedRestaurantsModule,
     RestaurantLeadsModule,
+    HorairesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -27,9 +27,9 @@ export class EventsController {
   ) { }
 
   @Post()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserType.OWNER, UserType.ADMIN)
-  @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Roles(UserType.OWNER, UserType.ADMIN)
+  // @ApiBearerAuth()
   @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -43,6 +43,10 @@ export class EventsController {
         is_paid: { type: 'boolean' },
         price: { type: 'number' },
         requires_reservation: { type: 'boolean' },
+        is_promo: { type: 'boolean' },
+        discount_percentage: { type: 'number' },
+        promo_start_at: { type: 'string' },
+        promo_end_at: { type: 'string' },
         image: {
           type: 'string',
           format: 'binary',
@@ -66,6 +70,12 @@ export class EventsController {
   @ApiOperation({ summary: 'Get all upcoming events' })
   async getUpcoming() {
     return this.eventsService.findAll();
+  }
+
+  @Get('promotions')
+  @ApiOperation({ summary: 'Get active promotions' })
+  async getPromotions() {
+    return this.eventsService.findPromotions();
   }
 
   @Get('restaurant/:restaurantId')

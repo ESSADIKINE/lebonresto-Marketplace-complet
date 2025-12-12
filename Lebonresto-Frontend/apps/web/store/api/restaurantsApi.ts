@@ -45,6 +45,18 @@ export const restaurantsApi = apiSlice.injectEndpoints({
             providesTags: (result, error, id) => [{ type: 'Restaurant', id }],
         }),
 
+        // Get Unified Restaurant Details
+        getRestaurantDetails: builder.query({
+            query: (id) => `/restaurants/${id}/details`,
+            providesTags: (result, error, id) => [
+                { type: 'Restaurant', id },
+                { type: 'Menu', id: `RESTAURANT_${id}` },
+                { type: 'Plat', id: `RESTAURANT_${id}` },
+                { type: 'Event', id: `RESTAURANT_${id}` },
+                { type: 'Feedback', id: `RESTAURANT_${id}` },
+            ],
+        }),
+
         // Get Restaurant Images
         getRestaurantImages: builder.query({
             query: (restaurantId) => `/restaurants/${restaurantId}/images`,
@@ -154,6 +166,7 @@ export const restaurantsApi = apiSlice.injectEndpoints({
 export const {
     useGetRestaurantsQuery,
     useGetRestaurantByIdQuery,
+    useGetRestaurantDetailsQuery,
     useGetRestaurantImagesQuery,
     useGetRestaurantMenusQuery,
     useGetRestaurantPlatsQuery,

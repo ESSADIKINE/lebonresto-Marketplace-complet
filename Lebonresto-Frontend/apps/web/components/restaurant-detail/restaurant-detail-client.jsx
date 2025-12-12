@@ -1,49 +1,43 @@
+// apps/web/components/restaurant-detail/RestaurantDetailClient.jsx
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-    useGetRestaurantByIdQuery,
-    useGetRestaurantImagesQuery,
-    useGetRestaurantMenusQuery,
-    useGetRestaurantPlatsQuery,
-    useGetRestaurantFeedbackQuery,
-    useGetRestaurantEventsQuery,
-    useGetRestaurantSummaryQuery,
-    useGetRestaurantTagsQuery,
-    useGetRecommendedRestaurantsQuery
-} from '../../store/api';
+    fetchRestaurantFullById,
+    selectRestaurantDetail,
+    selectRestaurantDetailLoading,
+    selectRestaurantDetailError
+} from '../../store/slices/restaurantDetailSlice';
+import { useGetRecommendedRestaurantsQuery } from '../../store/api';
 
-import RestaurantHeader from './restaurant-header';
-import RestaurantGallery from './restaurant-gallery';
-import RestaurantInfoSidebar from './restaurant-info-sidebar';
-import RestaurantTabs from './restaurant-tabs';
-import RestaurantReviews from './restaurant-reviews';
-import RestaurantEvents from './restaurant-events';
-import RestaurantMediaSection from './restaurant-media-section';
+import RestaurantInfoCard from './restaurant-info-card';
+import RestaurantMediaToggle from './restaurant-media-toggle';
+import RestaurantGalleryGrid from './restaurant-gallery-grid';
+
+import RestaurantSidebarRight from './restaurant-sidebar-right';
 import RestaurantCarousel from '../home-sections/restaurant-carousel';
 import NavbarLight from '../navbar/navbar-light';
 import FooterTop from '../footer-top';
 import Footer from '../footer';
 import BackToTop from '../back-to-top';
+import RestaurantContentTabs from './restaurant-content-tabs'; // New Import
+
+import styles from './restaurant-detail-page.module.css';
 
 export default function RestaurantDetailClient({ id }) {
-    // Parallel Fetching
-    // curl -X GET "http://localhost:3000/restaurants/{id}"
-    const { data: restaurant, isLoading: loadingInfo } = useGetRestaurantByIdQuery(id);
-    // curl -X GET "http://localhost:3000/restaurants/{id}/images"
-    const { data: images, isLoading: loadingImages } = useGetRestaurantImagesQuery(id);
-    // curl -X GET "http://localhost:3000/restaurants/{id}/menus"
-    const { data: menus, isLoading: loadingMenus } = useGetRestaurantMenusQuery(id);
-    // curl -X GET "http://localhost:3000/restaurants/{id}/plats"
-    const { data: plats, isLoading: loadingPlats } = useGetRestaurantPlatsQuery(id);
-    // curl -X GET "http://localhost:3000/restaurants/{id}/feedback"
-    const { data: feedback } = useGetRestaurantFeedbackQuery(id);
-    // curl -X GET "http://localhost:3000/restaurants/{id}/events"
-    const { data: events, isLoading: loadingEvents } = useGetRestaurantEventsQuery(id);
-    const { data: summary } = useGetRestaurantSummaryQuery(id);
-    const { data: tags } = useGetRestaurantTagsQuery(id);
+    const dispatch = useDispatch();
 
-    // Fetch similar/recommended for "Vous aimerez aussi"
+    const restaurant = useSelector((state) => selectRestaurantDetail(state, id));
+    const loadingInfo = useSelector((state) => selectRestaurantDetailLoading(state, id));
+    const error = useSelector((state) => selectRestaurantDetailError(state, id));
+
+    useEffect(() => {
+        if (id && !restaurant && !loadingInfo && !error) {
+            dispatch(fetchRestaurantFullById(id));
+        }
+    }, [id, restaurant, loadingInfo, error, dispatch]);
+
     const { data: recommended, isLoading: loadingRecommended } = useGetRecommendedRestaurantsQuery();
 
     if (loadingInfo) {
@@ -56,74 +50,103 @@ export default function RestaurantDetailClient({ id }) {
         );
     }
 
-    if (!restaurant) {
+    if (error || !restaurant) {
         return (
             <div className="d-flex flex-column align-items-center justify-content-center vh-100 gap-3">
                 <h3>Restaurant introuvable</h3>
-                <a href="/" className="btn btn-primary rounded-pill">Retour à l'accueil</a>
+                {error && (
+                    <p className="text-danger">
+                        {typeof error === 'string' ? error : 'Une erreur est survenue'}
+                    </p>
+                )}
+                <a href="/" className="btn btn-primary rounded-pill">
+                    Retour à l&apos;accueil
+                </a>
             </div>
-        )
+        );
     }
 
-    // Merge tags into restaurant object for easier passing if needed, or pass separately
-    const fullRestaurant = { ...restaurant, tagsData: tags };
+    const fullRestaurant = {
+        ...restaurant,
+        tagsData: restaurant.tags_json || [],
+        images: (restaurant.images_json || []).map((img) => ({ ...img, image_url: img.url })),
+        menus: restaurant.menus_json || [],
+        plats: restaurant.plats_json || [],
+        events: restaurant.events_json || [],
+        feedback: restaurant.feedback_list_json || [],
+        category: {
+            id: restaurant.category_id,
+            name: restaurant.category_name,
+            slug: restaurant.category_slug
+        },
+        city: {
+            id: restaurant.city_id,
+            name: restaurant.city_name,
+            region: restaurant.city_region,
+            country: restaurant.city_country
+        },
+        price_range:
+            restaurant.min_price !== null && restaurant.max_price !== null
+                ? `${restaurant.min_price} - ${restaurant.max_price} MAD`
+                : 'Prix sur demande',
+        status: restaurant.subscription_status,
+        restaurant_status: restaurant.business_status
+    };
+
+    const summary = restaurant.feedback_stats || {
+        rating_avg: 0,
+        rating_count: 0,
+        avg_cuisine: 0,
+        avg_service: 0,
+        avg_ambiance: 0
+    };
 
     return (
         <div className="bg-light min-vh-100">
             <NavbarLight />
 
-            <div className="container pt-5 pb-5">
-
-                {/* 1. Header Info */}
-                <RestaurantHeader restaurant={fullRestaurant} />
-
-                {/* 2. Gallery */}
-                <RestaurantGallery images={images} />
-
-                {/* 3. Media Section (Virtual Tour & Video) */}
-                <RestaurantMediaSection
-                    visit360_url={restaurant.visit360_url}
-                    video_url={restaurant.video_url}
-                    restaurantName={restaurant.name}
-                />
-
-                <div className="row">
-                    {/* Main Content Column */}
-                    <div className="col-lg-8 col-md-12">
-
-                        {/* 4. Events (if any) */}
-                        <RestaurantEvents events={events} />
-
-                        {/* 5. Menus & Plats */}
-                        <RestaurantTabs restaurant={restaurant} menus={menus} plats={plats} />
-
-                        {/* 6. Reviews */}
-                        <RestaurantReviews feedback={feedback} summary={summary} />
-
+            <div className={`container-xxl pt-4 pb-5 ${styles.detailLayout}`}>
+                {/* 1. Header & Media Section */}
+                <div className={`row g-4 mb-3 ${styles.headerRow}`}>
+                    <div className="col-lg-5 col-md-12">
+                        <RestaurantInfoCard restaurant={fullRestaurant} summary={summary} />
                     </div>
-
-                    {/* Sidebar Column */}
-                    <div className="col-lg-4 col-md-12">
-                        <RestaurantInfoSidebar restaurant={restaurant} />
-
-                        {/* Sticky Reserve Button for Mobile/Desktop scroll context could be added here */}
-                        <div className="card border-0 rounded-4 shadow-sm bg-white p-4 text-center sticky-top" style={{ top: '100px', zIndex: 10 }}>
-                            <h4 className="fw-bold mb-3">Réserver une table</h4>
-                            <p className="text-muted small mb-4">Confirmation immédiate</p>
-                            <button className="btn btn-primary w-100 rounded-pill fw-bold py-3 mb-2">
-                                Choisir une date
-                            </button>
-                            <span className="text-muted text-xs">Aucun frais de réservation</span>
-                        </div>
+                    <div className="col-lg-7 col-md-12">
+                        <RestaurantMediaToggle
+                            visit360_url={restaurant.visit360_url}
+                            video_url={restaurant.video_url}
+                            restaurantName={restaurant.name}
+                        />
                     </div>
                 </div>
 
-                {/* 7. Similar Restaurants */}
-                <div className="mt-5">
+                {/* 2. Gallery Section */}
+                <RestaurantGalleryGrid images={fullRestaurant.images} />
+
+                {/* 3. Reviews & Sidebar Section */}
+                <div className={`row g-4 ${styles.bottomRow}`}>
+                    <div className="col-lg-8 col-md-12">
+
+                        {/* Menus, Events, Plats Tabs */}
+                        <RestaurantContentTabs
+                            menus={fullRestaurant.menus}
+                            plats={fullRestaurant.plats}
+                            events={fullRestaurant.events}
+                            horaires={restaurant.horaires_json}
+                            feedback={fullRestaurant.feedback}
+                            summary={summary}
+                        />
+                    </div>
+                    <div className="col-lg-4 col-md-12">
+                        <RestaurantSidebarRight restaurant={fullRestaurant} />
+                    </div>
+                </div>
+
+                {/* 4. Similar Restaurants */}
+                <div className={`mt-5 pt-4 ${styles.similarBlock}`}>
                     <h3 className="fw-bold mb-4">Vous aimerez aussi</h3>
                     <RestaurantCarousel restaurants={recommended} isLoading={loadingRecommended} />
                 </div>
-
             </div>
 
             <FooterTop />

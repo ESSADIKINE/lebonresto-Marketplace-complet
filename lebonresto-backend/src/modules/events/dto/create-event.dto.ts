@@ -53,4 +53,26 @@ export class CreateEventDto {
   @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   requires_reservation?: boolean;
+
+  @ApiPropertyOptional({ example: false, default: false })
+  @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
+  @IsBoolean()
+  is_promo?: boolean;
+
+  @ApiPropertyOptional({ example: 20 })
+  @IsOptional()
+  @Transform(({ value }) => parseFloat(value))
+  @IsNumber()
+  discount_percentage?: number;
+
+  @ApiPropertyOptional({ example: '2023-12-31T20:00:00Z' })
+  @IsOptional()
+  @IsDateString()
+  promo_start_at?: string;
+
+  @ApiPropertyOptional({ example: '2024-01-01T20:00:00Z' })
+  @IsOptional()
+  @IsDateString()
+  promo_end_at?: string;
 }

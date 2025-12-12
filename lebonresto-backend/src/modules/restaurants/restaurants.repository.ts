@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { SupabaseService } from '../../database/supabase.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { RestaurantFullViewDto } from './dto/restaurant-full-view.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { Restaurant, RestaurantStatus } from './entities/restaurant.entity';
 
@@ -12,8 +13,24 @@ import { Restaurant, RestaurantStatus } from './entities/restaurant.entity';
 export class RestaurantsRepository {
   private readonly table = 'restaurants';
   private readonly promoView = 'view_restaurants_with_promos';
+  private readonly fullView = 'restaurant_full_view';
 
   constructor(private readonly supabase: SupabaseService) { }
+
+  async findFullById(id: string): Promise<RestaurantFullViewDto> {
+    const { data, error } = await this.supabase
+      .getClient()
+      .from(this.fullView)
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error || !data) {
+      throw new NotFoundException(`Restaurant with ID ${id} not found`);
+    }
+
+    return data;
+  }
 
   async create(data: Partial<Restaurant>): Promise<Restaurant> {
     const { data: created, error } = await this.supabase
@@ -480,5 +497,60 @@ export class RestaurantsRepository {
       .eq('id', id);
 
     if (updateError) throw new InternalServerErrorException(updateError.message);
+  }
+  async findDetails(id: string) {
+    const { data, error } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select(`
+        *,
+        city:cities(*),
+        category:categories(*),
+        tags:restaurant_tags(tags(*)),
+        images:restaurant_images(*),
+        menus(*),
+        plats(*),
+        events(*),
+        feedback(*)
+      `)
+      .eq('id', id)
+      .single();
+
+    if (error || !data) {
+      throw new NotFoundException(`Restaurant with ID ${id} not found`);
+    }
+
+    // Process Tags (flatten structure)
+    const tags = data.tags ? data.tags.map((t: any) => t.tags) : [];
+
+    // Calculate Aggregations
+    const feedback = data.feedback || [];
+    const rating_count = feedback.length;
+
+    let rating_avg = 0;
+    let avg_cuisine = 0;
+    let avg_service = 0;
+    let avg_ambiance = 0;
+
+    if (rating_count > 0) {
+      rating_avg = feedback.reduce((acc, curr) => acc + (curr.rating || 0), 0) / rating_count;
+      avg_cuisine = feedback.reduce((acc, curr) => acc + (curr.rating_cuisine || 0), 0) / rating_count;
+      avg_service = feedback.reduce((acc, curr) => acc + (curr.rating_service || 0), 0) / rating_count;
+      avg_ambiance = feedback.reduce((acc, curr) => acc + (curr.rating_ambiance || 0), 0) / rating_count;
+    }
+
+    // Sort feedback by date desc
+    const sortedFeedback = feedback.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+    return {
+      ...data,
+      tags, // Overwrite with flattened tags
+      feedback: sortedFeedback,
+      rating_avg: parseFloat(rating_avg.toFixed(1)), // Ensure numbers
+      rating_count,
+      avg_cuisine: parseFloat(avg_cuisine.toFixed(1)),
+      avg_service: parseFloat(avg_service.toFixed(1)),
+      avg_ambiance: parseFloat(avg_ambiance.toFixed(1)),
+    };
   }
 }

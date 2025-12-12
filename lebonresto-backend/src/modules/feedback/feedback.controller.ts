@@ -16,10 +16,10 @@ import { UpdateFeedbackDto } from './dto/update-feedback.dto';
 @ApiTags('feedback')
 @Controller('feedback')
 export class FeedbackController {
-  constructor(private readonly feedbackService: FeedbackService) {}
+  constructor(private readonly feedbackService: FeedbackService) { }
 
   @Post()
-  @ApiOperation({ summary: 'Create new feedback' })
+  @ApiOperation({ summary: 'Create new feedback (requires rating_cuisine, rating_service, rating_ambiance)' })
   create(@Body() createFeedbackDto: CreateFeedbackDto) {
     return this.feedbackService.create(createFeedbackDto);
   }
@@ -37,7 +37,7 @@ export class FeedbackController {
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update feedback' })
+  @ApiOperation({ summary: 'Update feedback (recalculates global rating if sub-ratings change)' })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateFeedbackDto: UpdateFeedbackDto,

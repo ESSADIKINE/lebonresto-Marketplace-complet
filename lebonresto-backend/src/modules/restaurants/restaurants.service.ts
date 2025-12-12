@@ -1,6 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { RestaurantsRepository } from './restaurants.repository';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { RestaurantFullViewDto } from './dto/restaurant-full-view.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { RestaurantStatus } from './entities/restaurant.entity';
 import { CloudinaryService } from '../images/cloudinary.service';
@@ -101,6 +102,10 @@ export class RestaurantsService {
     q?: string;
   }) {
     return this.restaurantsRepository.search(params);
+  }
+
+  async getRestaurantFullById(id: string): Promise<RestaurantFullViewDto> {
+    return this.restaurantsRepository.findFullById(id);
   }
 
   async findOne(id: string) {
@@ -289,5 +294,8 @@ export class RestaurantsService {
       },
       avgRating,
     };
+  }
+  async getDetails(id: string) {
+    return this.restaurantsRepository.findDetails(id);
   }
 }

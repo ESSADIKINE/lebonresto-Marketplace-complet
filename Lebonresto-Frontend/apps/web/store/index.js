@@ -4,6 +4,7 @@ import { lebonrestoApi } from './api/lebonrestoApi';
 import authReducer from './slices/authSlice';
 import restaurantsReducer from './slices/restaurantsSlice';
 import lookupsReducer from './slices/lookupsSlice';
+import restaurantDetailReducer from './slices/restaurantDetailSlice';
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
         auth: authReducer,
         restaurants: restaurantsReducer,
         lookups: lookupsReducer,
+        restaurantDetail: restaurantDetailReducer,
     },
     // Add RTK Query middleware for caching, invalidation, polling, etc.
     middleware: (getDefaultMiddleware) =>
