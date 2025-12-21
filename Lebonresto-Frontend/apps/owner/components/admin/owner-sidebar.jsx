@@ -1,20 +1,20 @@
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import {
     FiHome, FiShoppingBag, FiFileText, FiImage,
     FiCalendar, FiUser, FiShield
 } from 'react-icons/fi';
 
 export default function OwnerSidebar({ isOpen, onClose }) {
-    const router = useRouter();
+    const pathname = usePathname();
     const isActive = (path) => {
         // For exact dashboard path, only match exactly
         if (path === '/dashboard') {
-            return router.pathname === '/dashboard';
+            return pathname === '/dashboard';
         }
         // For other paths, match exact or child paths
-        return router.pathname === path || router.pathname.startsWith(path + '/');
+        return pathname === path || pathname?.startsWith(path + '/');
     };
 
     const menuItems = [

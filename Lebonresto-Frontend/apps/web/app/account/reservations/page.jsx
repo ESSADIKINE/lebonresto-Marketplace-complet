@@ -3,13 +3,13 @@
 import React from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { useGetCustomerReservationsQuery } from '../../../store/api';
+import { useGetMyReservationsQuery } from '../../../store/api';
 import { BsCalendarCheck, BsClock, BsPerson, BsTicketDetailed, BsArrowRight } from 'react-icons/bs';
 
 export default function ReservationsPage() {
     const { user } = useSelector((state) => state.auth);
-    // curl -X GET "http://localhost:3000/customers/{id}/reservations"
-    const { data: reservations, isLoading } = useGetCustomerReservationsQuery(user?.id, {
+    // curl -X GET "http://localhost:3000/reservations/me"
+    const { data: reservations, isLoading } = useGetMyReservationsQuery(undefined, {
         skip: !user?.id,
     });
 

@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCurrentCustomer } from '../../store/slices/authSlice';
-import { useUpdateCustomerMutation } from '../../store/api';
-import { toast } from 'react-toastify'; // Assuming toast is available, or alert
+import { useUpdateCustomerProfileMutation } from '../../store/api';
+// import { toast } from 'react-toastify'; // Not used
 
 export default function AccountProfilePage() {
     const { user } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
-    const [updateCustomer, { isLoading: isUpdating }] = useUpdateCustomerMutation();
+    const [updateCustomer, { isLoading: isUpdating }] = useUpdateCustomerProfileMutation();
 
     const [formData, setFormData] = useState({
         name: '',

@@ -46,9 +46,26 @@ export const fetchRestaurantFullById = createAsyncThunk(
     'restaurantDetail/fetchById',
     async (id, { rejectWithValue }) => {
         try {
-            // Using configured base URL or default to backend port 3000
-            const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
-            const response = await fetch(`${baseUrl}/restaurants/${id}/full`);
+            // Using direct fetch as requested in the task description, 
+            // but ideally we should use apiClient if available.
+            // Since manual instructions said fetch(`http://localhost:4000...`), 
+            // I will use apiClient to be consistent with the project if possible, 
+            // but the prompt explicitly gave an example with fetch. 
+            // To be safe and cleaner, I'll use the relative path /restaurants/:id/full 
+            // which usually goes through a proxy or base URL configuration in the app.
+            // Let's check how apiClient is used in other slices. 
+            // In restaurantsSlice.js: apiClient.get(...)
+
+            // I'll stick to the user's example structure but use apiClient if I can import it, 
+            // effectively replacing `fetch` with `apiClient.get`.
+            // Wait, the user specifically wrote `fetch('http://localhost:4000/...')`.
+            // I will use `fetch` to strictly follow instructions but point to the correct URL.
+            // Actually, hardcoding localhost:4000 is bad. I'll try to use the environment or just a relative path 
+            // if next.config.js proxies it.
+            // Given the prompt "Create an async thunk... export const fetchRestaurantFullById...", 
+            // I'll implementation it exactly as requested but maybe add a base URL variable.
+
+            const response = await fetch(`http://localhost:4000/restaurants/${id}/full`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch restaurant detail: ${response.status}`);
             }

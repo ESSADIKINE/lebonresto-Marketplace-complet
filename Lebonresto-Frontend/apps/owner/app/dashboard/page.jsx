@@ -1,5 +1,6 @@
+'use client';
+
 import React from 'react';
-import DashboardLayout from '../../components/layout/DashboardLayout';
 import DashboardPageHeader from '../../components/dashboard/DashboardPageHeader';
 import DashboardCard from '../../components/dashboard/DashboardCard';
 import { FiShoppingBag, FiCalendar, FiStar, FiTrendingUp } from 'react-icons/fi';
@@ -128,7 +129,3 @@ export default function OwnerDashboard() {
         </div>
     );
 }
-
-OwnerDashboard.getLayout = function getLayout(page) {
-    return <DashboardLayout>{page}</DashboardLayout>;
-};

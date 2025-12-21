@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useGetSavedRestaurantsQuery, useUnsaveRestaurantMutation } from '../../../store/api';
 import RestaurantCard from '../../../components/restaurant/RestaurantCard';
-import { BsHeartBreak, BsEmojiFrown } from 'react-icons/bs';
+import { BsHeart, BsEmojiFrown } from 'react-icons/bs';
 
 export default function SavedRestaurantsPage() {
     // curl -X GET "http://localhost:3000/me/saved-restaurants"
@@ -58,7 +58,7 @@ export default function SavedRestaurantsPage() {
                                     style={{ width: 36, height: 36 }}
                                     title="Retirer des favoris"
                                 >
-                                    <BsHeartBreak size={18} />
+                                    <BsHeart size={18} />
                                 </button>
                             </div>
                         </div>

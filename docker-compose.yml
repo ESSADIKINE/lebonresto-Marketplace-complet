@@ -1,0 +1,71 @@
+services:
+  # Backend Service
+  backend:
+    build:
+      context: ./lebonresto-backend
+      dockerfile: Dockerfile
+    container_name: lebonresto-backend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    networks:
+      - lebonresto-network
+    env_file:
+      - ./lebonresto-backend/.env
+
+  # Frontend: Customer Web App
+  frontend-web:
+    build:
+      context: ./Lebonresto-Frontend
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:3000
+    container_name: lebonresto-web
+    ports:
+      - "4000:3000"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - lebonresto-network
+    depends_on:
+      - backend
+
+  # Frontend: Owner App
+  frontend-owner:
+    build:
+      context: ./Lebonresto-Frontend
+      dockerfile: apps/owner/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:3000
+    container_name: lebonresto-owner
+    ports:
+      - "4003:4003"
+    environment:
+      - NODE_ENV=production
+    networks:
+      - lebonresto-network
+    depends_on:
+      - backend
+
+  # Frontend: Admin App
+  frontend-admin:
+    build:
+      context: ./Lebonresto-Frontend
+      dockerfile: apps/admin/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:3000
+    container_name: lebonresto-admin
+    ports:
+      - "4002:3002"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - lebonresto-network
+    depends_on:
+      - backend
+
+networks:
+  lebonresto-network:
+    driver: bridge
