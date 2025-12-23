@@ -90,12 +90,12 @@ export default function CategoryTwo({
                             <div className="category-overlay position-absolute top-0 start-0 w-100 h-100"></div>
 
                             {/* Content */}
-                            <div className="position-relative z-2 h-100 d-flex flex-column align-items-center justify-content-center">
+                            <div className="z-2 h-100 d-flex flex-column align-items-center justify-content-center">
                                 <div className="icoBoxx mb-3 bg-white rounded-circle d-flex align-items-center justify-content-center shadow-sm" style={{ width: '50px', height: '50px' }}>
                                     <IconComponent className="text-dark fs-5" />
                                 </div>
 
-                                <h5 className="mb-1 fw-bold text-dark fs-6">{category.name}</h5>
+                                <h5 className="mb-1 fw-bold text-white fs-6">{category.name}</h5>
                                 <span className="categorycounter badge bg-light text-dark rounded-pill px-2 py-1 fw-normal small">
                                     {category.count_restaurants || 0} Restaurants
                                 </span>

@@ -109,7 +109,7 @@ export default function HorizontalSlider({
                         <div
                             className="position-absolute top-0 start-0 h-100 z-2 pe-none slider-fade-left"
                             style={{
-                                width: '120px'
+                                width: '60px'
                             }}
                         ></div>
                     )}
@@ -160,7 +160,7 @@ export default function HorizontalSlider({
                         <div
                             className="position-absolute top-0 end-0 h-100 z-2 pe-none slider-fade-right"
                             style={{
-                                width: '120px'
+                                width: '60px'
                             }}
                         ></div>
                     )}
