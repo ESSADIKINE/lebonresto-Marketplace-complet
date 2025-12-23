@@ -17,8 +17,14 @@ async function bootstrap() {
   app.use(helmet());
 
   // CORS Configuration
+  // CORS Configuration
   app.enableCors({
-    origin: true, // Reflects the request origin
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:4000', // Frontend Web (Docker)
+      'http://localhost:4002', // Frontend Admin (Docker)
+      'http://localhost:4003', // Frontend Owner (Docker)
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

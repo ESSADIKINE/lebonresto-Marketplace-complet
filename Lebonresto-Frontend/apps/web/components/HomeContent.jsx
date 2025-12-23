@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { BsArrowRight } from 'react-icons/bs';
 import HeroSection from './hero-section';
 import CategoryTwo from './category-two';
 import ExploreCity from './explore-city';
@@ -56,33 +57,39 @@ export default function HomeContent() {
             <MostReservedSection />
 
             {/* 5. Catégories */}
-            <section className="bg-light">
-                <div className="container">
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
-                            <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Votre envie du <span className="text-primary">moment ?</span></h3>
-                                <p>Explorez les types de cuisine et trouvez le restaurant idéal. <Link href="/categories" className="text-primary fw-bold text-decoration-none small ms-1">Voir tout &rarr;</Link></p>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Pass categories */}
-                    <CategoryTwo categories={categories} />
-                </div>
-            </section>
+            <CategoryTwo
+                categories={categories}
+                title={
+                    <h2 className="display-6 fw-bold mb-2">
+                        Votre envie du <span className="text-primary">moment ?</span> 😋
+                    </h2>
+                }
+                subtitle="Explorez les types de cuisine et trouvez le restaurant idéal."
+                viewAllHref="/categories"
+            />
 
             {/* 6. Nouveautés notables */}
             <NewestSection />
 
             {/* 7. Autres villes au Maroc */}
-            <section>
+            <section className="position-relative overflow-hidden py-5">
                 <div className="container">
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
-                            <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Autres villes au <span className="text-primary">Maroc</span></h3>
-                                <p>Découvrez d’autres destinations gourmandes. <Link href="/cities" className="text-primary fw-bold text-decoration-none small ms-1">Voir tout &rarr;</Link></p>
+                    <div className="row align-items-end justify-content-between mb-5">
+                        <div className="col-lg-8 col-md-12">
+                            <div className="secHeading-wrap mb-0">
+                                <h2 className="display-6 fw-bold mb-2">
+                                    Autres villes au <span className="text-primary">Maroc</span> 🇲🇦
+                                </h2>
+                                <p className="lead text-muted fs-6 mb-0">
+                                    Découvrez d’autres destinations gourmandes.
+                                </p>
                             </div>
+                        </div>
+                        {/* Desktop Mini CTA */}
+                        <div className="col-lg-4 d-none d-lg-flex justify-content-end pb-1">
+                            <Link href="/cities" className="text-primary fw-bold text-decoration-none hover-underline small d-flex align-items-center">
+                                Voir toutes les villes <BsArrowRight className="ms-2" />
+                            </Link>
                         </div>
                     </div>
                     <ExploreCity cities={cities} />
@@ -90,49 +97,55 @@ export default function HomeContent() {
             </section>
 
             {/* 8. Avis clients */}
-            <section className="bg-light">
+            <section className="position-relative overflow-hidden py-5 bg-light">
                 <div className="container">
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
-                            <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Avis de nos <span className="text-primary">clients</span></h3>
-                                <p>Nos clients adorent nos services et partagent leurs expériences</p>
+                    <div className="row align-items-end justify-content-between mb-5">
+                        <div className="col-lg-8 col-md-12">
+                            <div className="secHeading-wrap mb-0">
+                                <h2 className="display-6 fw-bold mb-2">
+                                    Avis de nos <span className="text-primary">clients</span> 💬
+                                </h2>
+                                <p className="lead text-muted fs-6 mb-0">
+                                    Nos clients adorent nos services et partagent leurs expériences.
+                                </p>
                             </div>
                         </div>
+                        {/* Desktop Mini CTA */}
+                        <div className="col-lg-4 d-none d-lg-flex justify-content-end pb-1">
+                            {/* Link to a reviews page if it exists, otherwise simplify or omit */}
+                            <span className="text-muted small">Basé sur des avis réels</span>
+                        </div>
                     </div>
-                    <ClientOne reviews={feedback} />
+                    <ClientOne />
                 </div>
             </section>
 
             {/* 9. Actualités / Blog */}
-            <section className="light-top-gredient">
+            <section className="light-top-gredient py-5">
                 <div className="container">
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
-                            <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Actualités & <span className="text-primary">Inspirations</span> culinaires</h3>
-                                <p>Découvrez les dernières tendances et conseils gastronomiques</p>
+                    <div className="row align-items-end justify-content-between mb-5">
+                        <div className="col-lg-8 col-md-12">
+                            <div className="secHeading-wrap mb-0">
+                                <h2 className="display-6 fw-bold mb-2">
+                                    Actualités & Inspirations <span className="text-primary">culinaires</span> 📰
+                                </h2>
+                                <p className="lead text-muted fs-6 mb-0">
+                                    Découvrez les dernières tendances et conseils gastronomiques.
+                                </p>
                             </div>
+                        </div>
+                        {/* Desktop Mini CTA */}
+                        <div className="col-lg-4 d-none d-lg-flex justify-content-end pb-1">
+                            <Link href="/blog" className="text-primary fw-bold text-decoration-none hover-underline small d-flex align-items-center">
+                                Voir tous les articles <BsArrowRight className="ms-2" />
+                            </Link>
                         </div>
                     </div>
                     <BlogOne />
                 </div>
             </section>
 
-            {/* 10. Événements */}
-            <section className="pt-0">
-                <div className="container">
-                    <div className="row align-items-center justify-content-center">
-                        <div className="col-xl-7 col-lg-8 col-md-11 col-sm-12">
-                            <div className="secHeading-wrap text-center">
-                                <h3 className="sectionHeading">Événements & expériences <span className="text-primary">à venir</span></h3>
-                                <p>Ne manquez pas les événements culinaires près de chez vous</p>
-                            </div>
-                        </div>
-                    </div>
-                    <EventOne />
-                </div>
-            </section>
+
 
             <FooterTop />
 

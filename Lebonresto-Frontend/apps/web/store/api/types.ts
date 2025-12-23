@@ -284,26 +284,39 @@ export interface UpdateCustomerRequest {
 // ========================
 
 export interface GetRestaurantsParams {
-    cityId?: number;
-    categoryId?: number;
+    cityId?: number | string;
+    categoryId?: number | string;
     tags?: string;
     q?: string;
     page?: number;
     limit?: number;
     status?: string;
     sort?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    minRating?: number;
+    latitude?: number;
+    longitude?: number;
+    radius?: number;
 }
 
 export interface SearchRestaurantsParams {
     query: string;
-    cityId?: number;
-    categoryId?: number;
+    cityId?: number | string;
+    categoryId?: number | string;
     limit?: number;
 }
 
 export interface GetMostReservedParams {
     limit?: number;
     month?: string;
+    period?: string;
+    cityId?: number | string;
+}
+
+export interface GetPromoRestaurantsParams {
+    limit?: number;
+    cityId?: number | string;
 }
 
 // ========================

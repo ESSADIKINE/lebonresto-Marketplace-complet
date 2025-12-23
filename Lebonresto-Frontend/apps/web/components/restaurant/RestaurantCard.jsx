@@ -1,11 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
-import { BsGeoAlt, BsStarFill, BsArrowRight, BsHeart } from 'react-icons/bs';
+import { BsGeoAlt, BsStarFill, BsArrowRight, BsHeart, BsTagFill } from 'react-icons/bs';
 import {
     normalizeRestaurantData,
     isNewRestaurant,
-    formatPriceRange,
-    getStatusBadge
+    formatPriceRange
 } from '../../lib/restaurantUtils';
 
 export default function RestaurantCard({ restaurant: rawData, layout = 'grid' }) {
@@ -22,124 +21,119 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid' })
     const priceDisplay = formatPriceRange(minPrice, maxPrice);
     const detailLink = `/restaurants/${id}`;
     const reservationLink = `/restaurants/${id}/reservation`;
-    const isPremium = status?.toLowerCase() === 'premium';
-    const isOpen = restaurantStatus === 'Ouvert';
+    // Condition logic per user request
+    const isPremium = status?.toLowerCase() === 'premium'; // 1) Premium check
+    const isOpen = restaurantStatus === 'Ouvert' || status === 'APPROVED'; // Fallback logic
 
     // Tag limits
     const maxTags = layout === 'grid' ? 2 : 4;
     const displayTags = tags && tags.length > 0 ? tags.slice(0, maxTags) : [];
 
-    // --- Image Overlays Helper ---
-    const renderImageOverlays = () => (
-        <>
-            {/* 1. Premium Ribbon (Top Left) */}
+    // --- Image Zone (Shared) ---
+    const renderImageZone = (bgClass = 'bg-light') => (
+        <div className={`position-relative w-100 h-100 ${bgClass}`}>
+            <Link href={detailLink} className="d-block w-100 h-100">
+                <img
+                    src={image}
+                    className="img-fluid object-fit-cover w-100 h-100 promo-card-img"
+                    alt={name}
+                    loading="lazy"
+                />
+            </Link>
+
+            {/* 1) Premium Ribbon */}
             {isPremium && (
                 <div className="premium-ribbon-wrapper">
                     <div className="premium-ribbon">PREMIUM</div>
                 </div>
             )}
 
-            {/* 2. Save Icon (Top Right) */}
-            <div className="card-save-icon" title="Sauvegarder">
+            {/* Favorite Icon */}
+            <div className="promo-fav-icon d-flex align-items-center justify-content-center" title="Ajouter aux favoris">
                 <BsHeart size={16} />
             </div>
 
-            {/* 3. Discount Badge (Top Left, below ribbon area if needed, distinct) */}
-            {discount > 0 && (
-                <div className="position-absolute top-0 start-0 m-3 z-2 mt-5 pointer-events-none">
-                    <span className="badge bg-danger shadow-sm">-{discount}%</span>
-                </div>
-            )}
+            {/* Gradient Overlay */}
+            <div className="position-absolute bottom-0 start-0 w-100"
+                style={{ height: '60%', background: 'linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0,0,0,0) 100%)', pointerEvents: 'none', zIndex: 1 }}>
+            </div>
 
-            {/* 4. Bottom Left: Category Pill + Status Dot */}
-            <div className="position-absolute bottom-0 start-0 m-3 z-2 d-flex align-items-center gap-2">
-                <span className="category-overlay-pill">
-                    {category}
-                </span>
-                <div className="d-flex align-items-center gap-1 bg-white px-2 py-1 rounded-pill shadow-sm" style={{ fontSize: '0.7rem', fontWeight: '600' }}>
-                    <span className={`status-dot ${isOpen ? 'open' : 'closed'}`}></span>
-                    <span className={isOpen ? 'text-success' : 'text-danger'}>
-                        {restaurantStatus || (isOpen ? 'Ouvert' : 'Fermé')}
+            {/* 3) Status & Category & Promo (Conditional) */}
+            <div className="position-absolute bottom-0 start-0 w-100 p-3 d-flex align-items-end justify-content-between z-2">
+                <div className="d-flex align-items-center gap-2 flex-wrap">
+                    {/* Category */}
+                    {category && (
+                        <span className="chip-compact chip-cat">
+                            {category}
+                        </span>
+                    )}
+
+                    {/* Status */}
+                    <span className={`chip-compact ${isOpen ? 'status-open' : 'status-closed'}`}>
+                        <span className={`status-dot ${isOpen ? 'open' : 'closed'}`}></span>
+                        {isOpen ? 'Ouvert' : 'Fermé'}
                     </span>
+
+                    {/* 2) Promo Chip - "Next to 'Ouvert/Fermé'" requested if space allows, or flow naturally */}
+                    {discount > 0 && (
+                        <span className="chip-compact chip-promo-tag">
+                            <BsTagFill className="text-warning" />
+                            -{discount}%
+                        </span>
+                    )}
                 </div>
             </div>
-        </>
+        </div>
     );
 
-    // --- Nouveau Badge Content Helper ---
-    const renderNouveauBadge = () => {
-        if (!isNew) return null;
-        return (
-            <span className="nouveau-badge me-2">
-                Nouveau
-            </span>
-        );
-    };
-
-
-    // --- GRID LAYOUT ---
+    // --- GRID LAYOUT (Unified "Promo" Style) ---
     if (layout === 'grid') {
         return (
-            <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden theme-hover-card" data-testid="restaurant-card-grid">
-                <div className="position-relative">
-                    {/* Image Container */}
-                    <div className="ratio ratio-4x3 bg-light">
-                        <Link href={detailLink}>
-                            <img
-                                src={image}
-                                className="img-fluid object-fit-cover w-100 h-100"
-                                alt={name}
-                                loading="lazy"
-                            />
-                        </Link>
-                    </div>
-                    {/* Overlays */}
-                    {renderImageOverlays()}
+            <div className="card promo-card h-100 border-0 overflow-hidden position-relative">
+                {/* Image Section */}
+                <div className="promo-card-img-wrapper">
+                    {renderImageZone()}
                 </div>
 
+                {/* Content Section */}
                 <div className="card-body p-3 d-flex flex-column">
-                    {/* Row 1: Rating & Price */}
-                    <div className="d-flex align-items-center justify-content-between mb-2 small">
-                        <div className="d-flex align-items-center gap-1 text-warning">
-                            <BsStarFill size={12} />
-                            <span className="fw-bold text-dark">{rating}</span>
-                            <span className="text-muted">({reviewCount})</span>
+                    <div className="d-flex align-items-center justify-content-between mb-2">
+                        <div className="d-flex align-items-center gap-1">
+                            <BsStarFill className="text-warning" size={12} />
+                            <span className="fw-bold text-dark small">{rating}</span>
+                            <span className="text-muted small">({reviewCount})</span>
                         </div>
-                        <span className="fw-medium text-dark bg-light px-2 py-1 rounded small text-nowrap">{priceDisplay}</span>
+                        <span className="badge bg-light text-secondary rounded-pill fw-normal px-2 py-1 small">
+                            {priceDisplay}
+                        </span>
                     </div>
 
-                    {/* Row 2: Title */}
                     <h5 className="card-title fw-bold mb-1 text-truncate">
-                        <Link href={detailLink} className="text-dark text-decoration-none hover-primary">
+                        <Link href={detailLink} className="text-dark text-decoration-none stretched-link">
                             {name}
                         </Link>
                     </h5>
 
-                    {/* Row 3: Location */}
-                    <div className="d-flex align-items-center text-muted small mb-2">
-                        <BsGeoAlt className="me-1 flex-shrink-0" size={12} />
-                        <span className="text-truncate me-2">{address || city}</span>
-                        {restaurant.distance != null && (
-                            <span className="badge bg-light text-primary border border-primary border-opacity-10 rounded-pill ms-auto">
-                                {restaurant.distance.toFixed(1)} km
+                    <div className="d-flex align-items-center text-muted small mb-3">
+                        <BsGeoAlt className="me-1" size={12} />
+                        <span className="text-truncate">{address || city}</span>
+                    </div>
+
+                    {/* Optional: Simple tags if needed, otherwise skip to match Promo card simplicity 
+                        The Promo Card didn't show tags list, just category.
+                        Let's render 'Nouveau' if pertinent.
+                    */}
+                    <div className="mb-2">
+                        {isNew && (
+                            <span className="badge bg-light text-primary border border-primary border-opacity-10 rounded-pill small">
+                                Nouveau
                             </span>
                         )}
                     </div>
 
-                    {/* Row 4: Tags + Nouveau */}
-                    <div className="d-flex flex-wrap align-items-center gap-1 mb-3">
-                        {renderNouveauBadge()}
-                        {displayTags.length > 0 && displayTags.map((tag, idx) => (
-                            <span key={idx} className="badge border fw-normal text-muted bg-light" style={{ fontSize: '10px' }}>
-                                {typeof tag === 'string' ? tag : tag.name}
-                            </span>
-                        ))}
-                    </div>
-
-                    {/* Button */}
-                    <div className="mt-auto pt-2 border-top">
-                        <Link href={reservationLink} className="btn btn-primary w-100 rounded-pill btn-sm fw-medium py-2">
-                            Réserver
+                    <div className="mt-auto pt-2 d-flex gap-2">
+                        <Link href={reservationLink} className="btn btn-primary w-100 rounded-pill py-2 fw-medium d-flex align-items-center justify-content-center position-relative z-2 shadow-sm">
+                            Réserver <BsArrowRight className="ms-2" />
                         </Link>
                     </div>
                 </div>
@@ -147,31 +141,16 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid' })
         );
     }
 
-    // --- LIST LAYOUT ---
+    // --- LIST LAYOUT (Refactored to match visual density) ---
     return (
         <div className="card border-0 shadow-sm rounded-4 overflow-hidden mb-3 theme-hover-card" data-testid="restaurant-card-list">
             <div className="row g-0 h-100">
-                {/* Image Section (Left) */}
                 <div className="col-4 col-md-4 position-relative">
-                    <div className="h-100 bg-light position-relative">
-                        <Link href={detailLink} className="d-block h-100">
-                            <img
-                                src={image}
-                                className="img-fluid object-fit-cover w-100 h-100 position-absolute text-transparent"
-                                alt={name}
-                                loading="lazy"
-                            />
-                        </Link>
-                    </div>
-                    {/* Overlays */}
-                    {renderImageOverlays()}
+                    {renderImageZone('h-100')}
                 </div>
-
-                {/* Content Section (Right) */}
                 <div className="col-8 col-md-8">
                     <div className="card-body p-3 p-md-4 h-100 d-flex flex-column">
-
-                        {/* Header Row */}
+                        {/* Header */}
                         <div className="d-flex justify-content-between align-items-start mb-1">
                             <div className="overflow-hidden me-2">
                                 <h4 className="card-title fw-bold mb-1 text-truncate fs-5 fs-md-4">
@@ -182,33 +161,12 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid' })
                                 <div className="d-flex align-items-center text-muted small">
                                     <BsGeoAlt className="me-1" size={13} />
                                     <span className="text-truncate me-2">{address || city}</span>
-                                    {restaurant.distance != null && (
-                                        <span className="text-primary fw-medium small">
-                                            • {restaurant.distance.toFixed(1)} km
-                                        </span>
-                                    )}
                                 </div>
                             </div>
-
-                            {/* Desktop Price/Rating Block */}
+                            {/* Desktop Price */}
                             <div className="text-end d-none d-md-block flex-shrink-0">
                                 <span className="fw-bold text-dark d-block fs-5">{priceDisplay}</span>
-                                <div className="d-flex align-items-center justify-content-end gap-1 small mt-1 text-warning">
-                                    <BsStarFill size={12} />
-                                    <span className="fw-bold text-dark">{rating}</span>
-                                    <span className="text-muted">({reviewCount})</span>
-                                </div>
                             </div>
-                        </div>
-
-                        {/* Mobile Price/Rating Row */}
-                        <div className="d-flex d-md-none align-items-center justify-content-between mb-2 small">
-                            <div className="d-flex align-items-center gap-1 text-warning">
-                                <BsStarFill size={12} />
-                                <span className="fw-bold text-dark">{rating}</span>
-                                <span className="text-muted">({reviewCount})</span>
-                            </div>
-                            <span className="fw-medium text-dark">{priceDisplay}</span>
                         </div>
 
                         {/* Description */}
@@ -216,17 +174,7 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid' })
                             {description || 'Découvrez ce lieu unique et profitez d\'une expérience culinaire inoubliable.'}
                         </p>
 
-                        {/* Tags + Nouveau */}
-                        <div className="d-flex flex-wrap align-items-center gap-2 mb-3 d-none d-md-flex">
-                            {renderNouveauBadge()}
-                            {displayTags.length > 0 && displayTags.map((tag, idx) => (
-                                <span key={idx} className="badge bg-white text-secondary border fw-normal px-2 py-1">
-                                    {typeof tag === 'string' ? tag : tag.name}
-                                </span>
-                            ))}
-                        </div>
-
-                        {/* Actions Footer */}
+                        {/* Actions */}
                         <div className="d-flex gap-2 mt-auto pt-2 border-top">
                             <Link href={detailLink} className="btn btn-outline-light text-dark border fw-medium rounded-pill px-3 px-md-4 flex-grow-1 flex-md-grow-0 d-flex align-items-center justify-content-center text-nowrap btn-sm btn-md-regular">
                                 Voir détails

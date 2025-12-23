@@ -1,4 +1,10 @@
 import { apiSlice } from './apiSlice';
+import {
+    Restaurant,
+    GetRestaurantsParams,
+    GetMostReservedParams,
+    GetPromoRestaurantsParams
+} from './types';
 
 /**
  * Restaurant API Endpoints (Public)
@@ -12,6 +18,10 @@ export const restaurantsApi = apiSlice.injectEndpoints({
         getRestaurants: builder.query({
             query: (filters = {}) => {
                 const params = new URLSearchParams();
+
+                // If promoOnly is active, switch endpoint to /restaurants/promos
+                const isPromoRequest = filters.promoOnly === true || filters.promoOnly === 'true';
+                const endpoint = isPromoRequest ? '/restaurants/promos' : '/restaurants';
 
                 if (filters.cityId || filters.city_id) params.append('cityId', filters.cityId || filters.city_id);
                 if (filters.categoryId || filters.category_id) params.append('categoryId', filters.categoryId || filters.category_id);
@@ -27,8 +37,13 @@ export const restaurantsApi = apiSlice.injectEndpoints({
                 if (filters.longitude) params.append('longitude', filters.longitude.toString());
                 if (filters.radius) params.append('radius', filters.radius.toString());
 
+                if (filters.status) params.append('status', filters.status);
+
+                // Sort might be different for promos, but passing it is safe usually
+                if (filters.sort) params.append('sort', filters.sort);
+
                 const queryString = params.toString();
-                return `/restaurants${queryString ? `?${queryString}` : ''}`;
+                return `${endpoint}${queryString ? `?${queryString}` : ''}`;
             },
             providesTags: (result) =>
                 result && result.data && Array.isArray(result.data)
@@ -99,32 +114,53 @@ export const restaurantsApi = apiSlice.injectEndpoints({
 
         // --- New Endpoints for Home Page ---
 
+
+
+        // ... (existing code)
+
         // Get Restaurants with Promos
-        getPromoRestaurants: builder.query({
-            query: () => '/restaurants/promos',
+        getPromoRestaurants: builder.query<Restaurant[], GetPromoRestaurantsParams | void>({
+            query: ({ limit = 10, cityId }: GetPromoRestaurantsParams = {}) => {
+                const params = new URLSearchParams();
+                if (limit) params.append('limit', limit.toString());
+                if (cityId) params.append('cityId', cityId.toString());
+                return `/restaurants/promos?${params.toString()}`;
+            },
             providesTags: [{ type: 'Restaurant', id: 'PROMOS' }],
         }),
 
         // Get Most Reserved Restaurants
-        getMostReservedRestaurants: builder.query({
-            query: ({ limit = 10, month } = {}) => {
+        getMostReservedRestaurants: builder.query<Restaurant[], GetMostReservedParams | void>({
+            query: ({ limit = 10, period = 'month', cityId }: GetMostReservedParams = {}) => {
                 const params = new URLSearchParams();
                 if (limit) params.append('limit', limit.toString());
-                if (month) params.append('month', month);
+                if (period) params.append('period', period);
+                if (cityId) params.append('cityId', cityId.toString());
                 return `/restaurants/most-reserved?${params.toString()}`;
             },
             providesTags: [{ type: 'Restaurant', id: 'MOST_RESERVED' }],
         }),
 
-        // Get Recommended (Premium/Standard status)
-        getRecommendedRestaurants: builder.query({
-            query: () => '/restaurants?status=premium,standard,basic',
+        // Get Recommended (Premium status)
+        getRecommendedRestaurants: builder.query<Restaurant[], GetRestaurantsParams | void>({
+            query: ({ limit = 12 }: GetRestaurantsParams = {}) => {
+                const params = new URLSearchParams();
+                if (limit) params.append('limit', limit.toString());
+                // User requested to filter by premium status instead of sort=recommended
+                params.append('status', 'premium');
+                return `/restaurants?${params.toString()}`;
+            },
             providesTags: [{ type: 'Restaurant', id: 'RECOMMENDED' }],
         }),
 
         // Get Latest Restaurants
-        getLatestRestaurants: builder.query({
-            query: () => '/restaurants?sort=createdAtDesc',
+        getLatestRestaurants: builder.query<Restaurant[], GetRestaurantsParams | void>({
+            query: ({ limit = 10, sort = 'newest' }: GetRestaurantsParams = {}) => {
+                const params = new URLSearchParams();
+                if (limit) params.append('limit', limit.toString());
+                if (sort) params.append('sort', sort);
+                return `/restaurants?${params.toString()}`;
+            },
             providesTags: [{ type: 'Restaurant', id: 'LATEST' }],
         }),
 

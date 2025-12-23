@@ -197,8 +197,8 @@ export class RestaurantsRepository {
   }
 
   async findMostReserved(startDate: string, endDate: string, limit: number) {
-    // Uses the RPC function created by SQL script
-    const { data, error } = await this.supabase
+    // 1. Get stats from RPC (returns likely { restaurant_id, reservation_count, ... })
+    const { data: stats, error } = await this.supabase
       .getClient()
       .rpc('get_most_reserved_restaurants', {
         start_date: startDate,
@@ -207,9 +207,41 @@ export class RestaurantsRepository {
       });
 
     if (error) {
-      throw new InternalServerErrorException(`Could not fetch most reserved. key: ${error.message}`);
+      throw new InternalServerErrorException(`Could not fetch most reserved stats. key: ${error.message}`);
     }
-    return data;
+
+    if (!stats || stats.length === 0) {
+      return [];
+    }
+
+    // 2. Extract IDs
+    // The RPC likely returns 'restaurant_id' or 'id'. Let's check the test output or assume 'id' if it returns table rows, 
+    // or 'restaurant_id' if it's an aggregation. 
+    // SAFEST BET: The current implementation returned 'data' directly, and the user said it displayed *something* (placeholders),
+    // implying it returned restaurant-like objects but missing relations.
+    // If the RPC returns the restaurant row, it has 'id'. 
+
+    // We will map IDs from the result.
+    // We'll check if 'id' or 'restaurant_id' exists. 
+    const ids = stats.map((item: any) => item.id || item.restaurant_id);
+
+    if (ids.length === 0) return [];
+
+    // 3. Fetch Full Details (City, Category, Images, etc.)
+    const { data: fullData, error: dbError } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('*, city:cities(*), category:categories(*), images:restaurant_images(*), feedback(*)') // Fetch relations
+      .in('id', ids);
+
+    if (dbError) {
+      throw new InternalServerErrorException(`Could not fetch most reserved details. ${dbError.message}`);
+    }
+
+    // 4. Preserve Order (RPC returned them sorted by count)
+    const result = ids.map(id => fullData.find(r => r.id === id)).filter(Boolean);
+
+    return result;
   }
 
   async findOne(id: string): Promise<Restaurant> {

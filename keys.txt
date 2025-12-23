@@ -1,0 +1,17 @@
+--- Testing /restaurants/most-reserved ---
+Most Reserved Item Keys: ["id","owner_id","name","description","logo_url","city_id","category_id","rating_avg","created_at","reservation_count"]
+restaurant_image: undefined
+logo_url: https://png.pngtree.com/png-vector/20250215/ourmid/pngtree-cartoon-male-chef-with-thumbs-up-and-big-smile-png-image_15475977.png
+visit360_url: undefined
+Full Object: {
+  "id": "7f8b4b86-6fb5-40f8-8cb0-cce75891af90",
+  "owner_id": "62309553-ae24-4adc-9efb-ad3db33507bc",
+  "name": "Iloli",
+  "description": "Restaurant japonais contemporain à Nador, avec cuisine raffinée et ambiance intimiste. Spécialité burger fusion japonais.",
+  "logo_url": "https://png.pngtree.com/png-vector/20250215/ourmid/pngtree-cartoon-male-chef-with-thumbs-up-and-big-smile-png-image_15475977.png",
+  "city_id": "036e1d4e-3133-4d32-9492-6c817c622022",
+  "category_id": "02c7892e-2b38-41b0-8d26-33e8e6f7a288",
+  "rating_avg": 4,
+  "created_at": "2025-11-29T12:20:05.323264+00:00",
+  "reservation_count": 2
+}
