@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { BsSearch, BsFilter, BsStarFill } from 'react-icons/bs';
+import React, { useState, useEffect } from 'react';
+import { BsSearch, BsFilter, BsStarFill, BsGeoAlt, BsGeoAltFill } from 'react-icons/bs';
 
 export default function RestaurantFilters({ initialFilters, categories, cities, onApply }) {
     // Internal state
@@ -27,12 +27,14 @@ export default function RestaurantFilters({ initialFilters, categories, cities, 
     });
 
     // Price State
-    const [minPrice, setMinPrice] = useState(initialFilters.minPrice ? Number(initialFilters.minPrice) : 0);
-    const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice ? Number(initialFilters.maxPrice) : 1000); // Default max visual
+    // Price State
+    const [minPrice, setMinPrice] = useState(initialFilters.minPrice && initialFilters.minPrice !== '' ? Number(initialFilters.minPrice) : 50);
+    const [maxPrice, setMaxPrice] = useState(initialFilters.maxPrice && initialFilters.maxPrice !== '' ? Number(initialFilters.maxPrice) : 500); // Default 50-500
     const PRICE_CEILING = 1000;
 
     // Distance State
     const [distance, setDistance] = useState(initialFilters.distance ? Number(initialFilters.distance) : 10); // Default 10km
+    const [isLocating, setIsLocating] = useState(false);
 
     // Sync from props if strict URL sync is needed
     useEffect(() => {
@@ -54,8 +56,8 @@ export default function RestaurantFilters({ initialFilters, categories, cities, 
         }
 
         // Sync Price
-        setMinPrice(initialFilters.minPrice !== undefined ? Number(initialFilters.minPrice) : 0);
-        setMaxPrice(initialFilters.maxPrice !== undefined ? Number(initialFilters.maxPrice) : 1000);
+        setMinPrice(initialFilters.minPrice !== undefined && initialFilters.minPrice !== '' ? Number(initialFilters.minPrice) : 50);
+        setMaxPrice(initialFilters.maxPrice !== undefined && initialFilters.maxPrice !== '' ? Number(initialFilters.maxPrice) : 500);
 
         // Sync Distance
         if (initialFilters.distance) {
@@ -138,6 +140,41 @@ export default function RestaurantFilters({ initialFilters, categories, cities, 
         } else {
             setSelectedCityIds(cities.map(c => String(c.id)));
         }
+    };
+
+    const handleUseMyLocation = () => {
+        if (!navigator.geolocation) {
+            alert("La géolocalisation n'est pas supportée par votre navigateur.");
+            return;
+        }
+
+        setIsLocating(true);
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                setIsLocating(false);
+                const { latitude, longitude } = position.coords;
+                // Force apply with location
+                onApply({
+                    q: query,
+                    minRating: minRating,
+                    categoryId: selectedCategoryIds.join(','), // Assuming simple join for logic sake, or use helper
+                    cityId: selectedCityIds.join(','),
+                    minPrice,
+                    maxPrice,
+                    radius: distance || 10,
+                    distance: distance || 10, // sending both to be safe
+                    latitude,
+                    longitude
+                });
+            },
+            (error) => {
+                setIsLocating(false);
+                console.error("Error getting location:", error);
+                let msg = "Impossible de récupérer votre position.";
+                if (error.code === 1) msg = "Vous avez refusé la géolocalisation.";
+                alert(msg);
+            }
+        );
     };
 
     return (
@@ -489,6 +526,26 @@ export default function RestaurantFilters({ initialFilters, categories, cities, 
                         <h6 className="fw-bold mb-0 small text-uppercase ls-1 text-muted">Distance</h6>
                         <span className="small text-primary fw-bold">{distance} km</span>
                     </div>
+
+                    {/* Geolocation Button */}
+                    <button
+                        className={`btn btn-sm w-100 mb-3 d-flex align-items-center justify-content-center gap-2 rounded-pill border ${isLocating ? 'bg-light text-muted' : 'btn-outline-primary'}`}
+                        onClick={handleUseMyLocation}
+                        disabled={isLocating}
+                    >
+                        {isLocating ? (
+                            <>
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Localisation...
+                            </>
+                        ) : (
+                            <>
+                                <BsGeoAltFill size={14} />
+                                Utiliser ma position
+                            </>
+                        )}
+                    </button>
+
                     <div className="range-wrapper">
                         {/* Background Track */}
                         <div className="range-track-base"></div>
@@ -533,8 +590,9 @@ export default function RestaurantFilters({ initialFilters, categories, cities, 
                             setMinRating(null);
                             setSelectedCategoryIds(categories.map(c => String(c.id)));
                             setSelectedCityIds(cities.map(c => String(c.id)));
-                            setMinPrice(0);
-                            setMaxPrice(1000);
+                            setSelectedCityIds(cities.map(c => String(c.id)));
+                            setMinPrice(50);
+                            setMaxPrice(500);
                             setDistance(10);
 
                             // Trigger parent reset

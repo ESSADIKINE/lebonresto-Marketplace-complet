@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FaLeaf } from 'react-icons/fa6';
+import CustomTitleIcon from '../ui/CustomTitleIcon';
 import { useGetPromoRestaurantsQuery } from '../../store/api';
 import RestaurantCard from '../restaurant/RestaurantCard';
 import HorizontalSlider from '../ui/HorizontalSlider';
@@ -11,7 +11,7 @@ export default function PromosSection() {
 
     const title = (
         <h2 className="display-6 fw-bold mb-2">
-            Nos meilleures <span className="text-primary">offres</span> <FaLeaf className="text-success ms-2 fs-5 align-top opacity-75" />
+            Nos meilleures <span className="text-primary">offres</span> <CustomTitleIcon className="text-success ms-2 fs-5 align-top opacity-75" />
         </h2>
     );
 

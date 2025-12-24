@@ -118,11 +118,11 @@ export default function HorizontalSlider({
                     {showLeftArrow && (
                         <button
                             onClick={() => scroll('left')}
-                            className="slider-nav-btn position-absolute start-0 top-50 translate-middle-y"
-                            style={{ left: '-24px' }}
+                            className="slider-nav-btn position-absolute start-0 top-50 translate-middle-y bg-white shadow rounded-circle d-flex align-items-center justify-content-center border"
+                            style={{ left: '-28px', width: '56px', height: '56px', zIndex: 10 }}
                             aria-label="Previous"
                         >
-                            <BsChevronLeft size={22} className="text-primary" />
+                            <BsChevronLeft size={32} className="text-primary" strokeWidth={0.8} />
                         </button>
                     )}
 
@@ -147,11 +147,11 @@ export default function HorizontalSlider({
                     {showRightArrow && (
                         <button
                             onClick={() => scroll('right')}
-                            className="slider-nav-btn position-absolute end-0 top-50 translate-middle-y"
-                            style={{ right: '-24px' }}
+                            className="slider-nav-btn position-absolute end-0 top-50 translate-middle-y bg-white shadow rounded-circle d-flex align-items-center justify-content-center border"
+                            style={{ right: '-28px', width: '56px', height: '56px', zIndex: 10 }}
                             aria-label="Next"
                         >
-                            <BsChevronRight size={22} className="text-primary" />
+                            <BsChevronRight size={32} className="text-primary" strokeWidth={0.8} />
                         </button>
                     )}
 

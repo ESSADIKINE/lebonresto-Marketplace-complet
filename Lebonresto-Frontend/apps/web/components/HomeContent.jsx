@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { BsArrowRight } from 'react-icons/bs';
+import CustomTitleIcon from './ui/CustomTitleIcon';
 import HeroSection from './hero-section';
 import CategoryTwo from './category-two';
 import ExploreCity from './explore-city';
@@ -61,7 +62,7 @@ export default function HomeContent() {
                 categories={categories}
                 title={
                     <h2 className="display-6 fw-bold mb-2">
-                        Votre envie du <span className="text-primary">moment ?</span> 😋
+                        Votre envie du <span className="text-primary">moment ?</span> <CustomTitleIcon className="text-primary ms-2 fs-5 align-top opacity-75" />
                     </h2>
                 }
                 subtitle="Explorez les types de cuisine et trouvez le restaurant idéal."
@@ -78,8 +79,10 @@ export default function HomeContent() {
                         <div className="col-lg-8 col-md-12">
                             <div className="secHeading-wrap mb-0">
                                 <h2 className="display-6 fw-bold mb-2">
-                                    Autres villes au <span className="text-primary">Maroc</span> 🇲🇦
+                                    Autres villes au <span className="text-primary">Maroc</span> <CustomTitleIcon className="text-primary ms-2 fs-5 align-top opacity-75" />
                                 </h2>
+
+
                                 <p className="lead text-muted fs-6 mb-0">
                                     Découvrez d’autres destinations gourmandes.
                                 </p>
@@ -103,7 +106,7 @@ export default function HomeContent() {
                         <div className="col-lg-8 col-md-12">
                             <div className="secHeading-wrap mb-0">
                                 <h2 className="display-6 fw-bold mb-2">
-                                    Avis de nos <span className="text-primary">clients</span> 💬
+                                    Avis de nos <span className="text-primary">clients</span> <CustomTitleIcon className="text-primary ms-2 fs-5 align-top opacity-75" />
                                 </h2>
                                 <p className="lead text-muted fs-6 mb-0">
                                     Nos clients adorent nos services et partagent leurs expériences.
@@ -127,7 +130,7 @@ export default function HomeContent() {
                         <div className="col-lg-8 col-md-12">
                             <div className="secHeading-wrap mb-0">
                                 <h2 className="display-6 fw-bold mb-2">
-                                    Actualités & Inspirations <span className="text-primary">culinaires</span> 📰
+                                    Actualités & Inspirations <span className="text-primary">culinaires</span> <CustomTitleIcon className="text-primary ms-2 fs-5 align-top opacity-75" />
                                 </h2>
                                 <p className="lead text-muted fs-6 mb-0">
                                     Découvrez les dernières tendances et conseils gastronomiques.

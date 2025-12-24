@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FaFire } from 'react-icons/fa6';
+import CustomTitleIcon from '../ui/CustomTitleIcon';
 import { useGetMostReservedRestaurantsQuery } from '../../store/api';
 import RestaurantCard from '../restaurant/RestaurantCard';
 import HorizontalSlider from '../ui/HorizontalSlider';
@@ -11,7 +11,7 @@ export default function MostReservedSection() {
 
     const title = (
         <h2 className="display-6 fw-bold mb-2">
-            Établissements les plus <span className="text-primary">réservés</span> <FaFire className="text-danger ms-2 fs-5 align-top opacity-75" />
+            Établissements les plus <span className="text-primary">réservés</span> <CustomTitleIcon className="text-danger ms-2 fs-5 align-top opacity-75" />
         </h2>
     );
 

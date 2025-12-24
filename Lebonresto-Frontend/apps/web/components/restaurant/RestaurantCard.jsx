@@ -7,7 +7,7 @@ import {
     formatPriceRange
 } from '../../lib/restaurantUtils';
 
-export default function RestaurantCard({ restaurant: rawData, layout = 'grid' }) {
+export default function RestaurantCard({ restaurant: rawData, layout = 'grid', className = '' }) {
     const restaurant = normalizeRestaurantData(rawData);
     if (!restaurant) return null;
 
@@ -89,7 +89,7 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid' })
     // --- GRID LAYOUT (Unified "Promo" Style) ---
     if (layout === 'grid') {
         return (
-            <div className="card promo-card h-100 border-0 overflow-hidden position-relative">
+            <div className={`card promo-card h-100 border-0 overflow-hidden position-relative ${className}`}>
                 {/* Image Section */}
                 <div className="promo-card-img-wrapper">
                     {renderImageZone()}
@@ -143,7 +143,7 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid' })
 
     // --- LIST LAYOUT (Refactored to match visual density) ---
     return (
-        <div className="card border-0 shadow-sm rounded-4 overflow-hidden mb-3 theme-hover-card" data-testid="restaurant-card-list">
+        <div className={`card border-0 shadow-sm rounded-4 overflow-hidden mb-3 theme-hover-card ${className}`} data-testid="restaurant-card-list">
             <div className="row g-0 h-100">
                 <div className="col-4 col-md-4 position-relative">
                     {renderImageZone('h-100')}

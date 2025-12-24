@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './restaurant-detail-page.module.css';
+import RestaurantGalleryPopup from './restaurant-gallery-popup';
 
 export default function RestaurantGalleryGrid({ images }) {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
     if (!images || images.length === 0) {
         return null;
     }
@@ -21,6 +24,8 @@ export default function RestaurantGalleryGrid({ images }) {
                             alt={`Galerie ${idx + 1}`}
                             className={styles.galleryImg}
                             loading="lazy"
+                            onClick={() => setIsPopupOpen(true)}
+                            style={{ cursor: 'pointer' }}
                         />
                         {/* Overlay on the last item if there are more images */}
                         {idx === 4 && hiddenCount > 0 && (
@@ -36,11 +41,20 @@ export default function RestaurantGalleryGrid({ images }) {
             {/* Fallback button if < 5 images or generic access */}
             {images.length < 5 && images.length > 0 && (
                 <div className="text-center mt-3">
-                    <button className="btn btn-outline-dark rounded-pill px-4 fw-medium btn-sm">
+                    <button
+                        className="btn btn-outline-dark rounded-pill px-4 fw-medium btn-sm"
+                        onClick={() => setIsPopupOpen(true)}
+                    >
                         Voir toutes les photos ({images.length})
                     </button>
                 </div>
             )}
+            {/* Popup */}
+            <RestaurantGalleryPopup
+                images={images}
+                isOpen={isPopupOpen}
+                onClose={() => setIsPopupOpen(false)}
+            />
         </div>
     );
 }

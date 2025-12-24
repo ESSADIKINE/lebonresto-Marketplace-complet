@@ -40,6 +40,44 @@ export default function RestaurantDetailClient({ id }) {
 
     const { data: recommended, isLoading: loadingRecommended } = useGetRecommendedRestaurantsQuery();
 
+    const fullRestaurant = React.useMemo(() => {
+        if (!restaurant) return null;
+        return {
+            ...restaurant,
+            tagsData: restaurant.tags_json || [],
+            images: (restaurant.images_json || []).map((img) => ({ ...img, image_url: img.url })),
+            menus: restaurant.menus_json || [],
+            plats: restaurant.plats_json || [],
+            events: restaurant.events_json || [],
+            feedback: restaurant.feedback_list_json || [],
+            category: {
+                id: restaurant.category_id,
+                name: restaurant.category_name,
+                slug: restaurant.category_slug
+            },
+            city: {
+                id: restaurant.city_id,
+                name: restaurant.city_name,
+                region: restaurant.city_region,
+                country: restaurant.city_country
+            },
+            price_range:
+                restaurant.min_price !== null && restaurant.max_price !== null
+                    ? `${restaurant.min_price} - ${restaurant.max_price} MAD`
+                    : 'Prix sur demande',
+            status: restaurant.subscription_status,
+            restaurant_status: restaurant.business_status
+        };
+    }, [restaurant]);
+
+    const summary = restaurant?.feedback_stats || {
+        rating_avg: 0,
+        rating_count: 0,
+        avg_cuisine: 0,
+        avg_service: 0,
+        avg_ambiance: 0
+    };
+
     if (loadingInfo) {
         return (
             <div className="d-flex align-items-center justify-content-center vh-100">
@@ -65,41 +103,6 @@ export default function RestaurantDetailClient({ id }) {
             </div>
         );
     }
-
-    const fullRestaurant = {
-        ...restaurant,
-        tagsData: restaurant.tags_json || [],
-        images: (restaurant.images_json || []).map((img) => ({ ...img, image_url: img.url })),
-        menus: restaurant.menus_json || [],
-        plats: restaurant.plats_json || [],
-        events: restaurant.events_json || [],
-        feedback: restaurant.feedback_list_json || [],
-        category: {
-            id: restaurant.category_id,
-            name: restaurant.category_name,
-            slug: restaurant.category_slug
-        },
-        city: {
-            id: restaurant.city_id,
-            name: restaurant.city_name,
-            region: restaurant.city_region,
-            country: restaurant.city_country
-        },
-        price_range:
-            restaurant.min_price !== null && restaurant.max_price !== null
-                ? `${restaurant.min_price} - ${restaurant.max_price} MAD`
-                : 'Prix sur demande',
-        status: restaurant.subscription_status,
-        restaurant_status: restaurant.business_status
-    };
-
-    const summary = restaurant.feedback_stats || {
-        rating_avg: 0,
-        rating_count: 0,
-        avg_cuisine: 0,
-        avg_service: 0,
-        avg_ambiance: 0
-    };
 
     return (
         <div className="bg-light min-vh-100">
@@ -145,7 +148,7 @@ export default function RestaurantDetailClient({ id }) {
                 {/* 4. Similar Restaurants */}
                 <div className={`mt-5 pt-4 ${styles.similarBlock}`}>
                     <h3 className="fw-bold mb-4">Vous aimerez aussi</h3>
-                    <RestaurantCarousel restaurants={recommended} isLoading={loadingRecommended} />
+                    <RestaurantCarousel restaurants={recommended?.items || []} isLoading={loadingRecommended} />
                 </div>
             </div>
 

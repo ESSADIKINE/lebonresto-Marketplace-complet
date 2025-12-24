@@ -46,9 +46,9 @@ export const restaurantsApi = apiSlice.injectEndpoints({
                 return `${endpoint}${queryString ? `?${queryString}` : ''}`;
             },
             providesTags: (result) =>
-                result && result.data && Array.isArray(result.data)
+                result && result.items && Array.isArray(result.items)
                     ? [
-                        ...result.data.map(({ id }) => ({ type: 'Restaurant' as const, id })),
+                        ...result.items.map(({ id }: Restaurant) => ({ type: 'Restaurant' as const, id })),
                         { type: 'Restaurant' as const, id: 'LIST' },
                     ]
                     : [{ type: 'Restaurant' as const, id: 'LIST' }],
@@ -142,7 +142,7 @@ export const restaurantsApi = apiSlice.injectEndpoints({
         }),
 
         // Get Recommended (Premium status)
-        getRecommendedRestaurants: builder.query<Restaurant[], GetRestaurantsParams | void>({
+        getRecommendedRestaurants: builder.query<{ items: Restaurant[], total: number }, GetRestaurantsParams | void>({
             query: ({ limit = 12 }: GetRestaurantsParams = {}) => {
                 const params = new URLSearchParams();
                 if (limit) params.append('limit', limit.toString());
@@ -154,7 +154,7 @@ export const restaurantsApi = apiSlice.injectEndpoints({
         }),
 
         // Get Latest Restaurants
-        getLatestRestaurants: builder.query<Restaurant[], GetRestaurantsParams | void>({
+        getLatestRestaurants: builder.query<{ items: Restaurant[], total: number }, GetRestaurantsParams | void>({
             query: ({ limit = 10, sort = 'newest' }: GetRestaurantsParams = {}) => {
                 const params = new URLSearchParams();
                 if (limit) params.append('limit', limit.toString());

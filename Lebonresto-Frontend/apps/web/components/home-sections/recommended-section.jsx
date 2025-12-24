@@ -1,17 +1,18 @@
 'use client';
 
 import React from 'react';
-import { FaRegStar } from 'react-icons/fa6';
+import CustomTitleIcon from '../ui/CustomTitleIcon';
 import { useGetRecommendedRestaurantsQuery } from '../../store/api';
 import RestaurantCard from '../restaurant/RestaurantCard';
 import HorizontalSlider from '../ui/HorizontalSlider';
 
 export default function RecommendedSection() {
-    const { data: restaurants, isLoading } = useGetRecommendedRestaurantsQuery({ limit: 12, sort: 'recommended' });
+    const { data, isLoading } = useGetRecommendedRestaurantsQuery({ limit: 12, sort: 'recommended' });
+    const restaurants = data?.items || [];
 
     const title = (
         <h2 className="display-6 fw-bold mb-2">
-            Nos suggestions pour <span className="text-primary">vous</span> <FaRegStar className="text-warning ms-2 fs-5 align-top opacity-75" />
+            Nos suggestions pour <span className="text-primary">vous</span> <CustomTitleIcon className="text-warning ms-2 fs-5 align-top opacity-75" />
         </h2>
     );
 

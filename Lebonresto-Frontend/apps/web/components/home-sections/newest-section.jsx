@@ -1,17 +1,18 @@
 'use client';
 
 import React from 'react';
-import { FaBolt } from 'react-icons/fa6';
+import CustomTitleIcon from '../ui/CustomTitleIcon';
 import { useGetLatestRestaurantsQuery } from '../../store/api';
 import RestaurantCard from '../restaurant/RestaurantCard';
 import HorizontalSlider from '../ui/HorizontalSlider';
 
 export default function NewestSection() {
-    const { data: restaurants, isLoading } = useGetLatestRestaurantsQuery({ limit: 12 });
+    const { data, isLoading } = useGetLatestRestaurantsQuery({ limit: 12 });
+    const restaurants = data?.items || [];
 
     const title = (
         <h2 className="display-6 fw-bold mb-2">
-            Nouveautés <span className="text-primary">notables</span> <FaBolt className="text-warning ms-2 fs-5 align-top opacity-75" />
+            Nouveautés <span className="text-primary">notables</span> <CustomTitleIcon className="text-warning ms-2 fs-5 align-top opacity-75" />
         </h2>
     );
 
