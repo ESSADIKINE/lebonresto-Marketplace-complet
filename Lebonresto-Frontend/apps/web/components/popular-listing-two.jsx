@@ -142,7 +142,7 @@ export default function PopularListingTwo({ restaurants: initialRestaurants }) {
                                                 <div className="d-flex align-items-center justify-content-between gap-2">
                                                     <div className="catdWraps">
                                                         <div className="flex-start">
-                                                            <Link href={{ pathname: '/restaurants_grid', query: { category_id: restaurant.category_id } }} className="d-flex align-items-center justify-content-start gap-2">
+                                                            <Link href={{ pathname: '/restaurants', query: { category_id: restaurant.category_id } }} className="d-flex align-items-center justify-content-start gap-2">
                                                                 <span className="catIcon bg-primary"><FaUtensils className="text-white" /></span>
                                                                 <span className="catTitle">{restaurant.category?.name || 'Category'}</span>
                                                             </Link>

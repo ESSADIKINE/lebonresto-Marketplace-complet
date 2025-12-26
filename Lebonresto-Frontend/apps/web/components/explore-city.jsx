@@ -66,7 +66,7 @@ export default function ExploreCity({ cities: initialCities }) {
                         <div className="card border-0 rounded-4 ht-300 position-relative">
                             <Link
                                 href={{
-                                    pathname: '/restaurants_grid',
+                                    pathname: '/restaurants',
                                     query: { city_id: city.id }
                                 }}
                                 className="h-100"

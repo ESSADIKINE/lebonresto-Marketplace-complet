@@ -247,10 +247,10 @@ export default function FilterOne({ list }) {
                     <div className="col">
                         <ul className="nav nav-pills nav-fill gap-2 small d-inline-flex lightprimary border rounded-pill p-1 float-end">
                             <li className="nav-item" role="presentation">
-                                <Link href="/restaurants_list" className={`nav-link rounded-pill d-flex align-items-center ${list ? 'active' : ''}`} id="buy1"><BsList className="me-2" />List</Link>
+                                <Link href="/restaurants" className={`nav-link rounded-pill d-flex align-items-center ${list ? 'active' : ''}`} id="buy1"><BsList className="me-2" />List</Link>
                             </li>
                             <li className="nav-item" role="presentation">
-                                <Link href="/restaurants_grid" className={`nav-link rounded-pill d-flex align-items-center ${!list ? 'active' : ''}`} id="rent1"><BsUiRadiosGrid className="me-2" />Grid</Link>
+                                <Link href="/restaurants" className={`nav-link rounded-pill d-flex align-items-center ${!list ? 'active' : ''}`} id="rent1"><BsUiRadiosGrid className="me-2" />Grid</Link>
                             </li>
                         </ul>
                     </div>

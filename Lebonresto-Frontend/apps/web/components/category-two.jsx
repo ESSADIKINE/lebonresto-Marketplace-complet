@@ -75,7 +75,7 @@ export default function CategoryTwo({
                     <div key={category.id} className="h-100 w-100">
                         <Link
                             href={{
-                                pathname: '/restaurants_grid',
+                                pathname: '/restaurants',
                                 query: { category_id: category.id }
                             }}
                             className="categoryBox h-100 d-block text-center p-3 rounded-4 position-relative overflow-hidden text-decoration-none"

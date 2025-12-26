@@ -1,5 +1,12 @@
 /* Global styles */
 
+body.is-404 header,
+body.is-404 footer,
+body.is-404 .utility-bar,
+body.is-404 .top-scroll {
+    display: none !important;
+}
+
 /* Range Slider Customization */
 .form-range-transparent {
     appearance: none;

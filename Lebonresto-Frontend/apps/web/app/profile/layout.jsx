@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCurrentCustomer } from '../../store/slices/authSlice';
 
-import { BsPerson, BsCalendarRange, BsHeart, BsChatText, BsBoxArrowRight } from 'react-icons/bs';
+import { BsPerson, BsCalendarRange, BsHeart, BsChatText, BsBoxArrowRight, BsBell, BsGear } from 'react-icons/bs';
 
 export default function AccountLayout({ children }) {
     const dispatch = useDispatch();
@@ -39,10 +39,11 @@ export default function AccountLayout({ children }) {
     }
 
     const menuItems = [
-        { label: 'Mon profil', href: '/account', icon: BsPerson },
-        { label: 'Mes réservations', href: '/account/reservations', icon: BsCalendarRange },
-        { label: 'Restaurants favoris', href: '/account/saved-restaurants', icon: BsHeart },
-        { label: 'Mes avis', href: '/account/feedback', icon: BsChatText },
+        { label: 'Mon profil', href: '/profile', icon: BsPerson },
+        { label: 'Mes réservations', href: '/profile/orders', icon: BsCalendarRange },
+        { label: 'Restaurants favoris', href: '/profile/saved-restaurants', icon: BsHeart },
+        { label: 'Notifications', href: '/profile/notifications', icon: BsBell },
+        { label: 'Paramètres', href: '/profile/settings', icon: BsGear },
     ];
 
     return (

@@ -31,10 +31,10 @@ export default function Footer() {
                         <div className="footer-widget mb-5 mb-md-5 mb-lg-0">
                             <h4 className="widget-title text-pri">Découvrir</h4>
                             <ul className="footer-menu">
-                                <li><Link href="/restaurants_grid">Restaurants à Casablanca</Link></li>
-                                <li><Link href="/restaurants_grid">Restaurants à Rabat</Link></li>
-                                <li><Link href="/restaurants_grid">Restaurants à Marrakech</Link></li>
-                                <li><Link href="/restaurants_grid">Restaurants à Tanger</Link></li>
+                                <li><Link href="/restaurants">Restaurants à Casablanca</Link></li>
+                                <li><Link href="/restaurants">Restaurants à Rabat</Link></li>
+                                <li><Link href="/restaurants">Restaurants à Marrakech</Link></li>
+                                <li><Link href="/restaurants">Restaurants à Tanger</Link></li>
                                 <li><Link href="/half-map">Recherche sur carte</Link></li>
                             </ul>
                         </div>

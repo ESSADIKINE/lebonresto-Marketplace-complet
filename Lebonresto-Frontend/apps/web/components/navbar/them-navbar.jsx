@@ -68,7 +68,7 @@ export default function ThemNavbar() {
                                 <ul>
                                     <li>
                                         {isAuthenticated ? (
-                                            <Link href="/dashboard-user" className="d-flex align-items-center">
+                                            <Link href="/profile" className="d-flex align-items-center">
                                                 <div className="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: 35, height: 35 }}>
                                                     {user?.name?.charAt(0).toUpperCase() || 'U'}
                                                 </div>
@@ -109,11 +109,11 @@ export default function ThemNavbar() {
                                     </ul>
                                 </li>
 
-                                <li className={`${['/restaurants_grid', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06', '/restaurants_list', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05', '/half-map', '/half-map-02', '/half-map-03', '/half-map-04', '/half-map-05', '/single-listing', '/single-listing-02', '/single-listing-03', '/single-listing-04', '/single-listing-05'].includes(current) ? 'active' : ''}`}><Link href="#">Listings<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
+                                <li className={`${['/restaurants', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05', '/half-map', '/half-map-02', '/half-map-03', '/half-map-04', '/half-map-05', '/single-listing', '/single-listing-02', '/single-listing-03', '/single-listing-04', '/single-listing-05'].includes(current) ? 'active' : ''}`}><Link href="#">Listings<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
                                     <ul className="nav-dropdown nav-submenu">
-                                        <li className={`${['/restaurants_grid', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06'].includes(current) ? 'active' : ''}`}><Link href="#">Grid Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
+                                        <li className={`${['/restaurants', '/grid-layout-02', '/grid-layout-03', '/grid-layout-04', '/grid-layout-05', '/grid-layout-06'].includes(current) ? 'active' : ''}`}><Link href="#">Grid Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
                                             <ul className="nav-dropdown nav-submenu">
-                                                <li className={`${current === '/restaurants_grid' ? 'active' : ''}`}><Link href="/restaurants_grid">Grid Layout 01</Link></li>
+                                                <li className={`${current === '/restaurants' ? 'active' : ''}`}><Link href="/restaurants">Grid Layout 01</Link></li>
                                                 <li className={`${current === '/grid-layout-02' ? 'active' : ''}`}><Link href="/grid-layout-02">Grid Layout 02</Link></li>
                                                 <li className={`${current === '/grid-layout-03' ? 'active' : ''}`}><Link href="/grid-layout-03">Grid Layout 03</Link></li>
                                                 <li className={`${current === '/grid-layout-04' ? 'active' : ''}`}><Link href="/grid-layout-04">Grid Layout 04</Link></li>
@@ -121,9 +121,9 @@ export default function ThemNavbar() {
                                                 <li className={`${current === '/grid-layout-06' ? 'active' : ''}`}><Link href="/grid-layout-06">Grid Layout 06</Link></li>
                                             </ul>
                                         </li>
-                                        <li className={`${['/restaurants_list', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05'].includes(current) ? 'active' : ''}`}><Link href="#">List Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
+                                        <li className={`${['/restaurants', '/list-layout-02', '/list-layout-03', '/list-layout-04', '/list-layout-05'].includes(current) ? 'active' : ''}`}><Link href="#">List Layouts<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
                                             <ul className="nav-dropdown nav-submenu">
-                                                <li className={`${current === '/restaurants_list' ? 'active' : ''}`}><Link href="/restaurants_list">List Layout 01</Link></li>
+                                                <li className={`${current === '/restaurants' ? 'active' : ''}`}><Link href="/restaurants">List Layout 01</Link></li>
                                                 <li className={`${current === '/list-layout-02' ? 'active' : ''}`}><Link href="/list-layout-02">List Layout 02</Link></li>
                                                 <li className={`${current === '/list-layout-03' ? 'active' : ''}`}><Link href="/list-layout-03">List Layout 03</Link></li>
                                                 <li className={`${current === '/list-layout-04' ? 'active' : ''}`}><Link href="/list-layout-04">List Layout 04</Link></li>
@@ -151,17 +151,13 @@ export default function ThemNavbar() {
                                     </ul>
                                 </li>
 
-                                <li className={`${['/dashboard-user', '/dashboard-my-profile', '/dashboard-my-bookings', '/dashboard-my-listings', '/dashboard-bookmarks', '/dashboard-messages', '/dashboard-reviews', '/dashboard-wallet', '/dashboard-add-listing'].includes(current) ? 'active' : ''}`}><Link href="#">User Dashboard<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
+                                <li className={`${['/profile', '/profile/orders', '/profile/saved-restaurants', '/profile/settings', '/profile/notifications'].includes(current) ? 'active' : ''}`}><Link href="#">User Dashboard<span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span></Link>
                                     <ul className="nav-dropdown nav-submenu">
-                                        <li className={`${current === '/dashboard-user' ? 'active' : ''}`}><Link href="/dashboard-user" className='d-flex'><BsSpeedometer className="me-1 align-self-center" />Dashboard Area</Link></li>
-                                        <li className={`${current === '/dashboard-my-profile' ? 'active' : ''}`}><Link href="/dashboard-my-profile" className='d-flex'><BsPersonLinesFill className="me-1 align-self-center" />My Profile</Link></li>
-                                        <li className={`${current === '/dashboard-my-bookings' ? 'active' : ''}`}><Link href="/dashboard-my-bookings" className='d-flex'><BsJournalCheck className="me-1 align-self-center" />My Bookings</Link></li>
-                                        <li className={`${current === '/dashboard-my-listings' ? 'active' : ''}`}><Link href="/dashboard-my-listings" className='d-flex'><BsUiRadiosGrid className="me-1 align-self-center" />My Listings</Link></li>
-                                        <li className={`${current === '/dashboard-bookmarks' ? 'active' : ''}`}><Link href="/dashboard-bookmarks" className='d-flex'><BsBookmarkStar className="me-1 align-self-center" />Bookmarkes</Link></li>
-                                        <li className={`${current === '/dashboard-messages' ? 'active' : ''}`}><Link href="/dashboard-messages" className='d-flex'><BsChatDots className="me-1 align-self-center" />Messages</Link></li>
-                                        <li className={`${current === '/dashboard-reviews' ? 'active' : ''}`}><Link href="/dashboard-reviews" className='d-flex'><BsYelp className="me-1 align-self-center" />Reviews</Link></li>
-                                        <li className={`${current === '/dashboard-wallet' ? 'active' : ''}`}><Link href="/dashboard-wallet" className='d-flex'><BsWallet className="me-1 align-self-center" />Wallet</Link></li>
-                                        <li className={`${current === '/dashboard-add-listing' ? 'active' : ''}`}><Link href="/dashboard-add-listing" className='d-flex'><BsPatchPlus className="me-1 align-self-center" />Add Listing</Link></li>
+                                        <li className={`${current === '/profile' ? 'active' : ''}`}><Link href="/profile" className='d-flex'><BsPersonCircle className="me-1 align-self-center" />Mon Profil</Link></li>
+                                        <li className={`${current === '/profile/orders' ? 'active' : ''}`}><Link href="/profile/orders" className='d-flex'><BsJournalCheck className="me-1 align-self-center" />Mes Commandes</Link></li>
+                                        <li className={`${current === '/profile/saved-restaurants' ? 'active' : ''}`}><Link href="/profile/saved-restaurants" className='d-flex'><BsBookmarkStar className="me-1 align-self-center" />Favoris</Link></li>
+                                        <li className={`${current === '/profile/notifications' ? 'active' : ''}`}><Link href="/profile/notifications" className='d-flex'><BsBell className="me-1 align-self-center" />Notifications</Link></li>
+                                        <li className={`${current === '/profile/settings' ? 'active' : ''}`}><Link href="/profile/settings" className='d-flex'><BsGear className="me-1 align-self-center" />Paramètres</Link></li>
                                     </ul>
                                 </li>
 
@@ -220,8 +216,10 @@ export default function ThemNavbar() {
                                                         <div className="fw-bold text-dark">{user?.name}</div>
                                                     </div>
                                                 </li>
-                                                <li><Link href="/dashboard-user" className="d-flex align-items-center"><BsSpeedometer className="me-2" />Dashboard</Link></li>
-                                                <li><Link href="/dashboard-my-profile" className="d-flex align-items-center"><BsPersonCircle className="me-2" />Mon Profil</Link></li>
+                                                <li><Link href="/profile" className="d-flex align-items-center"><BsPersonCircle className="me-2" />Mon Profil</Link></li>
+                                                <li><Link href="/profile/orders" className="d-flex align-items-center"><BsJournalCheck className="me-2" />Mes Commandes</Link></li>
+                                                <li><Link href="/profile/saved-restaurants" className="d-flex align-items-center"><BsBookmarkStar className="me-2" />Favoris</Link></li>
+                                                <li><Link href="/profile/settings" className="d-flex align-items-center"><BsGear className="me-2" />Paramètres</Link></li>
                                                 <li><Link href="#" onClick={(e) => { e.preventDefault(); logout(); }} className="d-flex align-items-center text-danger"><BsBoxArrowRight className="me-2" />Déconnexion</Link></li>
                                             </ul>
                                         </li>
