@@ -4,8 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useGetCitiesQuery } from '../../store/api';
-import NavbarLight from '../../components/navbar/navbar-light';
-import FooterTop from '../../components/footer-top';
 
 
 export default function CitiesPage() {
@@ -14,7 +12,6 @@ export default function CitiesPage() {
 
     return (
         <div className="bg-light min-vh-100">
-            <NavbarLight />
             <div className="container py-5">
                 <div className="text-center mb-5">
                     <h1 className="fw-bold">Toutes les villes</h1>
@@ -49,7 +46,6 @@ export default function CitiesPage() {
                     </div>
                 )}
             </div>
-            <FooterTop />
 
         </div>
     );

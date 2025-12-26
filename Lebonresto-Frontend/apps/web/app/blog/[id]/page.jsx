@@ -1,13 +1,11 @@
 'use client';
 
 import React from 'react'
-import NavbarLight from '../../../components/navbar/navbar-light'
 import Link from 'next/link'
 import { MdArrowForwardIos } from 'react-icons/md'
 import BlogSidebar from '../../../components/blog-sidebar'
 import { FaQuoteLeft, FaThumbsDown, FaThumbsUp } from 'react-icons/fa'
 import { blogData } from '../../../data/data'
-import FooterTop from '../../../components/footer-top'
 
 
 const blogImg = '/assets/img/gal-4.jpg'
@@ -27,7 +25,6 @@ export default function BlogDetail({ params }) {
 
     return (
         <div className='bg-light'>
-            <NavbarLight />
             <section>
                 <div className="container">
                     <div className="row justify-content-start align-items-center">
@@ -256,7 +253,6 @@ export default function BlogDetail({ params }) {
                     </div>
                 </div>
             </section>
-            <FooterTop />
 
 
         </div>

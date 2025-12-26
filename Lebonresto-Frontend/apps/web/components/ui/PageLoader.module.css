@@ -1,0 +1,271 @@
+.loaderOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.4s cubic-bezier(0.215, 0.61, 0.355, 1), visibility 0.4s;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.loaderOverlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* SVG STYLES */
+.iconContainer {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.stroke {
+    fill: none;
+    stroke: #016B61;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+/* ZELLIGE HINT (Subtle Opacity) */
+.zellige {
+    opacity: 0.15;
+    stroke-width: 1.5;
+}
+
+/* ANIMATION: DRAW STROKE (ONCE) */
+.drawPath {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: drawIn 1.2s cubic-bezier(0.215, 0.61, 0.355, 1) forwards;
+}
+
+@keyframes drawIn {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+/* ANIMATION: PIN BOB */
+.pinGroup {
+    animation: bob 3s cubic-bezier(0.645, 0.045, 0.355, 1) infinite;
+    transform-origin: center center;
+}
+
+@keyframes bob {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* ANIMATION: UTENSILS CHOREOGRAPHY (HOSPITALITY SLIDE) */
+.forkGroup {
+    transform-origin: 30px 65px;
+    /* Pivot near base for tilt */
+    animation: forkDance 2.5s cubic-bezier(0.645, 0.045, 0.355, 1) infinite;
+    animation-delay: 0.5s;
+    /* Wait for draw-in slightly */
+}
+
+.spoonGroup {
+    transform-origin: 70px 65px;
+    /* Pivot near base for tilt */
+    animation: spoonDance 2.5s cubic-bezier(0.645, 0.045, 0.355, 1) infinite;
+    animation-delay: 0.5s;
+}
+
+/* Fork starts left, slides right, tilts right */
+@keyframes forkDance {
+
+    0%,
+    100% {
+        transform: translateX(-15px) rotate(0deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    /* Meet */
+    50% {
+        transform: translateX(0px) rotate(-8deg) translateY(-2px);
+    }
+
+    /* Present/Tilt */
+    60% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    /* Untilt */
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(-15px) rotate(0deg);
+        opacity: 0;
+    }
+}
+
+/* Spoon starts right, slides left, tilts left */
+@keyframes spoonDance {
+
+    0%,
+    100% {
+        transform: translateX(15px) rotate(0deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    40% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    /* Meet */
+    50% {
+        transform: translateX(0px) rotate(8deg) translateY(-2px);
+    }
+
+    /* Present/Tilt */
+    60% {
+        transform: translateX(0px) rotate(0deg);
+    }
+
+    /* Untilt */
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(15px) rotate(0deg);
+        opacity: 0;
+    }
+}
+
+/* TYPOGRAPHY */
+.textContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #016B61;
+}
+
+.brandLine {
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+    margin-bottom: 6px;
+}
+
+.brandName {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    /* Option B: Subtle spacing pulse + vertical ease */
+    animation: textBreathe 3s ease-in-out infinite;
+}
+
+.dots span {
+    font-size: 18px;
+    font-weight: 700;
+    opacity: 0;
+    animation: dotFade 1.5s infinite;
+}
+
+.dots span:nth-child(1) {
+    animation-delay: 0.0s;
+}
+
+.dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+.caption {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #016B61;
+    opacity: 0.6;
+    /* Muted */
+}
+
+@keyframes textBreathe {
+
+    0%,
+    100% {
+        letter-spacing: -0.02em;
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    50% {
+        letter-spacing: 0.01em;
+        transform: translateY(-1px);
+        opacity: 0.9;
+    }
+}
+
+@keyframes dotFade {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+
+    .drawPath,
+    .pinGroup,
+    .forkGroup,
+    .spoonGroup,
+    .brandName,
+    .dots span {
+        animation: none !important;
+        stroke-dasharray: none !important;
+        stroke-dashoffset: 0 !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

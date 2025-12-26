@@ -6,6 +6,7 @@ import '../styles/globals.css';
 import '../styles/admin-theme.css';
 
 import StoreProvider from '../store/StoreProvider';
+import { AuthProvider } from '../components/auth/AuthProvider';
 import { Poppins } from 'next/font/google';
 
 const poppins = Poppins({
@@ -25,7 +26,9 @@ export default function RootLayout({ children }) {
         <html lang="en">
             <body className={poppins.className}>
                 <StoreProvider>
-                    {children}
+                    <AuthProvider>
+                        {children}
+                    </AuthProvider>
                 </StoreProvider>
             </body>
         </html>

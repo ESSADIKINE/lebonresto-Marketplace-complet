@@ -1,0 +1,213 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeIn 0.3s forwards;
+}
+
+.modalContainer {
+    width: 650px;
+    min-height: 550px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideUp 0.4s 0.1s forwards;
+    overflow: hidden;
+    position: relative;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.closeButtonContainer {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+}
+
+/* User asked to DELETE the header part, so we remove the .header block styles entirely or keep them minimal if needed for internal structure 
+   Re-reading: "juste delete this part <header>"
+   So I will NOT include the big header gradient styles. I will make a simple close button if needed, but user said delete.
+   I'll keep a minimal close button style just in case I implement it outside.
+*/
+
+.closeButton {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-size: 20px;
+}
+
+.closeButton:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.body {
+    padding: 20px 0;
+    /* Reduced vertical padding, centering handled by flex */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    flex: 1;
+    /* Take remaining height */
+    justify-content: center;
+    /* Center vertically in the available space */
+}
+
+.formCentered {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Compact Input Styles */
+.inputGroup {
+    width: 55%;
+    /* ~360px on 650px modal */
+    min-width: 320px;
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 14px 14px 45px;
+    font-size: 15px;
+    /* Slightly larger text */
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    outline: none;
+    transition: all 0.3s ease;
+    color: #1e293b;
+    background: #f8fafc;
+    height: 52px;
+    /* Explicit custom height */
+}
+
+.input:focus {
+    border-color: #016B61;
+    background: #ffffff;
+    box-shadow: 0 0 0 4px rgba(1, 107, 97, 0.1);
+}
+
+.inputIcon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+.input:focus+.inputIcon {
+    color: #016B61;
+}
+
+.label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.button {
+    width: 55%;
+    min-width: 320px;
+    padding: 14px;
+    height: 52px;
+    background: #016B61;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(1, 107, 97, 0.2);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button:hover {
+    background: #015049;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(1, 107, 97, 0.3);
+}
+
+.button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.link {
+    color: #016B61;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    font-size: 14px;
+}
+
+.link:hover {
+    color: #015049;
+    text-decoration: underline;
+}
+
+.footer {
+    width: 55%;
+    min-width: 320px;
+    text-align: center;
+    margin-top: 24px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

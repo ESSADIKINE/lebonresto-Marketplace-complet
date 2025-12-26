@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCurrentCustomer } from '../../store/slices/authSlice';
-import FooterTop from '../../components/footer-top';
 
 import { BsPerson, BsCalendarRange, BsHeart, BsChatText, BsBoxArrowRight } from 'react-icons/bs';
 
@@ -102,7 +101,6 @@ export default function AccountLayout({ children }) {
                 </div>
             </section>
 
-            <FooterTop />
 
         </div>
     );

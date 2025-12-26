@@ -1,11 +1,9 @@
 'use client';
 
 import React from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
 import Link from 'next/link'
 import { Link as ScrollLink } from 'react-scroll'
 import { articles } from '../../data/data'
-import FooterTop from '../../components/footer-top'
 
 import { MdArrowForwardIos } from 'react-icons/md'
 
@@ -14,7 +12,6 @@ const bg = '/assets/img/title-bg.png'
 export default function HelpCenter() {
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-cover position-relative" style={{ backgroundColor: `#ffe8ee`, backgroundImage: `url(${bg})` }}>
                 <div className="container">
@@ -173,7 +170,6 @@ export default function HelpCenter() {
                     </div>
                 </div>
             </section>
-            <FooterTop />
 
 
         </>

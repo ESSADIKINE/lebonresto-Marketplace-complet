@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import FooterTop from '../../../../components/footer-top';
 
 import { useGetRestaurantByIdQuery } from '../../../../store/api';
 import ReservationForm from '../../../../components/reservation/reservation-form';
@@ -62,7 +61,6 @@ export default function ReservationPage({ params }) {
 
             </div>
 
-            <FooterTop />
 
         </div>
     );

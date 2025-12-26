@@ -7,6 +7,9 @@ import MainHeader from './header/MainHeader';
 import Footer from './footer';
 import BackToTop from './back-to-top';
 
+import { useAuth } from './auth/AuthProvider';
+import PageLoader from './ui/PageLoader';
+
 /**
  * Wraps the main application content.
  * Conditionally renders Header/Footer/BackToTop depending on the path.
@@ -14,6 +17,7 @@ import BackToTop from './back-to-top';
  */
 export default function MainLayoutWrapper({ children }) {
     const pathname = usePathname();
+    const { status } = useAuth();
 
     // Pages that should hide standard layout (header/footer)
     const hiddenLayoutPaths = ['/login', '/register'];
@@ -23,6 +27,15 @@ export default function MainLayoutWrapper({ children }) {
     const nonStickyPaths = ['/restaurants', '/half-map'];
     // Check if current path starts with any of the non-sticky paths
     const isSticky = !nonStickyPaths.some(path => pathname.startsWith(path));
+
+
+
+    // ...
+
+    // Global App Loader
+    if (status === 'loading') {
+        return <PageLoader />;
+    }
 
     return (
         <div className="d-flex flex-column min-vh-100">

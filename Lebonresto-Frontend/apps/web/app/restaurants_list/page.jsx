@@ -1,11 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import NavbarLight from '../../components/navbar/navbar-light';
 import FilterOne from '../../components/filter-one';
 import { BsCoin, BsLightningChargeFill, BsPatchCheckFill, BsSearch, BsTelephone } from 'react-icons/bs';
 import { FaArrowLeft, FaArrowRight, FaHeart, FaLocationDot, FaStar } from 'react-icons/fa6';
-import FooterTop from '../../components/footer-top';
 
 
 export const metadata = {
@@ -41,7 +39,6 @@ export default async function RestaurantsList({ searchParams }) {
 
     return (
         <>
-            <NavbarLight />
 
             <div className="bg-white py-3 z-3" style={{ position: 'sticky', top: '80px', marginTop: '80px' }}>
                 <FilterOne list={true} />
@@ -209,7 +206,6 @@ export default async function RestaurantsList({ searchParams }) {
                     </div>
                 </div>
             </section>
-            <FooterTop />
 
         </>
     );

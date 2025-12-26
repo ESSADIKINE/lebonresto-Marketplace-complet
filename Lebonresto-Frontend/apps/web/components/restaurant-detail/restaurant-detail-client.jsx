@@ -17,10 +17,6 @@ import RestaurantGalleryGrid from './restaurant-gallery-grid';
 
 import RestaurantSidebarRight from './restaurant-sidebar-right';
 import RestaurantCarousel from '../home-sections/restaurant-carousel';
-import NavbarLight from '../navbar/navbar-light';
-import FooterTop from '../footer-top';
-import Footer from '../footer';
-import BackToTop from '../back-to-top';
 import RestaurantContentTabs from './restaurant-content-tabs'; // New Import
 
 import styles from './restaurant-detail-page.module.css';
@@ -106,7 +102,6 @@ export default function RestaurantDetailClient({ id }) {
 
     return (
         <div className="bg-light min-vh-100">
-            <NavbarLight />
 
             <div className={`container-xxl pt-4 pb-5 ${styles.detailLayout}`}>
                 {/* 1. Header & Media Section */}
@@ -152,9 +147,6 @@ export default function RestaurantDetailClient({ id }) {
                 </div>
             </div>
 
-            <FooterTop />
-            <Footer />
-            <BackToTop />
         </div>
     );
 }

@@ -14,7 +14,7 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid', c
     const {
         id, name, description, image, city, address, category,
         rating, reviewCount, minPrice, maxPrice,
-        status, restaurantStatus, createdAt, tags, discount
+        status, createdAt, tags, discount
     } = restaurant;
 
     const isNew = isNewRestaurant(createdAt);
@@ -23,7 +23,6 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid', c
     const reservationLink = `/restaurants/${id}/reservation`;
     // Condition logic per user request
     const isPremium = status?.toLowerCase() === 'premium'; // 1) Premium check
-    const isOpen = restaurantStatus === 'Ouvert' || status === 'APPROVED'; // Fallback logic
 
     // Tag limits
     const maxTags = layout === 'grid' ? 2 : 4;
@@ -68,11 +67,12 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid', c
                         </span>
                     )}
 
-                    {/* Status */}
-                    <span className={`chip-compact ${isOpen ? 'status-open' : 'status-closed'}`}>
-                        <span className={`status-dot ${isOpen ? 'open' : 'closed'}`}></span>
-                        {isOpen ? 'Ouvert' : 'Fermé'}
-                    </span>
+                    {/* Status removed per request, replaced with Nouveau if applicable */}
+                    {isNew && (
+                        <span className="chip-compact status-new" style={{ backgroundColor: 'var(--bs-primary)', color: 'white' }}>
+                            Nouveau
+                        </span>
+                    )}
 
                     {/* 2) Promo Chip - "Next to 'Ouvert/Fermé'" requested if space allows, or flow naturally */}
                     {discount > 0 && (
@@ -124,11 +124,7 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid', c
                         Let's render 'Nouveau' if pertinent.
                     */}
                     <div className="mb-2">
-                        {isNew && (
-                            <span className="badge bg-light text-primary border border-primary border-opacity-10 rounded-pill small">
-                                Nouveau
-                            </span>
-                        )}
+                        {/* 'Nouveau' moved to image overlay */}
                     </div>
 
                     <div className="mt-auto pt-2 d-flex gap-2">

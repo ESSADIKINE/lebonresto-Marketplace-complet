@@ -45,7 +45,7 @@ export default function RestaurantGalleryPopup({ images, isOpen, onClose }) {
                         onClick={handleCloseFullscreen}
                         title="Retour à la grille"
                     >
-                        <BsGrid3X3Gap size={20} />
+                        <BsGrid3X3Gap size={24} />
                     </button>
                     <span className="small opacity-75">
                         {selectedIndex + 1} / {images.length}
@@ -55,7 +55,7 @@ export default function RestaurantGalleryPopup({ images, isOpen, onClose }) {
                         onClick={onClose} // Exit completely
                         title="Fermer"
                     >
-                        <BsX size={24} />
+                        <BsX size={32} />
                     </button>
                 </div>
 
@@ -72,19 +72,19 @@ export default function RestaurantGalleryPopup({ images, isOpen, onClose }) {
                     {selectedIndex > 0 && (
                         <button
                             className="btn btn-light rounded-circle position-absolute start-0 ms-3 d-flex align-items-center justify-content-center shadow"
-                            style={{ width: 44, height: 44, top: '50%', transform: 'translateY(-50%)' }}
+                            style={{ width: 60, height: 60, top: '50%', transform: 'translateY(-50%)' }}
                             onClick={handlePrev}
                         >
-                            <BsChevronLeft size={20} />
+                            <BsChevronLeft size={40} />
                         </button>
                     )}
                     {selectedIndex < images.length - 1 && (
                         <button
                             className="btn btn-light rounded-circle position-absolute end-0 me-3 d-flex align-items-center justify-content-center shadow"
-                            style={{ width: 44, height: 44, top: '50%', transform: 'translateY(-50%)' }}
+                            style={{ width: 60, height: 60, top: '50%', transform: 'translateY(-50%)' }}
                             onClick={handleNext}
                         >
-                            <BsChevronRight size={20} />
+                            <BsChevronRight size={40} />
                         </button>
                     )}
                 </div>

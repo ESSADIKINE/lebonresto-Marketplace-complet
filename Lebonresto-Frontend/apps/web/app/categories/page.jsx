@@ -3,8 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { useGetCategoriesQuery } from '../../store/api';
-import NavbarLight from '../../components/navbar/navbar-light';
-import FooterTop from '../../components/footer-top';
 
 import {
     FaUtensils, FaPizzaSlice, FaFish, FaBurger, FaLeaf, FaHotdog, FaWineGlass, FaCakeCandles
@@ -28,7 +26,6 @@ export default function CategoriesPage() {
 
     return (
         <div className="bg-light min-vh-100">
-            <NavbarLight />
             <div className="container py-5">
                 <div className="text-center mb-5">
                     <h1 className="fw-bold">Toutes les catégories</h1>
@@ -56,7 +53,6 @@ export default function CategoriesPage() {
                     </div>
                 )}
             </div>
-            <FooterTop />
 
         </div>
     );

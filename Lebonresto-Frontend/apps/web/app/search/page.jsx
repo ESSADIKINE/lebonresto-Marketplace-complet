@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import FooterTop from '../../components/footer-top';
 
 import RestaurantListingClient from '../../components/listing/restaurant-listing-client';
 import { useSearchParams } from 'next/navigation';
@@ -19,7 +18,6 @@ function SearchPageContent() {
                 title={query ? `Résultats pour "${query}"` : 'Résultats de recherche'}
             />
 
-            <FooterTop />
 
         </div>
     );

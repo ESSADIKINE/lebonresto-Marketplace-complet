@@ -65,6 +65,20 @@ export const registerCustomer = createAsyncThunk(
     }
 );
 
+export const registerOwner = createAsyncThunk(
+    'auth/registerOwner',
+    async (ownerData, { rejectWithValue }) => {
+        try {
+            const response = await apiClient.post('/owners', ownerData);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || 'Registration failed'
+            );
+        }
+    }
+);
+
 export const fetchCurrentCustomer = createAsyncThunk(
     'auth/fetchCurrentCustomer',
     async (_, { rejectWithValue }) => {
@@ -189,6 +203,24 @@ const authSlice = createSlice({
                 }
             })
             .addCase(registerCustomer.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+                state.isAuthenticated = false;
+            })
+
+            // Register Owner
+            .addCase(registerOwner.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(registerOwner.fulfilled, (state, action) => {
+                state.loading = false;
+                // Check if API returns details needed for auto-login, otherwise just stop loading
+                // Assuming POST /owners returns the created owner object, but maybe not token
+                // We'll leave user/token null and let UI redirect to login
+                state.error = null;
+            })
+            .addCase(registerOwner.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
                 state.isAuthenticated = false;

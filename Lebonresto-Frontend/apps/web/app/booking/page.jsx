@@ -1,10 +1,8 @@
 'use client';
 
 import React from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
 import Link from 'next/link'
 import { BsStarFill, BsStarHalf } from 'react-icons/bs'
-import FooterTop from '../../components/footer-top'
 
 import { MdArrowForwardIos } from 'react-icons/md'
 
@@ -13,7 +11,6 @@ const listImg = '/assets/img/list-4.jpg'
 export default function BookingPage() {
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-light">
                 <div className="container">
@@ -263,7 +260,6 @@ export default function BookingPage() {
                 </div>
 
             </section>
-            <FooterTop />
 
         </>
     )

@@ -1,11 +1,9 @@
 'use client';
 
 import React, { useState } from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
 import Link from 'next/link'
 import { MdArrowForwardIos } from 'react-icons/md'
 import { BsXLg } from 'react-icons/bs'
-import FooterTop from '../../components/footer-top'
 
 
 const img1 = '/assets/img/h.jpg'
@@ -28,7 +26,6 @@ export default function Cart() {
     };
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-light">
                 <div className="container">
@@ -244,7 +241,6 @@ export default function Cart() {
                 </div>
             </section>
 
-            <FooterTop />
 
         </>
     )

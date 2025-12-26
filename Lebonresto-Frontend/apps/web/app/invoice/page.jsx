@@ -1,8 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import NavbarLight from '../../components/navbar/navbar-light'
 import { BsDownload, BsPrinter } from 'react-icons/bs'
-import FooterTop from '../../components/footer-top'
 
 
 const logo = '/assets/img/logo.svg'
@@ -11,7 +9,6 @@ const bg = '/assets/img/auth-bg.png'
 export default function InvoicePage() {
     return (
         <>
-            <NavbarLight />
             <section className="bg-cover" style={{ backgroundImage: `url(${bg})`, backgroundColor: `#ffe8ee` }}>
                 <div className="container">
                     <div className="row align-items-center justify-content-center">
@@ -122,7 +119,6 @@ export default function InvoicePage() {
                     </div>
                 </div>
             </section>
-            <FooterTop />
 
         </>
     )

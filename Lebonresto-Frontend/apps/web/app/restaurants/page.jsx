@@ -1,5 +1,4 @@
 import React from 'react';
-import FooterTop from '../../components/footer-top';
 import RestaurantListingClient from '../../components/listing/restaurant-listing-client';
 
 export const metadata = {
@@ -16,7 +15,6 @@ export default function RestaurantsPage() {
                 <RestaurantListingClient />
             </div>
 
-            <FooterTop />
 
         </div>
     );

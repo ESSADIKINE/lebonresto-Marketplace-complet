@@ -2,8 +2,6 @@
 
 import React from 'react'
 import Link from 'next/link'
-import NavbarLight from '../../components/navbar/navbar-light'
-import FooterTop from '../../components/footer-top'
 
 import { listData } from '../../data/data'
 import { BsBrowserChrome, BsCoin, BsEnvelope, BsEnvelopeCheckFill, BsFacebook, BsInstagram, BsLightningChargeFill, BsPatchCheckFill, BsPersonCheck, BsPhone, BsSend, BsStarFill, BsStarHalf, BsTelephone, BsTwitter, BsWhatsapp, BsYoutube } from 'react-icons/bs'
@@ -15,7 +13,6 @@ const user = '/assets/img/team-4.jpg'
 export default function AuthorProfile() {
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-light py-5">
                 <div className="container">
@@ -295,7 +292,6 @@ export default function AuthorProfile() {
                 </div>
             </section>
 
-            <FooterTop />
 
         </>
     )

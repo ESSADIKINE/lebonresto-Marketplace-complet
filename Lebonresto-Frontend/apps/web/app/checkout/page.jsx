@@ -3,9 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Select from 'react-select';
-import NavbarLight from '../../components/navbar/navbar-light'
 import { MdArrowForwardIos } from 'react-icons/md'
-import FooterTop from '../../components/footer-top';
 
 
 export default function CheckoutPage() {
@@ -22,7 +20,6 @@ export default function CheckoutPage() {
     ];
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-light">
                 <div className="container">
@@ -386,7 +383,6 @@ export default function CheckoutPage() {
                     </div>
                 </div>
             </section>
-            <FooterTop />
 
         </>
     )

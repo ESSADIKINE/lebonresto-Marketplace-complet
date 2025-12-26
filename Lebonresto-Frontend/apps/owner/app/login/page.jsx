@@ -1,90 +1,73 @@
-'use client';
-
-import React from 'react';
+"use client";
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { FaEye, FaFacebook, FaGooglePlusG } from 'react-icons/fa6';
+import { useAuth } from '../../components/auth/AuthProvider';
+import { BsEnvelope, BsLock } from 'react-icons/bs';
 
-const bg = '/assets/img/auth-bg.png';
-const logo = '/assets/img/icon.png';
+export default function OwnerLoginPage() {
+    const { login } = useAuth();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-export default function Login() {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+        setLoading(true);
+        try {
+            const data = await login(email, password);
+            if (data.needsVerification) {
+                window.location.href = `/verify-email?email=${encodeURIComponent(email)}`;
+            } else {
+                window.location.href = '/dashboard';
+            }
+        } catch (err) {
+            setError(err.response?.data?.message || 'Login failed');
+            setLoading(false);
+        }
+    };
+
     return (
-        <section style={{ backgroundImage: `url(${bg})`, backgroundPosition: 'center', backgroundRepeat: 'no-repeat', backgroundColor: '#ffe8ee', backgroundSize: 'cover', minHeight: '100vh' }}>
-            <div className="container pt-5">
-                <div className="row align-items-center justify-content-center">
-                    <div className="col-xl-5 col-lg-7 col-md-9">
-                        <div className="authWrap">
-                            <div className="authhead">
-                                <div className="text-center mb-4"><Link href="/"><img className="img-fluid" src={logo} width="55" alt="logo" /></Link></div>
-                            </div>
-                            <div className="authbody d-black mb-4">
-                                <div className="card rounded-4 p-sm-5 p-4">
-                                    <div className="card-body p-0">
-                                        <div className="text-center"><h1 className="mb-2 fs-2">Welcome To ListingHub!</h1></div>
-                                        <form className="mt-5 text-start">
-                                            <div className="form mb-5">
-                                                <div className="form-group form-border mb-4">
-                                                    <label>User Name</label>
-                                                    <input type="email" className="form-control" placeholder="name@example.com" required="" />
-                                                </div>
-                                                <div className="form-group form-border position-relative mb-4">
-                                                    <label>Password</label>
-                                                    <div className="position-relative">
-                                                        <input type="password" className="form-control" id="password-field" name="password" placeholder="Password" />
-                                                        <FaEye className="fa-solid fa-eye toggle-password position-absolute top-50 end-0 translate-middle-y me-3" />
-                                                    </div>
-                                                </div>
-
-                                                <div className="form-group mb-4">
-                                                    <button type="submit" className="btn btn-primary full-width fw-medium">Log In</button>
-                                                </div>
-
-                                                <div className="modal-flex-item d-flex align-items-center justify-content-between mb-3">
-                                                    <div className="modal-flex-first">
-                                                        <div className="form-check form-check-inline">
-                                                            <input className="form-check-input" type="checkbox" id="savepassword" value="option1" />
-                                                            <label className="form-check-label" htmlFor="savepassword">Save Password</label>
-                                                        </div>
-                                                    </div>
-                                                    <div className="modal-flex-last">
-                                                        <Link href="#" className="text-primary fw-medium">Forget Password?</Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div className="prixer my-5">
-                                                <div className="devider-wraps position-relative">
-                                                    <div className="devider-text text-muted text-md">Or signin with email</div>
-                                                </div>
-                                            </div>
-
-                                            <div className="social-login">
-                                                <div className="d-flex align-items-center justify-content-center flex-wrap gap-3 p-0">
-                                                    <div className="flex-first flex-fill mob-100">
-                                                        <Link href="#" className="btn bg-white border  text-dark full-width">
-                                                            <FaGooglePlusG className="color--googleplus me-2" />
-                                                            <span className="fw-medium text-md">Signin with Google</span>
-                                                        </Link>
-                                                    </div>
-                                                    <div className="flex-last flex-fill mob-100">
-                                                        <Link href="#" className="btn bg-white border  text-dark full-width">
-                                                            <FaFacebook className="color--facebook me-2" />
-                                                            <span className="fw-medium text-md">Signin with Facebook</span>
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="authfooter">
-                                <div className="text-center"><p className="text-dark mb-0">Are you new here?<Link href="/register" className="fw-medium text-primary"> Create an account</Link></p></div>
-                            </div>
+        <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
+            <div className="card shadow-sm border-0 p-4" style={{ maxWidth: '400px', width: '100%' }}>
+                <h3 className="text-center fw-bold mb-3">Owner Portal</h3>
+                {error && <div className="alert alert-danger">{error}</div>}
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <label className="form-label">Email</label>
+                        <div className="input-group">
+                            <span className="input-group-text"><BsEnvelope /></span>
+                            <input
+                                type="email"
+                                className="form-control"
+                                required
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                            />
                         </div>
                     </div>
-                </div>
+                    <div className="mb-3">
+                        <label className="form-label">Password</label>
+                        <div className="input-group">
+                            <span className="input-group-text"><BsLock /></span>
+                            <input
+                                type="password"
+                                className="form-control"
+                                required
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                    <button className="btn btn-primary w-100" type="submit" disabled={loading}>
+                        {loading ? 'Logging in...' : 'Login'}
+                    </button>
+                    <div className="text-center mt-3">
+                        <Link href="/register" className="text-decoration-none">Register New Restaurant</Link>
+                    </div>
+                </form>
             </div>
-        </section>
+        </div>
     );
 }

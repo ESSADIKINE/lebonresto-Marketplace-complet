@@ -3,14 +3,20 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BsPersonCircle, BsSearch, BsGeoAlt } from "react-icons/bs";
+import { BsPersonCircle, BsSearch, BsGeoAlt, BsBell, BsSpeedometer, BsBoxArrowRight, BsGear } from "react-icons/bs";
+import AuthModal from '../auth/AuthModal';
+import { useAuth } from '../auth/AuthProvider';
 
 export default function MainHeader({ sticky = true }) {
     const router = useRouter();
+    const { user, isAuthenticated, logout } = useAuth();
 
     // State
     const [scrolled, setScrolled] = useState(false);
     const [cities, setCities] = useState([]);
+
+    // Auth Modal State
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
     // Form State
     const [selectedCityId, setSelectedCityId] = useState('');
@@ -136,19 +142,71 @@ export default function MainHeader({ sticky = true }) {
                     </div>
 
                     {/* 3. Auth Button */}
-                    <div>
-                        <Link
-                            href="/login"
-                            className="btn btn-outline-primary rounded-pill fw-medium d-flex align-items-center gap-2 px-3"
-                            style={{ height: '40px' }}
-                        >
-                            <BsPersonCircle size={20} />
-                            <span className="d-none d-md-inline">Connexion</span>
-                        </Link>
+                    <div className="d-flex align-items-center">
+                        {/* Notification Bell (Only if Logged In) */}
+                        {isAuthenticated && (
+                            <div className="text-dark me-3 position-relative cursor-pointer" style={{ cursor: 'pointer' }}>
+                                <BsBell size={22} />
+                                <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                    <span className="visually-hidden">New alerts</span>
+                                </span>
+                            </div>
+                        )}
+
+                        {isAuthenticated ? (
+                            <div className="dropdown">
+                                <a
+                                    href="#"
+                                    className="d-flex align-items-center text-decoration-none dropdown-toggle hide-arrow"
+                                    id="userDropdown"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <div className="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style={{ width: 42, height: 42 }}>
+                                        {user?.name?.charAt(0).toUpperCase() || 'U'}
+                                    </div>
+                                </a>
+                                <ul className="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown">
+                                    <li className="px-3 py-2 border-bottom">
+                                        <div className="fw-bold text-dark">{user?.name}</div>
+                                        <div className="small text-muted text-truncate" style={{ maxWidth: '150px' }}>{user?.email}</div>
+                                    </li>
+                                    <li><Link href="/profile" className="dropdown-item d-flex align-items-center py-2"><BsPersonCircle className="me-2 text-info" />Mon Profil</Link></li>
+                                    <li><Link href="/settings" className="dropdown-item d-flex align-items-center py-2"><BsGear className="me-2 text-secondary" />Paramètres</Link></li>
+                                    <li><hr className="dropdown-divider" /></li>
+                                    <li>
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                logout();
+                                            }}
+                                            className="dropdown-item d-flex align-items-center py-2 text-danger bg-transparent border-0 w-100"
+                                        >
+                                            <BsBoxArrowRight className="me-2" />Déconnexion
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                        ) : (
+                            <a
+                                href="#"
+                                className="btn btn-outline-primary rounded-pill fw-medium d-flex align-items-center gap-2 px-3 hover-shadow transition-all"
+                                style={{ height: '40px' }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsAuthModalOpen(true);
+                                }}
+                            >
+                                <BsPersonCircle size={20} />
+                                <span className="d-none d-md-inline">Connexion</span>
+                            </a>
+                        )}
                     </div>
 
                 </div>
             </div>
+
+            <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
 
             {/* Mobile Search Bar (Below Main Header on mobile) - Optional, 
                 for now hiding it on mobile or keeping basic behavior 

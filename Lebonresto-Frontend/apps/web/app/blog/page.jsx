@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
 
 import Link from 'next/link'
 
@@ -37,7 +36,6 @@ const blogPosts = [
 export default function Blog() {
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-cover position-relative" style={{ backgroundImage: `url(${bg})` }} data-overlay="6">
                 <div className="container">

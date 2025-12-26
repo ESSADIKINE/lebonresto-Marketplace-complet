@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
 
 import { BsGeoAlt, BsEnvelope, BsTelephone } from 'react-icons/bs'
 
@@ -10,7 +9,6 @@ const bg = '/assets/img/title-banner.jpg'
 export default function ContactUs() {
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-cover position-relative" style={{ backgroundImage: `url(${bg})` }} data-overlay="6">
                 <div className="container">

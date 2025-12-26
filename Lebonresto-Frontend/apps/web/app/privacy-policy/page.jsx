@@ -3,7 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { MdArrowForwardIos } from 'react-icons/md'
-import FooterTop from '../../components/footer-top'
 
 export default function PrivacyPolicy() {
     return (
@@ -72,7 +71,6 @@ export default function PrivacyPolicy() {
 
                 </div>
             </section>
-            <FooterTop />
 
         </>
     )

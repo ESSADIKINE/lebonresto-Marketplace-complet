@@ -1,5 +1,4 @@
 import React from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
 
 
 const bg = '/assets/img/title-banner.jpg'
@@ -7,7 +6,6 @@ const bg = '/assets/img/title-banner.jpg'
 export default function FAQ() {
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-cover position-relative" style={{ backgroundImage: `url(${bg})` }} data-overlay="6">
                 <div className="container">

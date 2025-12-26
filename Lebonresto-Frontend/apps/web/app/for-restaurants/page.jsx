@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import FooterTop from '../../components/footer-top';
 
 import ForRestaurantsLeadForm from '../../components/for-restaurants/for-restaurants-lead-form';
 import { BsCheckCircleFill, BsGraphUp, BsGlobe, BsMegaphone, BsStarFill, BsQuote } from 'react-icons/bs';
@@ -279,7 +278,6 @@ export default function ForRestaurantsPage() {
                 </div>
             </section>
 
-            <FooterTop />
 
         </div>
     );

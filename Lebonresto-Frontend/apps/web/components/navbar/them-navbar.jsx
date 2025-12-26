@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -12,12 +13,17 @@ const list1 = '/assets/img/list-3.jpg'
 const list2 = '/assets/img/list-4.jpg'
 const list3 = '/assets/img/list-5.jpg'
 
-import { BsPersonCircle, BsBasket2, BsSearch, BsGeoAlt, BsSpeedometer, BsPersonLinesFill, BsJournalCheck, BsUiRadiosGrid, BsBookmarkStar, BsChatDots, BsYelp, BsWallet, BsPatchPlus, BsBoxArrowInRight, BsPersonPlus, BsQuestionCircle, BsShieldCheck, BsPersonVcard, BsCalendar2Check, BsPersonCheck, BsBlockquoteLeft, BsEnvelopeCheck, BsCoin, BsPatchQuestion, BsHourglassTop, BsInfoCircle, BsXOctagon, BsGear, BsGeoAltFill, BsX } from "react-icons/bs";
+import { BsPersonCircle, BsBasket2, BsSearch, BsGeoAlt, BsSpeedometer, BsPersonLinesFill, BsJournalCheck, BsUiRadiosGrid, BsBookmarkStar, BsChatDots, BsYelp, BsWallet, BsPatchPlus, BsBoxArrowInRight, BsPersonPlus, BsQuestionCircle, BsShieldCheck, BsPersonVcard, BsCalendar2Check, BsPersonCheck, BsBlockquoteLeft, BsEnvelopeCheck, BsCoin, BsPatchQuestion, BsHourglassTop, BsInfoCircle, BsXOctagon, BsGear, BsGeoAltFill, BsX, BsBell, BsBoxArrowRight } from "react-icons/bs";
 import { FiX } from 'react-icons/fi';
 import { BiSolidShoppingBagAlt } from 'react-icons/bi'
+import { useUI } from '../UIProvider';
+import { useAuth } from '../auth/AuthProvider';
 
 
 export default function ThemNavbar() {
+    const { openAuthModal } = useUI();
+    const { user, isAuthenticated, logout } = useAuth();
+    console.log('[ThemNavbar] Auth State:', { isAuthenticated, user });
     const [scroll, setScroll] = useState(false);
     const [current, setCurrent] = useState('');
     const [windowWidth, setWindowWidth] = useState(0);
@@ -61,7 +67,15 @@ export default function ThemNavbar() {
                             <div className="mobile_nav">
                                 <ul>
                                     <li>
-                                        <Link href="#login" className="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#login"><BsPersonCircle className="me-1" /></Link>
+                                        {isAuthenticated ? (
+                                            <Link href="/dashboard-user" className="d-flex align-items-center">
+                                                <div className="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: 35, height: 35 }}>
+                                                    {user?.name?.charAt(0).toUpperCase() || 'U'}
+                                                </div>
+                                            </Link>
+                                        ) : (
+                                            <a href="#" className="d-flex align-items-center" onClick={(e) => { e.preventDefault(); openAuthModal(); }}><BsPersonCircle className="me-1" /></a>
+                                        )}
                                     </li>
                                     <li>
                                         <a href="#cartSlider" className="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><BsBasket2 className="" /><span className="head-cart-counter">3</span></a>
@@ -188,14 +202,40 @@ export default function ThemNavbar() {
                             </ul>
 
                             <ul className="nav-menu nav-menu-social align-to-right">
-                                <li>
-                                    <Link href="#login" className="d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#login"><BsPersonCircle className="fs-6 me-1" /><span className="navCl">SignUp or SignIn</span></Link>
-                                </li>
+                                {isAuthenticated ? (
+                                    <>
+                                        <li>
+                                            <Link href="#" className="d-flex align-items-center text-dark"><BsBell className="fs-5" /></Link>
+                                        </li>
+                                        <li>
+                                            <Link href="#" className="d-flex align-items-center">
+                                                <div className="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: 40, height: 40 }}>
+                                                    {user?.name?.charAt(0).toUpperCase() || 'U'}
+                                                </div>
+                                                <span className="submenu-indicator"><span className="submenu-indicator-chevron"></span></span>
+                                            </Link>
+                                            <ul className="nav-dropdown nav-submenu" style={{ right: 0, left: 'auto' }}>
+                                                <li>
+                                                    <div className="d-flex align-items-center px-3 py-2 border-bottom">
+                                                        <div className="fw-bold text-dark">{user?.name}</div>
+                                                    </div>
+                                                </li>
+                                                <li><Link href="/dashboard-user" className="d-flex align-items-center"><BsSpeedometer className="me-2" />Dashboard</Link></li>
+                                                <li><Link href="/dashboard-my-profile" className="d-flex align-items-center"><BsPersonCircle className="me-2" />Mon Profil</Link></li>
+                                                <li><Link href="#" onClick={(e) => { e.preventDefault(); logout(); }} className="d-flex align-items-center text-danger"><BsBoxArrowRight className="me-2" />Déconnexion</Link></li>
+                                            </ul>
+                                        </li>
+                                    </>
+                                ) : (
+                                    <li>
+                                        <a href="#" className="d-flex align-items-center" onClick={(e) => { e.preventDefault(); openAuthModal(); }}><BsPersonCircle className="fs-6 me-1" /><span className="navCl">Connexion</span></a>
+                                    </li>
+                                )}
                                 <li>
                                     <a href="#cartSlider" className="cart-content" data-bs-toggle="offcanvas" role="button" aria-controls="cartSlider"><BsBasket2 className="" /><span className="head-cart-counter">3</span></a>
                                 </li>
                                 <li className="list-buttons light">
-                                    <Link href="/register"><BsGeoAlt className="fs-6 me-1" />Add Listing</Link>
+                                    <Link href="#" onClick={(e) => { e.preventDefault(); openAuthModal(); }} ><BsGeoAlt className="fs-6 me-1" />Add Listing</Link>
                                 </li>
                             </ul>
                         </div>
@@ -204,64 +244,8 @@ export default function ThemNavbar() {
             </div>
             <div className="clearfix"></div>
 
-            <div className="modal fade" id="login" tabIndex="-1" role="dialog" aria-labelledby="loginmodal" aria-hidden="true">
-                <div className="modal-dialog" id="loginmodal">
-                    <div className="modal-content">
-                        <div className="modal-header justify-content-end border-0 pb-0">
-                            <Link href="#" className="square--30 circle bg-light-danger text-danger" data-bs-dismiss="modal" aria-label="Close"><FiX className="" /></Link>
-                        </div>
+            <div className="clearfix"></div>
 
-                        <div className="modal-body px-4">
-                            <div className="text-center mb-5">
-                                <h2>Welcome Back</h2>
-                                <p className="fs-6">Login to manage your account.</p>
-                            </div>
-
-                            <form className="needs-validation px-lg-2" noValidate>
-                                <div className="row align-items-center justify-content-between g-3 mb-4">
-                                    <div className="col-xl-6 col-lg-6 col-md-6"><Link href="#" className="btn btn-outline-secondary border rounded-3 text-md px-lg-2 full-width"><img src={googleLogo} className="img-fluid me-2" width="16" alt="" />Login with Google</Link></div>
-                                    <div className="col-xl-6 col-lg-6 col-md-6"><Link href="#" className="btn btn-outline-secondary border rounded-3 text-md px-lg-2 full-width"><img src={facebookLogo} className="img-fluid me-2" width="16" alt="" />Login with Facebook</Link></div>
-                                </div>
-
-                                <div className="form-group form-border mb-4">
-                                    <label className="form-label" htmlFor="email01">Your email</label>
-                                    <input type="email" className="form-control" id="email01" placeholder="email@site.com" required />
-                                    <span className="invalid-feedback">Please enter a valid email address.</span>
-                                </div>
-
-                                <div className="mb-4">
-                                    <div className="d-flex justify-content-between align-items-center">
-                                        <label className="form-label" htmlFor="pass01">Password</label>
-                                        <Link className="link fw-medium text-primary" href="/forgot-password">Forgot Password?</Link>
-                                    </div>
-
-                                    <div className="form-group form-border input-group-merge">
-                                        <input type="password" className="form-control" id="pass01" placeholder="8+ characters required" required />
-                                    </div>
-
-                                    <span className="invalid-feedback">Please enter a valid password.</span>
-                                </div>
-
-                                <div className="d-grid mb-3">
-                                    <button type="submit" className="btn btn-primary fw-medium">Log in</button>
-                                </div>
-
-                                <div className="text-center">
-                                    <p>Don't have an account yet? <Link className="link fw-medium text-primary" href="/signup">Sign up here</Link></p>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div className="modal-footer p-3 border-top">
-                            <div className="d-flex align-items-center justify-content-between gap-3">
-                                <div className="brand px-lg-4 px-3"><img src={brand1} className="img-fluid" alt="" /></div>
-                                <div className="brand px-lg-4 px-3"><img src={brand2} className="img-fluid" alt="" /></div>
-                                <div className="brand px-lg-4 px-3"><img src={brand3} className="img-fluid" alt="" /></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div className="offcanvas offcanvas-end" data-bs-scroll="true" tabIndex="-1" id="cartSlider" aria-labelledby="cartSliderLabel">
                 <div className="offcanvas-header border-bottom d-flex justify-content-between">

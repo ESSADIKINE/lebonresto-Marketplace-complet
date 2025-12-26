@@ -1,8 +1,6 @@
 'use client';
 
 import React from 'react';
-import NavbarLight from '../../../../components/navbar/navbar-light';
-import FooterTop from '../../../../components/footer-top';
 
 import BackToTop from '../../../../components/back-to-top';
 import RestaurantListingClient from '../../../../components/listing/restaurant-listing-client';
@@ -15,7 +13,6 @@ export default function CityRestaurantsPage({ params }) {
 
     return (
         <div className="bg-light min-vh-100">
-            <NavbarLight />
 
             {city ? (
                 <div className="bg-white border-bottom mb-4">
@@ -38,7 +35,6 @@ export default function CityRestaurantsPage({ params }) {
                 title={city ? `Restaurants à ${city.name}` : 'Restaurants'}
             />
 
-            <FooterTop />
 
             <BackToTop />
         </div>

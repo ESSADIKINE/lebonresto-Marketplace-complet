@@ -1,6 +1,4 @@
 import React from 'react'
-import NavbarLight from '../../components/navbar/navbar-light'
-import FooterTop from '../../components/footer-top'
 
 import { BsCheckCircleFill, BsPatchCheckFill } from 'react-icons/bs'
 
@@ -9,7 +7,6 @@ const bg = '/assets/img/auth-bg.png'
 export default function SuccessPayment() {
     return (
         <>
-            <NavbarLight />
 
             <section className="bg-cover" style={{ backgroundColor: `#ffe8ee`, backgroundImage: `url(${bg})` }}>
                 <div className="container">
@@ -54,7 +51,6 @@ export default function SuccessPayment() {
                     </div>
                 </div>
             </section>
-            <FooterTop />
 
         </>
     )

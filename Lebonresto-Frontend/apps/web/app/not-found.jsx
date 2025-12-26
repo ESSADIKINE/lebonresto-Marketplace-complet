@@ -3,7 +3,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { MdArrowForwardIos } from 'react-icons/md'
-import FooterTop from '../components/footer-top'
 
 const bg = '/assets/img/error.svg'
 
@@ -51,7 +50,6 @@ export default function NotFound() {
                 </div>
             </section>
 
-            <FooterTop />
         </>
     )
 }
