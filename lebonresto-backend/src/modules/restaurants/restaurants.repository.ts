@@ -59,7 +59,9 @@ export class RestaurantsRepository {
     latitude?: number;
     longitude?: number;
     radius?: number;
-  }): Promise<Restaurant[]> {
+    page?: number;
+    limit?: number;
+  }): Promise<{ items: Restaurant[]; total: number }> {
     let query = this.supabase
       .getClient()
       .from(this.table)
@@ -108,19 +110,14 @@ export class RestaurantsRepository {
     }
 
     // Sorting
-    if (filters.sort === 'createdAtDesc') {
-      query = query.order('created_at', { ascending: false });
-    } else {
-      query = query.order('created_at', { ascending: false });
-    }
+    // Sorting will be handled in-memory to ensure consistency
+    // switch (filters.sort) { ... } REMOVED
 
     const { data: rawData, error } = await query;
 
     if (error) {
       throw new InternalServerErrorException(error.message);
     }
-
-
 
     let data = rawData;
 
@@ -152,32 +149,68 @@ export class RestaurantsRepository {
       if (radius) {
         data = data.filter((r) => r.distance !== undefined && r.distance <= radius);
       } else {
-        // If sorting by distance is implied or desired when location is provided
-        // We probably only want to filter valid coordinates if we are doing distance logic
         data = data.filter(r => r.distance !== undefined);
       }
 
       // Sort by distance if distance filter is active OR just location is provided
-      // (Usually if user gives location, they want closest first)
       data.sort((a, b) => (a.distance || Infinity) - (b.distance || Infinity));
     }
 
-    // In-memory sort fallback for Status if desired
-    if (!filters.sort && data && !filters.radius) {
-      const score = (s: string) => {
-        if (s === RestaurantStatus.PREMIUM) return 3;
-        if (s === RestaurantStatus.STANDARD) return 2;
-        if (s === RestaurantStatus.BASIC) return 1;
-        return 0;
-      };
-      data.sort((a, b) => {
-        const diff = score(b.status) - score(a.status);
-        if (diff !== 0) return diff;
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-      });
-    }
+    // Power-Sorting for Recommended / Default View
+    // Prioritizes Status: Premium > Standard > Basic
+    // Unified In-Memory Sorting
+    // This runs after fetching ALL data matched by filters, ensuring reliable sorting regardless of DB column types.
+    const sortType = filters.sort || 'recommended';
 
-    return data;
+    data.sort((a, b) => {
+      switch (sortType) {
+        case 'price_asc':
+          return (a.min_price || 0) - (b.min_price || 0);
+
+        case 'price_desc':
+          return (b.min_price || 0) - (a.min_price || 0);
+
+        case 'rating_desc':
+          return (b.rating_avg || 0) - (a.rating_avg || 0);
+
+        case 'newest':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+
+        case 'most_reserved':
+          // Using rating_count as proxy for reservations if reservation_count is missing
+          return (b.rating_count || 0) - (a.rating_count || 0);
+
+        case 'recommended':
+        default:
+          // Recommended: Status Priority > Rating > Date
+          const score = (s: string) => {
+            if (s === RestaurantStatus.PREMIUM) return 30;
+            if (s === RestaurantStatus.STANDARD) return 20;
+            if (s === RestaurantStatus.BASIC) return 10;
+            return 0;
+          };
+
+          const diffStatus = score(b.status) - score(a.status);
+          if (diffStatus !== 0) return diffStatus;
+
+          if ((a.rating_avg || 0) !== (b.rating_avg || 0)) {
+            return (b.rating_avg || 0) - (a.rating_avg || 0);
+          }
+
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
+
+    // Pagination (In-Memory because of the complex in-memory sort/filter above)
+    const page = filters.page || 1;
+    const limit = filters.limit || 10;
+    const total = data.length;
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+
+    const items = data.slice(startIndex, endIndex);
+
+    return { items, total };
   }
 
   async findWithPromos() {

@@ -25,4 +25,17 @@ export class CreateCityDto {
   @IsOptional()
   @IsString()
   city_image?: string;
+
+  @ApiPropertyOptional({ example: 33.5731 })
+  @IsOptional()
+  latitude?: number;
+
+  @ApiPropertyOptional({ example: -7.5898 })
+  @IsOptional()
+  longitude?: number;
+
+  @ApiPropertyOptional({ example: 'https://example.com/icon.png' })
+  @IsOptional()
+  @IsString()
+  icon_url?: string;
 }

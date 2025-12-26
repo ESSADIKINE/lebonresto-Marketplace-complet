@@ -55,6 +55,8 @@ export class RestaurantsService {
     latitude?: number;
     longitude?: number;
     radius?: number;
+    page?: number;
+    limit?: number;
   }) {
     return this.restaurantsRepository.findAll(filters);
   }

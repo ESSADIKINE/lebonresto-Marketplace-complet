@@ -5,7 +5,7 @@ import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
 export class CustomersService {
-  constructor(private readonly customersRepository: CustomersRepository) {}
+  constructor(private readonly customersRepository: CustomersRepository) { }
 
   create(createCustomerDto: CreateCustomerDto | any) {
     return this.customersRepository.create(createCustomerDto);
@@ -19,7 +19,7 @@ export class CustomersService {
     return this.customersRepository.findOne(id);
   }
 
-  update(id: string, updateCustomerDto: UpdateCustomerDto) {
+  update(id: string, updateCustomerDto: any) {
     return this.customersRepository.update(id, updateCustomerDto);
   }
 

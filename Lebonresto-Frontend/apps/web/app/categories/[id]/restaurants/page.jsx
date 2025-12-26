@@ -5,11 +5,15 @@ import React from 'react';
 import BackToTop from '../../../../components/back-to-top';
 import RestaurantListingClient from '../../../../components/listing/restaurant-listing-client';
 import { useGetCategoryByIdQuery } from '../../../../store/api';
+import PageLoader from '../../../../components/ui/PageLoader';
 
 export default function CategoryRestaurantsPage({ params }) {
     const { id } = params;
     // curl -X GET "http://localhost:3000/categories/{id}"
     const { data: category, isLoading } = useGetCategoryByIdQuery(id);
+
+    if (isLoading) return <PageLoader />;
+
 
     return (
         <div className="bg-light min-vh-100">

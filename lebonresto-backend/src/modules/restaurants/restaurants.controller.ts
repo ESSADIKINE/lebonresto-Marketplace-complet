@@ -65,8 +65,9 @@ export class RestaurantsController {
     @Query('latitude') latitude?: number,
     @Query('longitude') longitude?: number,
     @Query('radius') radius?: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
   ) {
-    console.log('GET /restaurants filters:', { status, sort, cityId, categoryId, minPrice, maxPrice, minRating, q, latitude, longitude, radius });
     return this.restaurantsService.findAll({
       status,
       sort,
@@ -78,7 +79,9 @@ export class RestaurantsController {
       q,
       latitude,
       longitude,
-      radius
+      radius,
+      page,
+      limit,
     });
   }
 

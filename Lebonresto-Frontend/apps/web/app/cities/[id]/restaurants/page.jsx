@@ -5,11 +5,14 @@ import React from 'react';
 import BackToTop from '../../../../components/back-to-top';
 import RestaurantListingClient from '../../../../components/listing/restaurant-listing-client';
 import { useGetCityByIdQuery } from '../../../../store/api';
+import PageLoader from '../../../../components/ui/PageLoader';
 
 export default function CityRestaurantsPage({ params }) {
     const { id } = params;
     // curl -X GET "http://localhost:3000/cities/{id}"
     const { data: city, isLoading } = useGetCityByIdQuery(id);
+
+    if (isLoading) return <PageLoader />;
 
     return (
         <div className="bg-light min-vh-100">

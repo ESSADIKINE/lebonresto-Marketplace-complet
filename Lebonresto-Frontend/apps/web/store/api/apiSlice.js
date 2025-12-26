@@ -12,7 +12,7 @@ const baseQuery = fetchBaseQuery({
     prepareHeaders: (headers) => {
         // Attach customer auth token if available
         if (typeof window !== 'undefined') {
-            const token = localStorage.getItem('lb_customer_token');
+            const token = localStorage.getItem('accessToken');
             if (token) {
                 headers.set('Authorization', `Bearer ${token}`);
             }

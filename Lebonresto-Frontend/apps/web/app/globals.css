@@ -677,7 +677,7 @@ body.is-404 .top-scroll {
 .categoryBox .icoBoxx svg {
     width: 24px;
     height: 24px;
-    fill: #fff;
+    fill: #333;
     transition: all 0.4s ease;
 }
 

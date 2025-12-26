@@ -13,13 +13,20 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 @ApiTags('Notifications')
 @Controller('notifications')
 export class NotificationsController {
-  constructor(private readonly notificationsService: NotificationsService) {}
+  constructor(private readonly notificationsService: NotificationsService) { }
 
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   async findAll(@Request() req) {
-    return this.notificationsService.findAllByUser(req.user.sub);
+    return this.notificationsService.findAllByUser(req.user.userId);
+  }
+
+  @Get(':id')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  async findOne(@Param('id') id: string) {
+    return this.notificationsService.findOne(id);
   }
 
   @Patch(':id/seen')

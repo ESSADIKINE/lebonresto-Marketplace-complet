@@ -1,0 +1,144 @@
+.dropdownMenu {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    min-width: 200px !important;
+    width: 200px !important;
+    margin-top: 12px;
+    animation: slideUp 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    transform-origin: top right;
+}
+
+.notificationDropdown {
+    min-width: 320px !important;
+    width: 320px !important;
+}
+
+.dropdownItem {
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #4a4a4a;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    width: 100%;
+    text-decoration: none;
+    text-align: left;
+}
+
+.dropdownItem:hover,
+.dropdownItem:focus {
+    background-color: #f8f9fa;
+    color: var(--primary-color, #016B61);
+}
+
+.dropdownItem.danger {
+    color: #dc3545;
+}
+
+.dropdownItem.danger:hover {
+    background-color: #fff5f5;
+    color: #dc3545;
+}
+
+.userHeader {
+    padding: 16px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, rgba(1, 107, 97, 0.05), rgba(1, 107, 97, 0.1));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notificationHeader {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    margin-bottom: 4px;
+}
+
+.notificationHeader h6 {
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a1a;
+}
+
+.notificationItem {
+    padding: 12px 16px;
+    border-bottom: 1px solid #f8f9fa;
+    transition: background-color 0.2s;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+.notificationItem.unread {
+    background-color: #f0fdf4;
+    /* Light green/primary tint */
+    border-left: 3px solid #016B61;
+}
+
+.notificationItem:hover {
+    background-color: #f8f9fa;
+}
+
+.notificationItem.unread:hover {
+    background-color: #e6f7eb;
+}
+
+.notificationItem:last-child {
+    border-bottom: none;
+}
+
+.notificationTitle {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+.notificationBody {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.notificationTime {
+    font-size: 0.7rem;
+    color: #999;
+    margin-top: 4px;
+}
+
+.userName {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1a1a1a;
+    margin-bottom: 2px;
+}
+
+.userRole {
+    font-size: 0.75rem;
+    color: #016B61;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

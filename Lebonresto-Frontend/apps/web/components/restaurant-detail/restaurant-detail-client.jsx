@@ -18,6 +18,7 @@ import RestaurantGalleryGrid from './restaurant-gallery-grid';
 import RestaurantSidebarRight from './restaurant-sidebar-right';
 import RestaurantCarousel from '../home-sections/restaurant-carousel';
 import RestaurantContentTabs from './restaurant-content-tabs'; // New Import
+import PageLoader from '../../ui/PageLoader';
 
 import styles from './restaurant-detail-page.module.css';
 
@@ -75,13 +76,7 @@ export default function RestaurantDetailClient({ id }) {
     };
 
     if (loadingInfo) {
-        return (
-            <div className="d-flex align-items-center justify-content-center vh-100">
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Chargement...</span>
-                </div>
-            </div>
-        );
+        return <PageLoader />;
     }
 
     if (error || !restaurant) {

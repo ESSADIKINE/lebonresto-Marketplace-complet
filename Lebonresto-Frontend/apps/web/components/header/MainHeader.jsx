@@ -6,10 +6,25 @@ import { useRouter } from 'next/navigation';
 import { BsPersonCircle, BsSearch, BsGeoAlt, BsBell, BsSpeedometer, BsBoxArrowRight, BsGear } from "react-icons/bs";
 import AuthModal from '../auth/AuthModal';
 import { useAuth } from '../auth/AuthProvider';
+import styles from './header.module.css';
+
+import { useGetMyNotificationsQuery, useMarkNotificationAsSeenMutation } from '../../store/api/notificationsApi';
 
 export default function MainHeader({ sticky = true }) {
     const router = useRouter();
     const { user, isAuthenticated, logout } = useAuth();
+
+    // Notifications Query
+    const { data: notifications = [] } = useGetMyNotificationsQuery(undefined, {
+        skip: !isAuthenticated,
+        refetchOnFocus: true
+    });
+    const [markAsSeen] = useMarkNotificationAsSeenMutation();
+
+    // Calculate unseen count
+    const unseenCount = notifications.filter(n => !n.seen).length;
+    // Take recent 3
+    const recentNotifications = notifications.slice(0, 3);
 
     // State
     const [scrolled, setScrolled] = useState(false);
@@ -34,10 +49,6 @@ export default function MainHeader({ sticky = true }) {
                 if (res.ok) {
                     const data = await res.json();
                     setCities(data);
-                    // Optional: Set default from API? For now "Maroc" is hardcoded visually fallback
-                    if (data.length > 0) {
-                        // We could set the first city as default, but "Maroc" / "Toutes les villes" is often better
-                    }
                 }
             } catch (error) {
                 console.error("Failed to fetch cities:", error);
@@ -56,24 +67,20 @@ export default function MainHeader({ sticky = true }) {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        // Construct query params
-        // Target: /restaurants?city=...&q=...
         const params = new URLSearchParams();
-
-        // Map cityId/Name logic
-        // If user selected a specific city ID, send it. If just text, maybe query?
-        // Using cityId as primary filter based on existing logic
         if (selectedCityId) {
             params.set('cityId', selectedCityId);
         }
-
         if (searchQuery) {
-            // curl -X GET "http://localhost:3000/restaurants/search?query=..."
-            // But we map to /restaurants page filters often
             params.set('q', searchQuery);
         }
-
         router.push(`/restaurants?${params.toString()}`);
+    };
+
+    const handleNotificationClick = (n) => {
+        if (!n.seen) {
+            markAsSeen(n.id);
+        }
     };
 
     return (
@@ -145,11 +152,68 @@ export default function MainHeader({ sticky = true }) {
                     <div className="d-flex align-items-center">
                         {/* Notification Bell (Only if Logged In) */}
                         {isAuthenticated && (
-                            <div className="text-dark me-3 position-relative cursor-pointer" style={{ cursor: 'pointer' }}>
-                                <BsBell size={22} />
-                                <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                    <span className="visually-hidden">New alerts</span>
-                                </span>
+                            <div className="dropdown me-3">
+                                <div
+                                    className="text-dark position-relative cursor-pointer dropdown-toggle hide-arrow"
+                                    style={{ cursor: 'pointer' }}
+                                    id="notifDropdown"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                >
+                                    <BsBell size={22} />
+                                    {unseenCount > 0 && (
+                                        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-light">
+                                            {unseenCount}
+                                            <span className="visually-hidden">New alerts</span>
+                                        </span>
+                                    )}
+                                </div>
+                                <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu} ${styles.notificationDropdown}`} aria-labelledby="notifDropdown">
+                                    <li className={styles.notificationHeader}>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <h6>Notifications</h6>
+                                            {unseenCount > 0 && <span className="badge bg-primary-subtle text-primary rounded-pill">{unseenCount} nouvelles</span>}
+                                        </div>
+                                    </li>
+
+                                    {recentNotifications.length === 0 ? (
+                                        <li>
+                                            <div className="px-4 py-5 text-center text-muted">
+                                                <BsBell size={32} className="mb-3 opacity-25" />
+                                                <p className="small mb-0">Aucune nouvelle notification</p>
+                                            </div>
+                                        </li>
+                                    ) : (
+                                        recentNotifications.map(notification => (
+                                            <li key={notification.id}>
+                                                <Link
+                                                    href={`/profile/notifications/${notification.id}`}
+                                                    className="text-decoration-none"
+                                                    onClick={() => handleNotificationClick(notification)}
+                                                >
+                                                    <div className={`${styles.notificationItem} ${!notification.seen ? styles.unread : ''}`}>
+                                                        <div className={styles.notificationTitle}>
+                                                            {notification.title || 'Notification'} {/* Fallback title if backend doesn't send one */}
+                                                        </div>
+                                                        <div className={`text-truncate ${styles.notificationBody}`} style={{ maxWidth: '280px' }}>
+                                                            {notification.message}
+                                                        </div>
+                                                        <div className={styles.notificationTime}>
+                                                            {new Date(notification.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        ))
+                                    )}
+
+                                    <li><hr className="dropdown-divider mx-2 opacity-10" /></li>
+                                    <li>
+                                        <Link href="/profile/notifications" className={`${styles.dropdownItem} justify-content-center text-primary`}>
+                                            <span style={{ fontSize: '0.85rem' }}>Voir tout</span>
+                                        </Link>
+                                    </li>
+                                </ul>
                             </div>
                         )}
 
@@ -162,27 +226,52 @@ export default function MainHeader({ sticky = true }) {
                                     data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                 >
-                                    <div className="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style={{ width: 42, height: 42 }}>
-                                        {user?.name?.charAt(0).toUpperCase() || 'U'}
-                                    </div>
+                                    {user?.avatar_url ? (
+                                        <img
+                                            src={user.avatar_url}
+                                            alt={user?.first_name || 'User'}
+                                            className="rounded-circle shadow-sm object-fit-cover"
+                                            style={{ width: 42, height: 42 }}
+                                        />
+                                    ) : (
+                                        <div className="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold shadow-sm" style={{ width: 42, height: 42 }}>
+                                            {user?.first_name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                                        </div>
+                                    )}
                                 </a>
-                                <ul className="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="userDropdown">
-                                    <li className="px-3 py-2 border-bottom">
-                                        <div className="fw-bold text-dark">{user?.name}</div>
-                                        <div className="small text-muted text-truncate" style={{ maxWidth: '150px' }}>{user?.email}</div>
+                                <ul className={`dropdown-menu dropdown-menu-end ${styles.dropdownMenu}`} aria-labelledby="userDropdown">
+                                    <li className="px-2">
+                                        <div className={styles.userHeader}>
+                                            <div>
+                                                <div className={styles.userName}>
+                                                    {user?.name || (user?.first_name ? `${user.first_name} ${user.last_name || ''}` : 'Utilisateur')}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </li>
-                                    <li><Link href="/profile" className="dropdown-item d-flex align-items-center py-2"><BsPersonCircle className="me-2 text-info" />Mon Profil</Link></li>
-                                    <li><Link href="/settings" className="dropdown-item d-flex align-items-center py-2"><BsGear className="me-2 text-secondary" />Paramètres</Link></li>
-                                    <li><hr className="dropdown-divider" /></li>
+                                    <li>
+                                        <Link href="/profile" className={styles.dropdownItem}>
+                                            <BsPersonCircle size={18} />
+                                            <span>Mon Profil</span>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/settings" className={styles.dropdownItem}>
+                                            <BsGear size={18} />
+                                            <span>Paramètres</span>
+                                        </Link>
+                                    </li>
+                                    <li><hr className="dropdown-divider mx-2 opacity-10" /></li>
                                     <li>
                                         <button
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 logout();
                                             }}
-                                            className="dropdown-item d-flex align-items-center py-2 text-danger bg-transparent border-0 w-100"
+                                            className={`${styles.dropdownItem} ${styles.danger} w-100 bg-transparent`}
                                         >
-                                            <BsBoxArrowRight className="me-2" />Déconnexion
+                                            <BsBoxArrowRight size={18} />
+                                            <span>Déconnexion</span>
                                         </button>
                                     </li>
                                 </ul>

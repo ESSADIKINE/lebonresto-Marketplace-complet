@@ -5,6 +5,7 @@ import { Logger } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import * as morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { GlobalValidationPipe } from './common/pipes/validation.pipe';
 
@@ -15,6 +16,7 @@ async function bootstrap() {
 
   // Security
   app.use(helmet());
+  app.use(cookieParser()); // Enable Cookie Parsing
 
   // CORS Configuration
   // CORS Configuration
@@ -24,6 +26,8 @@ async function bootstrap() {
       'http://localhost:4000', // Frontend Web (Docker)
       'http://localhost:4002', // Frontend Admin (Docker)
       'http://localhost:4003', // Frontend Owner (Docker)
+      'http://localhost:3001', // Frontend Web (Standard Dev Port)
+      'http://127.0.0.1:3001', // Frontend Web (IPv4)
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,

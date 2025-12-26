@@ -66,8 +66,19 @@ export const AuthProvider = ({ children }) => {
         try {
             const { data } = await apiClient.post('/auth/customer/login', { email, password });
             setAccessToken(data.access_token);
-            setUser(data.user);
-            setUserProfile(data.user);
+
+            // Fetch full profile immediately to ensure we have avatar_url and latest details
+            // This is robust against the login endpoint returning partial data
+            try {
+                const meRes = await apiClient.get('/auth/customer/me');
+                setUser(meRes.data);
+                setUserProfile(meRes.data);
+            } catch (e) {
+                console.warn('Profile fetch failed after login, using fallback', e);
+                setUser(data.user);
+                setUserProfile(data.user);
+            }
+
             setStatus('authenticated');
             return data;
         } catch (error) {

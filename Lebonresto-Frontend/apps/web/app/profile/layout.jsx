@@ -3,40 +3,35 @@
 import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchCurrentCustomer } from '../../store/slices/authSlice';
-
 import { BsPerson, BsCalendarRange, BsHeart, BsChatText, BsBoxArrowRight, BsBell, BsGear } from 'react-icons/bs';
+import { useAuth } from '../../components/auth/AuthProvider';
 
 export default function AccountLayout({ children }) {
-    const dispatch = useDispatch();
     const router = useRouter();
     const pathname = usePathname();
-    const { user, token, isAuthenticated, loading } = useSelector((state) => state.auth);
+    const { user, isAuthenticated, isLoading, logout } = useAuth();
 
     useEffect(() => {
-        if (!token) {
-            router.push('/login');
-        } else if (!user && !loading) {
-            dispatch(fetchCurrentCustomer()).unwrap().catch(() => router.push('/login'));
+        // If finished loading and not authenticated, redirect to home
+        if (!isLoading && !isAuthenticated) {
+            router.push('/');
         }
-    }, [token, user, loading, dispatch, router]);
+    }, [isLoading, isAuthenticated, router]);
 
-    const handleLogout = () => {
-        // Dispatch logout action or simple reload clear
-        // Ideally: dispatch(logout());
-        // For now, assuming basic clear logic:
-        if (typeof window !== 'undefined') localStorage.removeItem('lb_customer_token');
-        window.location.href = '/';
+    const handleLogout = async () => {
+        await logout();
+        router.push('/');
     };
 
-    if (!token || (!user && loading)) {
+    if (isLoading) {
         return (
             <div className="d-flex align-items-center justify-content-center min-vh-100 bg-light">
                 <div className="spinner-border text-primary" role="status"></div>
             </div>
         );
     }
+
+    if (!isAuthenticated) return null; // Will redirect via useEffect
 
     const menuItems = [
         { label: 'Mon profil', href: '/profile', icon: BsPerson },

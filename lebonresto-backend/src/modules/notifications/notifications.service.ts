@@ -11,7 +11,7 @@ export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
   private readonly table = 'notifications';
 
-  constructor(private readonly supabase: SupabaseService) {}
+  constructor(private readonly supabase: SupabaseService) { }
 
   async findAllByUser(userId: string): Promise<Notification[]> {
     const { data, error } = await this.supabase
@@ -24,6 +24,22 @@ export class NotificationsService {
     if (error) {
       this.logger.error(`Error finding notifications: ${error.message}`);
       throw new InternalServerErrorException('Error finding notifications');
+    }
+
+    return data;
+  }
+
+  async findOne(id: string): Promise<Notification> {
+    const { data, error } = await this.supabase
+      .getClient()
+      .from(this.table)
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (error) {
+      this.logger.error(`Error finding notification ${id}: ${error.message}`);
+      throw new InternalServerErrorException('Error finding notification');
     }
 
     return data;

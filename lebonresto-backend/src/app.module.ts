@@ -6,6 +6,10 @@ import { AppService } from './app.service';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CustomersModule } from './modules/customers/customers.module';
+import { CustomerAuthModule } from './modules/auth/customer-auth/customer-auth.module';
+import { OwnerAuthModule } from './modules/auth/owner-auth/owner-auth.module';
+import { AdminAuthModule } from './modules/auth/admin-auth/admin-auth.module';
+import { EmailModule } from './modules/email/email.module';
 import { OwnersModule } from './modules/owners/owners.module';
 import { AdminsModule } from './modules/admins/admins.module';
 import { RestaurantsModule } from './modules/restaurants/restaurants.module';
@@ -49,6 +53,10 @@ import { validationSchema } from './common/config/validation';
     SavedRestaurantsModule,
     RestaurantLeadsModule,
     HorairesModule,
+    CustomerAuthModule,
+    OwnerAuthModule,
+    AdminAuthModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

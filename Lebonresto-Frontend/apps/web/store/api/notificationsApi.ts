@@ -10,7 +10,7 @@ export const notificationsApi = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         // Get Current Customer's Notifications
         getMyNotifications: builder.query({
-            query: () => '/notifications/me',
+            query: () => '/notifications',
             providesTags: (result) =>
                 result
                     ? [
@@ -18,6 +18,12 @@ export const notificationsApi = apiSlice.injectEndpoints({
                         { type: 'Notification' as const, id: 'LIST' },
                     ]
                     : [{ type: 'Notification' as const, id: 'LIST' }],
+        }),
+
+        // Get Single Notification
+        getNotificationById: builder.query({
+            query: (id) => `/notifications/${id}`,
+            providesTags: (result, error, id) => [{ type: 'Notification', id }],
         }),
 
         // Mark Notification as Seen/Read
@@ -73,6 +79,7 @@ export const notificationsApi = apiSlice.injectEndpoints({
 
 export const {
     useGetMyNotificationsQuery,
+    useGetNotificationByIdQuery,
     useMarkNotificationAsSeenMutation,
     useMarkAllNotificationsAsSeenMutation,
     useDeleteNotificationMutation,
