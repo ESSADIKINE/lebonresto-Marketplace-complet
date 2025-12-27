@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { BsPersonCircle, BsSearch, BsGeoAlt, BsBell, BsSpeedometer, BsBoxArrowRight, BsGear } from "react-icons/bs";
+import { BsPersonCircle, BsSearch, BsGeoAlt, BsBell, BsSpeedometer, BsBoxArrowRight, BsGear, BsCalendarRange, BsHeart } from "react-icons/bs";
 import AuthModal from '../auth/AuthModal';
 import { useAuth } from '../auth/AuthProvider';
 import styles from './header.module.css';
@@ -253,6 +253,18 @@ export default function MainHeader({ sticky = true }) {
                                         <Link href="/profile" className={styles.dropdownItem}>
                                             <BsPersonCircle size={18} />
                                             <span>Mon Profil</span>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/profile/reservations" className={styles.dropdownItem}>
+                                            <BsCalendarRange size={18} />
+                                            <span>Mes réservations</span>
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link href="/profile/saved-restaurants" className={styles.dropdownItem}>
+                                            <BsHeart size={18} />
+                                            <span>Restaurants favoris</span>
                                         </Link>
                                     </li>
                                     <li>

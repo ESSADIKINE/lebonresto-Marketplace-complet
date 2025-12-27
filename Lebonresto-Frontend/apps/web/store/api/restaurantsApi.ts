@@ -192,8 +192,9 @@ export const restaurantsApi = apiSlice.injectEndpoints({
             invalidatesTags: ['SavedRestaurant'],
         }),
 
+        // Get Saved Restaurants (TODO: Backend Implementation Missing)
         getSavedRestaurants: builder.query({
-            query: () => '/me/saved-restaurants',
+            queryFn: () => ({ data: [] }), // Return empty list immediately
             providesTags: ['SavedRestaurant'],
         }),
     }),

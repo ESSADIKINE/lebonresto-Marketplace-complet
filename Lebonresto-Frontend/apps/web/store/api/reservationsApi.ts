@@ -34,10 +34,12 @@ export const reservationsApi = apiSlice.injectEndpoints({
             invalidatesTags: (result, error, { id }) => [{ type: 'Reservation', id }],
         }),
 
-        // Get reservations for current customer (if needed later)
-        getMyReservations: builder.query({
-            query: () => '/me/reservations',
-            providesTags: ['Reservation'],
+        // Get reservations for a specific customer
+        getCustomerReservations: builder.query({
+            query: (customerId) => `/customers/${customerId}/reservations`,
+            providesTags: (result, error, customerId) => [
+                { type: 'Reservation', id: `CUSTOMER_${customerId}` }
+            ],
         }),
     }),
 });
@@ -47,5 +49,5 @@ export const {
     useGetRestaurantReservationsQuery,
     useGetReservationByIdQuery,
     useUpdateReservationMutation,
-    useGetMyReservationsQuery,
+    useGetCustomerReservationsQuery,
 } = reservationsApi;

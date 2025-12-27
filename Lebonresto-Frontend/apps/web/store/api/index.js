@@ -53,7 +53,7 @@ export {
 // Reservations API
 export {
     reservationsApi,
-    useGetMyReservationsQuery,
+    useGetCustomerReservationsQuery,
     useCreateReservationMutation,
     useGetReservationByIdQuery,
     useUpdateReservationMutation,

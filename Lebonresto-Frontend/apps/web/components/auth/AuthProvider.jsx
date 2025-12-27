@@ -135,7 +135,8 @@ export const AuthProvider = ({ children }) => {
             logout,
             requestOtp,
             verifyOtp,
-            resetPassword
+            resetPassword,
+            refreshUser: checkAuth // Expose way to refresh profile
         }}>
             {children}
         </AuthContext.Provider>

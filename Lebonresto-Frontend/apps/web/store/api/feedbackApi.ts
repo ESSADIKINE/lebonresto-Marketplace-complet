@@ -22,16 +22,12 @@ export const feedbackApi = apiSlice.injectEndpoints({
             ],
         }),
 
-        // Get Customer's Own Feedback (if backend supports this)
+        // Get Customer's Own Feedback
         getMyFeedback: builder.query({
-            query: () => '/feedback/me',
-            providesTags: (result) =>
-                result
-                    ? [
-                        ...result.map(({ id }) => ({ type: 'Feedback' as const, id })),
-                        { type: 'Feedback' as const, id: 'MY_LIST' },
-                    ]
-                    : [{ type: 'Feedback' as const, id: 'MY_LIST' }],
+            query: (customerId) => `/customers/${customerId}/feedback`,
+            providesTags: (result, error, customerId) => [
+                { type: 'Feedback', id: `CUSTOMER_${customerId}` }
+            ],
         }),
 
         // Update Feedback (edit review)
