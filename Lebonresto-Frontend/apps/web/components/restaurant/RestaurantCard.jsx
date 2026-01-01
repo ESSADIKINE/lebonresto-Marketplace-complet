@@ -127,11 +127,7 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid', c
                         {/* 'Nouveau' moved to image overlay */}
                     </div>
 
-                    <div className="mt-auto pt-2 d-flex gap-2">
-                        <Link href={reservationLink} className="btn btn-primary w-100 rounded-pill py-2 fw-medium d-flex align-items-center justify-content-center position-relative z-2 shadow-sm">
-                            Réserver <BsArrowRight className="ms-2" />
-                        </Link>
-                    </div>
+
                 </div>
             </div>
         );
@@ -175,9 +171,7 @@ export default function RestaurantCard({ restaurant: rawData, layout = 'grid', c
                             <Link href={detailLink} className="btn btn-outline-light text-dark border fw-medium rounded-pill px-3 px-md-4 flex-grow-1 flex-md-grow-0 d-flex align-items-center justify-content-center text-nowrap btn-sm btn-md-regular">
                                 Voir détails
                             </Link>
-                            <Link href={reservationLink} className="btn btn-primary fw-medium rounded-pill px-3 px-md-4 flex-grow-1 flex-md-grow-0 d-flex align-items-center justify-content-center shadow-sm text-nowrap btn-sm btn-md-regular">
-                                Réserver <BsArrowRight className="ms-2 d-none d-md-inline" />
-                            </Link>
+
                         </div>
                     </div>
                 </div>

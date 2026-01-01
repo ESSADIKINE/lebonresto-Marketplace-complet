@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { BsGeoAlt, BsArrowRight, BsTelephone, BsEnvelope } from 'react-icons/bs';
 import styles from './restaurant-detail-page.module.css';
 
@@ -101,6 +102,15 @@ export default function RestaurantSidebarRight({ restaurant }) {
                     </div>
                 </div>
             </div>
+
+            {/* Premium Reservation Button */}
+            <Link
+                href={`/restaurants/${restaurant.id}/reservation`}
+                className={`btn btn-lg w-100 py-3 rounded-pill fw-bold fs-5 d-flex align-items-center justify-content-center gap-2 ${styles.reserveBtnAnimated}`}
+            >
+                Réserver une table
+                <BsArrowRight className="fs-4" />
+            </Link>
 
         </div>
     );

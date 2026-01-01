@@ -18,7 +18,7 @@ import RestaurantGalleryGrid from './restaurant-gallery-grid';
 import RestaurantSidebarRight from './restaurant-sidebar-right';
 import RestaurantCarousel from '../home-sections/restaurant-carousel';
 import RestaurantContentTabs from './restaurant-content-tabs'; // New Import
-import PageLoader from '../../ui/PageLoader';
+import PageLoader from '../ui/PageLoader';
 
 import styles from './restaurant-detail-page.module.css';
 
